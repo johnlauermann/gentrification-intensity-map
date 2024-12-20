@@ -4,7 +4,6 @@
 ## 3) cleans data and calculates derivative statistics (e.g. percents, means)
 
 library(dplyr)
-library(data.table)
 library(ipumsr)
 library(purrr)
 
@@ -25,97 +24,125 @@ metadata_SF3 <- get_metadata_nhgis(dataset = "1990_STF3")
 #pulling data from the IPUMS API
 ##define the data to extract
 ds <- define_extract_nhgis(
-  description = "Gentrification map data, 1990 blocks & block group parts",
+  description = "Gentrification map data, block group parts & 1990 time series (on 2010bg)",
+  time_series_tables = list(
+    tst_spec("CL8", geog_levels = "blck_grp", years = "1990"),
+    tst_spec("CM1", geog_levels = "blck_grp", years = "1990"),
+    tst_spec("CP4", geog_levels = "blck_grp", years = "1990"),
+    tst_spec("CM4", geog_levels = "blck_grp", years = "1990"),
+    tst_spec("CM7", geog_levels = "blck_grp", years = "1990"),
+    tst_spec("CM9", geog_levels = "blck_grp", years = "1990"),
+    tst_spec("CN1", geog_levels = "blck_grp", years = "1990"),
+    tst_spec("CW3", geog_levels = "blck_grp", years = "1990")
+    ),
   datasets = list(
     ds_spec("1990_STF1", 
-            data_tables = c("NP1", "NP3", "NP6", "NP8", "NP11", "NH1", "NH2", "NH3", "NH24", "NH33"),
-            geog_levels = "block"),
+            data_tables = c("NH24", "NH33"),
+            geog_levels = "blck_grp_598_101"),
     ds_spec("1990_STF3", 
-            data_tables = c("NP57", "NP70", "NP78", "NP85", "NP121", "NH29", "NH62"),
-            geog_levels = "blck_grp_598_101")
+                     data_tables = c("NP57", "NP70", "NP78", "NP85", "NP121", "NH29", "NH62", "NH33", "NH24"),
+                     geog_levels = "blck_grp_598_101")
   ),
   geographic_extents = "*"
 )
-
+  
 ##submit to the API and download results
 extract <- submit_extract(ds)
 wait_for_extract(extract)   
 filepath <- download_extract(extract)
 
-
-#for data from short form questionnaire (STF1), available at block level
+#for data from time series tables, on 2010 block group boundaries
 ##define variables
-variables_blk <- c(
-  Age_2529_sum = "ET3018",
-  Age_3034_sum = "ET3019",
-  Age_3539_sum = "ET3020",
-  Age_4044_sum = "ET3021",
-  Age_4549_sum = "ET3022",
-  Age_5054_sum = "ET3023",
-  Age_5559_sum = "ET3024",
-  Age_6061_sum = "ET3025",
-  Age_6264_sum = "ET3026",
-  Age_6569_sum = "ET3027",
-  Age_7074_sum = "ET3028",
-  Age_7579_sum = "ET3029",
-  Age_8084_sum = "ET3030",
-  Age_over85_sum = "ET3031",
-  Asian_sum = "EUY004",
-  Black_sum = "EUY002",
-  ConRent_agg = "ES8001",
-  Hispanic_sum = "EU0001",
-  Households_sum = "EUO001",
-  HouseUnits_sum = "ESA001",
-  HouseValue_agg = "ESV001",
-  HUOccupied_sum = "ESN001",
-  HUOwner_sum = "ES1001",
-  HURenter_sum = "ES1002",
-  HUVacant_sum = "ESN002",
-  Other_sum = "EUY005",
-  Population_sum = "ET1001",
-  White_sum = "EUY001"
+variables_bg <- c(
+  Age_2529_sum = "CW3AI1990",
+  Age_3034_sum = "CW3AJ1990",
+  Age_3539_sum = "CW3AK1990",
+  Age_4044_sum = "CW3AL1990",
+  Age_4549_sum = "CW3AM1990",
+  Age_5054_sum = "CW3AN1990",
+  Age_5559_sum = "CW3AO1990",
+  Age_6061_sum = "CW3AP1990",
+  Age_6264_sum = "CW3AQ1990",
+  Age_6569_sum = "CW3AR1990",
+  Age_7074_sum = "CW3AS1990",
+  Age_7579_sum = "CW3AT1990",
+  Age_8084_sum = "CW3AU1990",
+  Age_over85_sum = "CW3AV1990",
+  Asian_sum = "CM1AD1990",
+  Black_sum = "CM1AB1990",
+  Hispanic_sum = "CP4AB1990",
+  Households_sum = "CM4AA1990",
+  HouseUnits_sum = "CM7AA1990",
+  HUOccupied_sum = "CM9AA1990",
+  HUOwner_sum = "CN1AA1990",
+  HURenter_sum = "CN1AB1990",
+  HUVacant_sum = "CM9AB1990",
+  Other_sum = "CM1AF1990",
+  Population_sum = "CL8AA1990",
+  White_sum = "CM1AA1990"
 )
 
 ##load data, filtering to reduce memory load
-data_blk <- read_nhgis(filpath, file_select = 1) %>%
-  select(GISJOIN, all_of(variables_blk)) 
-data_blk <- data_blk %>% select(GISJOIN, sort(setdiff(names(.), "GISJOIN")))
+data_bg <- read_nhgis(filepath, file_select = 3) %>%
+  select(GISJOIN, all_of(variables_bg)) 
+data_bg <- data_bg %>% select(GISJOIN, sort(setdiff(names(.), "GISJOIN")))
+
 
 ##crosswalk the data to 2010 block boundaries
 ###load crosswalk from IPUMS API
-url_blk <- "https://api.ipums.org/supplemental-data/nhgis/crosswalks/nhgis_blk1990_blk2010.zip"
-download.file(url_blk, "nhgis_blk1990_blk2010.zip", headers = c(Authorization = my_key))
+url <- "https://api.ipums.org/supplemental-data/nhgis/crosswalks/nhgis_bg2010_tr2020.zip"
+download.file(url, "nhgis_bg2010_tr2020.zip", headers = c(Authorization = my_key))
 
 ###crosswalk and merge to blocks
-crosswalks_blk <- read_nhgis("nhgis_blk1990_blk2010.zip") %>%
-  select(blk1990gj, blk2010gj, weight)
-data_blk <- data_blk %>% rename(blk1990gj = GISJOIN)
-data_blk <- left_join(crosswalks_blk, data_blk, by = "blk1990gj")
-rm(crosswalks_blk)
+crosswalks_bg <- read_nhgis("nhgis_bg2010_tr2020.zip") 
+data_bg <- data_bg %>% rename(bg2010gj = GISJOIN)
+data_bg <- left_join(crosswalks_bg, data_bg, by = "bg2010gj")
+rm(crosswalks_bg)
 
 ###weight source data for new boundaries
-data_blk <- data_blk %>%
-  mutate(across(
-    .cols = !all_of(c("blk1990gj", "blk2010gj")),  
-    .fns = ~ . * weight
-  ))
-
+data_bg <- within(data_bg, {
+  Age_2529_sum <- Age_2529_sum * wt_adult
+  Age_3034_sum <- Age_3034_sum * wt_adult
+  Age_3539_sum <- Age_3539_sum * wt_adult
+  Age_4044_sum <- Age_4044_sum * wt_adult
+  Age_4549_sum <- Age_4549_sum * wt_adult
+  Age_5054_sum <- Age_5054_sum * wt_adult
+  Age_5559_sum <- Age_5559_sum * wt_adult
+  Age_6061_sum <- Age_6061_sum * wt_adult
+  Age_6264_sum <- Age_6264_sum * wt_adult
+  Age_6569_sum <- Age_6569_sum * wt_adult
+  Age_7074_sum <- Age_7074_sum * wt_adult
+  Age_7579_sum <- Age_7579_sum * wt_adult
+  Age_8084_sum <- Age_8084_sum * wt_adult
+  Age_over85_sum <- Age_over85_sum * wt_adult
+  Asian_sum <- Asian_sum * wt_pop
+  Black_sum <- Black_sum * wt_pop
+  Hispanic_sum <- Hispanic_sum * wt_pop
+  Households_sum <- Households_sum * wt_hh
+  HouseUnits_sum <- HouseUnits_sum * wt_hu
+  HUOccupied_sum <- HUOccupied_sum * wt_hu
+  HUOwner_sum <- HUOwner_sum * wt_ownhu
+  HURenter_sum <- HURenter_sum * wt_renthu
+  HUVacant_sum <- HUVacant_sum * wt_hu
+  Other_sum <- Other_sum * wt_pop
+  Population_sum <- Population_sum * wt_pop
+  White_sum <- White_sum * wt_pop
+})
+  
 ###calculate additional categories from components
-data_blk <- within(data_blk, {
+data_bg <- within(data_bg, {
   Adults_sum <- Age_2529_sum + Age_3034_sum + Age_3539_sum + Age_4044_sum + 
     Age_4549_sum + Age_5054_sum + Age_5559_sum + Age_6061_sum + Age_6264_sum + 
     Age_6569_sum + Age_7074_sum + Age_7579_sum + Age_8084_sum + Age_over85_sum})
 
 ##define final variable selections
-variable_names_blk <- c(
+variable_names_bg <- c(
   "Adults_sum",
   "Asian_sum",
   "Black_sum",
-  "ConRent_agg",
   "Hispanic_sum",
   "Households_sum",
   "HouseUnits_sum",
-  "HouseValue_agg",
   "HUOccupied_sum",
   "HUOwner_sum",
   "HURenter_sum",
@@ -125,36 +152,20 @@ variable_names_blk <- c(
   "White_sum"
 )
 
-##summarize by block
-### use data table to manage big data
-setDT(data_blk)
-setkey(data_blk, blk2010gj)
-data_blk <- data_blk[, lapply(.SD, sum), by = blk2010gj, .SDcols = variable_names_blk]
-
-
-##crosswalk the data to 2020 tracts
-###load crosswalk from IPUMS API
-url_blk <- "https://api.ipums.org/supplemental-data/nhgis/crosswalks/nhgis_blk2010_tr2020.zip"
-download.file(url_blk, "nhgis_blk2010_tr2020.zip", headers = c(Authorization = my_key))
-
-###crosswalk and merge again, to tracts
-crosswalks_blk <- read_nhgis("nhgis_blk2010_tr2020.zip") %>%
-  select(blk2010gj, tr2020gj, weight)
-data_blk <- data_blk %>% rename(blk2010gj = GISJOIN)
-data_blk <- left_join(crosswalks_blk, data_blk, by = "blk2010gj")
-rm(crosswalks_blk)
-
-### use data table to manage big data
-setDT(data_blk)
-setkey(data_blk, tr2010gj)
-
 ##summarize by tract
-data_blk <- data_blk[, lapply(.SD, sum), by = tr2020gj, .SDcols = variable_names_blk]
+data_bg <- data_bg %>% 
+  group_by(tr2020gj) %>%
+  summarize(across(all_of(variable_names_bg), sum))
 
 
 #for data from long form questionnaire, available at block group partition level
 ##define variables
-variables_bgp <- c(
+variables_bgp_STF1 <- c(
+  ConRent_agg = "ES8001",
+  HouseValue_agg = "ESV001"
+)
+
+variables_bgp_STF3 <- c(
   Ed_Bach_sum = "E33006",
   Ed_Graduate_sum = "E33007",
   Employed_F_sum = "E4I006",
@@ -175,8 +186,11 @@ variables_bgp <- c(
 )
 
 ##load data, filtering to reduce memory load
-data_bgp <- read_nhgis(filepath, file_select = 2) %>%
-  select(GISJOIN, all_of(variables_bgp)) 
+data_bgp_STF1 <- read_nhgis(filepath, file_select = 1) %>%
+  select(GISJOIN, all_of(variables_bgp_STF1)) 
+data_bgp_STF3 <- read_nhgis(filepath, file_select = 2) %>%
+  select(GISJOIN, all_of(variables_bgp_STF3))
+data_bgp <- left_join(data_bgp_STF1, data_bgp_STF3, by = "GISJOIN")
 data_bgp <- data_bgp %>% select(GISJOIN, sort(setdiff(names(.), "GISJOIN")))
 
 ##crosswalk the data to new tract boundaries
@@ -192,11 +206,13 @@ rm(crosswalks_bgp)
 
 ###weight blocks 
 data_bgp <- within(data_bgp, {
+  ConRent_agg <- ConRent_agg * wt_renthu
   Ed_Bach_sum <- Ed_Bach_sum * wt_adult
   Ed_Graduate_sum <- Ed_Graduate_sum * wt_adult
   Employed_F_sum <- Employed_F_sum * wt_pop
   Employed_M_sum <- Employed_M_sum * wt_pop
   HHIncome_agg <- as.numeric(HHIncome_agg) * wt_hh
+  HouseValue_agg <- HouseValue_agg * wt_ownhu
   HouseValue_Mortgaged_agg <- as.numeric(HouseValue_Mortgaged_agg) * wt_ownhu
   Owner_MovedIn_under1yr_sum <- Owner_MovedIn_under1yr_sum * wt_ownhu
   Owner_MovedIn_2to5yrs_sum <- Owner_MovedIn_2to5yrs_sum * wt_ownhu
@@ -227,8 +243,10 @@ data_bgp <- within(data_bgp, {
 ##define final variable selections
 variable_names_bgp <- c(
   "Bach_sum",
+  "ConRent_agg",
   "Employed_sum",
   "HHIncome_agg",
+  "HouseValue_agg",
   "HouseValue_Mortgaged_agg",
   "MovedIn_under10yrs_sum",
   "Poverty_sum",
@@ -243,37 +261,37 @@ data_bgp <- data_bgp %>%
 
 ##crosswalk the data to new tract boundaries
 ####load crosswalk from IPUMS API
-url_bg <- "https://api.ipums.org/supplemental-data/nhgis/crosswalks/nhgis_bg2010_tr2020.zip"
-download.file(url_bg, "nhgis_bg2010_tr2020.zip", headers = c(Authorization = my_key))
+url <- "https://api.ipums.org/supplemental-data/nhgis/crosswalks/nhgis_bg2010_tr2020.zip"
+download.file(url, "nhgis_bg2010_tr2020.zip", headers = c(Authorization = my_key))
 
 ##crosswalk and merge again, to tracts
-crosswalks_bgp <- read_nhgis("crosswalks_nhgis/nhgis_bg2010_tr2020.zip")
-data_bgp <- left_join(crosswalks_bgp, data_bgp, by = "bg2010gj")
-rm(crosswalks_bgp)
+crosswalks <- read_nhgis("crosswalks_nhgis/nhgis_bg2010_tr2020.zip")
+data_bgp <- left_join(crosswalks, data_bgp, by = "bg2010gj")
+rm(crosswalks)
 
 ###weight again using new crosswalks
 data_bgp <- within(data_bgp,{
   Bach_sum = Bach_sum * wt_adult
+  ConRent_agg = ConRent_agg * wt_renthu
   Employed_sum = Employed_sum * wt_pop
   HHIncome_agg = HHIncome_agg * wt_hh
+  HouseValue_agg = HouseValue_agg * wt_ownhu
   HouseValue_Mortgaged_agg = HouseValue_Mortgaged_agg * wt_ownhu
   MovedIn_under10yrs_sum = MovedIn_under10yrs_sum * wt_hu
   Poverty_sum = Poverty_sum * wt_pop
   WhiteCollar_sum = WhiteCollar_sum * wt_pop
 })
 
-### use data table to manage big data
-setDT(data_bgp)
-setkey(data_bgp, tr2010gj)
-
 ##summarize by tract
-data_bgp <- data_bgp[, lapply(.SD, sum), by = tr2020gj, .SDcols = variable_names_bgp]
+data_bgp <- data_bgp %>% 
+  group_by(tr2020gj) %>%
+  summarize(across(all_of(variable_names_bgp), sum))
 
 
 #compile the entire dataset
 ##merge block and block group partition data
-data <- left_join(data_blk, data_bgp, by = "tr2020gj")
-data <- data %>% select(tr2010gj, sort(setdiff(names(.), "tr2020gj")))
+data <- left_join(data_bg, data_bgp, by = "tr2020gj")
+data <- data %>% select(tr2020gj, sort(setdiff(names(.), "tr2020gj")))
 
 ##calculate derivative metrics
 ## Define functions to exclude incorrect data and low-population tracts

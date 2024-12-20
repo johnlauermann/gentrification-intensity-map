@@ -8,12 +8,12 @@ library(dplyr)
 library(purrr)
 
 #set working directory & general attributes
-setwd("Your key here")
+setwd("Your directory")
 year <- "2020"
 inflation <- 1
 
 #set API key (to get one: https://account.ipums.org/api_keys)
-my_key <- "Your directory here"
+my_key <- "Your key"
 set_ipums_api_key(my_key)
 
 #see metadata for relevant parameters

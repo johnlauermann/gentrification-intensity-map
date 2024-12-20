@@ -8,12 +8,12 @@ library(dplyr)
 library(purrr)
 
 #set working directory & general attributes
-setwd("Your directory here")
+setwd("Your directory")
 year <- "2010"
 inflation <- 1.1884  #based on BLS CPI inflation calculator, https://data.bls.gov/cgi-bin/cpicalc.pl?cost1=1%2C000.00&year1=201012&year2=202012
 
 #set API key (to get one: https://account.ipums.org/api_keys)
-my_key <- "Your key here"
+my_key <- "Your key"
 set_ipums_api_key(my_key)
 
 #see metadata for relevant parameters
@@ -23,15 +23,14 @@ metadata <- get_metadata_nhgis(dataset = "2006_2010_ACS5a")
 #pulling data from the IPUMS API
 ##define the data to extract
 ds <- define_extract_nhgis(
-  description = "Gentrification map data, 2010 block groups",
-  datasets = ds_spec("2006_2010_ACS5a",
+  description = "Gentrification map data, 2010 block groups & tracts",
+  datasets = ds_spec("2006_2010_ACS5a", 
                      data_tables = c("B01003", "B02001", "B03003", "B11001", 
-                                     "B15002", "B19025","B25001", "B25002", 
-                                     "B25003", "B25060", "B25082", "B25038",
-                                     "C17002", "C24010"),
-                     geog_levels = "blck_grp"
-                     ),
-  geographic_extents = "*"
+                            "B15002", "B19025","B25001", "B25002", 
+                            "B25003", "B25060", "B25082", "B25038",
+                            "C17002", "C24010"),
+                     geog_levels = c("blck_grp", "tract")),
+     geographic_extents = "*"
 )
 
 ##submit to the API and download results
@@ -46,7 +45,6 @@ variables <- c(
   Adults_sum = "JN9E001",
   Asian_sum = "JMBE005",
   Black_sum = "JMBE003",
-  ConRent_agg = "JS1E001",
   Ed_BachF_sum = "JN9E032",
   Ed_DoctorateF_sum = "JN9E035",
   Ed_MastersF_sum = "JN9E033",
@@ -60,8 +58,6 @@ variables <- c(
   Hispanic_sum = "JMKE003",
   Households_sum = "JM5E001",
   HouseUnits_sum = "JRIE001",
-  HouseValue_agg = "JTNE001",
-  HouseValue_Mortgaged_agg = "JTNE002",
   HUOccupied_sum = "JRJE002",
   HUOwner_sum = "JRKE002",
   HURenter_sum = "JRKE003",
@@ -81,7 +77,7 @@ variables <- c(
 )
 
 ##query and load data
-data <- read_nhgis(filepath) %>%
+data <- read_nhgis(filepath, file_select = 1) %>%
   select(GISJOIN, all_of(variables)) 
 data <- data %>% select(GISJOIN, sort(setdiff(names(.), "GISJOIN")))
 
@@ -89,9 +85,9 @@ data <- data %>% select(GISJOIN, sort(setdiff(names(.), "GISJOIN")))
 ###load crosswalk from IPUMS API
 url <- "https://api.ipums.org/supplemental-data/nhgis/crosswalks/nhgis_bg2010_tr2020.zip"
 download.file(url, "nhgis_bg2010_tr2020.zip", headers = c(Authorization = my_key))
-crosswalks <- read_nhgis("nhgis_bg2010_tr2020.zip")
 
 ###join with data
+crosswalks <- read_nhgis("crosswalks_nhgis/nhgis_bg2010_tr2020.zip")
 data <- data %>% rename(bg2010gj = GISJOIN)
 data <- left_join(crosswalks, data, by = "bg2010gj")
 
@@ -100,7 +96,6 @@ data <- within(data, {
   Adults_sum <- Adults_sum * wt_pop
   Asian_sum <- Asian_sum * wt_pop
   Black_sum <- Black_sum * wt_pop
-  ConRent_agg <- as.numeric(ConRent_agg) * wt_renthu
   Ed_BachF_sum <- Ed_BachF_sum * wt_adult
   Ed_BachM_sum <- Ed_BachM_sum * wt_adult
   Ed_MastersF_sum <- Ed_MastersF_sum * wt_adult
@@ -114,8 +109,6 @@ data <- within(data, {
   Hispanic_sum <- Hispanic_sum * wt_pop
   Households_sum <- Households_sum * wt_hh
   HouseUnits_sum <- HouseUnits_sum * wt_hu
-  HouseValue_agg <- as.numeric(HouseValue_agg) * wt_ownhu
-  HouseValue_Mortgaged_agg <- as.numeric(HouseValue_Mortgaged_agg) * wt_ownhu
   HUOccupied_sum <- HUOccupied_sum * wt_ownhu
   HUVacant_sum <- HUVacant_sum * wt_ownhu
   HUOwner_sum <- HUOwner_sum * wt_ownhu
@@ -134,7 +127,6 @@ data <- within(data, {
   White_sum <- White_sum * wt_pop
 })
 
-
 ##calculate additional categories from components
 data <- within(data, {
   Bach_sum <- Ed_BachF_sum + Ed_MastersF_sum + Ed_ProfDegreeF_sum +
@@ -152,14 +144,11 @@ variable_names <- c(
   "Asian_sum",
   "Bach_sum",
   "Black_sum",
-  "ConRent_agg",
   "Employed_sum",
   "HHIncome_agg",
   "Hispanic_sum",
   "Households_sum",
   "HouseUnits_sum",
-  "HouseValue_agg",
-  "HouseValue_Mortgaged_agg",
   "HUOccupied_sum",
   "HUOwner_sum",
   "HURenter_sum",
@@ -179,6 +168,41 @@ data <- data %>%
   group_by(tr2020gj) %>%
   summarize(across(all_of(variable_names), sum))
 
+##these data are missing for many block groups. Adding from tract data instead. 
+variables_tr <- c(
+  ConRent_agg = "JS1E001",
+  HouseValue_agg = "JTNE001",
+  HouseValue_Mortgaged_agg = "JTNE002"
+)
+###load tract data & filter
+data_tr <- read_nhgis(filepath, file_select = 2) %>%
+  select(GISJOIN, all_of(variables_tr)) 
+
+###load crosswalk from IPUMS API
+url <- "https://api.ipums.org/supplemental-data/nhgis/crosswalks/nhgis_tr2010_tr2020.zip"
+download.file(url, "nhgis_tr2010_tr2020.zip", headers = c(Authorization = my_key))
+
+###join with data
+crosswalks <- read_nhgis("nhgis_tr2010_tr2020.zip")
+data_tr <- data_tr %>% rename(tr2010gj = GISJOIN)
+data_tr <- left_join(crosswalks, data_tr, by = "tr2010gj")
+
+###weight data 
+data_tr <- within(data_tr, {
+  ConRent_agg <- as.numeric(ConRent_agg) * wt_renthu
+  HouseValue_agg <- as.numeric(HouseValue_agg) * wt_ownhu
+  HouseValue_Mortgaged_agg <- as.numeric(HouseValue_Mortgaged_agg) * wt_ownhu
+})
+
+#pivot to 2020 tracts
+variables_tr_names <- c("ConRent_agg", "HouseValue_agg", "HouseValue_Mortgaged_agg")
+data_tr <- data_tr %>% select(all_of(c("tr2020gj", variables_tr_names)))
+data_tr <- data_tr %>% 
+  group_by(tr2020gj) %>%
+  summarize(across(all_of(variables_tr_names), sum))
+
+###join all to one tract data frame
+data <- left_join(data, data_tr, by = "tr2020gj")
 
 #calculate derivative metrics
 ## Define functions to exclude incorrect data and low-population tracts

@@ -9,7 +9,7 @@ PRESERVE.
 SET DECIMAL DOT.
 
 GET DATA  /TYPE=TXT
-  /FILE="YourDirectory\metrodata_allyears_2020tr.csv"
+  /FILE="Your directory\metrodata_allyears_2020tr.csv"
   /ENCODING='UTF8'
   /DELIMITERS=","
   /QUALIFIER='"'
@@ -36,22 +36,6 @@ GET DATA  /TYPE=TXT
   Bach_pct_chg_1990to2020 AUTO
   Bach_pct_chg_2000to2010 AUTO
   Bach_pct_chg_2010to2020 AUTO
-  Bach_sum_1990 AUTO
-  Bach_sum_2000 AUTO
-  Bach_sum_2010 AUTO
-  Bach_sum_2020 AUTO
-  Bach_sum_chg_1990to2000 AUTO
-  Bach_sum_chg_1990to2020 AUTO
-  Bach_sum_chg_2000to2010 AUTO
-  Bach_sum_chg_2010to2020 AUTO
-  ConRent_agg_1990 AUTO
-  ConRent_agg_2000 AUTO
-  ConRent_agg_2010 AUTO
-  ConRent_agg_2020 AUTO
-  ConRent_agg_chg_1990to2000 AUTO
-  ConRent_agg_chg_1990to2020 AUTO
-  ConRent_agg_chg_2000to2010 AUTO
-  ConRent_agg_chg_2010to2020 AUTO
   ConRent_mean_1990 AUTO
   ConRent_mean_2000 AUTO
   ConRent_mean_2010 AUTO
@@ -60,15 +44,7 @@ GET DATA  /TYPE=TXT
   ConRent_mean_chg_1990to2020 AUTO
   ConRent_mean_chg_2000to2010 AUTO
   ConRent_mean_chg_2010to2020 AUTO
-  HHIncome_agg_1990 AUTO
-  HHIncome_agg_2000 AUTO
-  HHIncome_agg_2010 AUTO
-  HHIncome_agg_2020 AUTO
-  HHIncome_agg_chg_1990to2000 AUTO
-  HHIncome_agg_chg_1990to2020 AUTO
-  HHIncome_agg_chg_2000to2010 AUTO
-  HHIncome_agg_chg_2010to2020 AUTO
-  HHIncome_mean_1990 AUTO
+ HHIncome_mean_1990 AUTO
   HHIncome_mean_2000 AUTO
   HHIncome_mean_2010 AUTO
   HHIncome_mean_2020 AUTO
@@ -76,15 +52,7 @@ GET DATA  /TYPE=TXT
   HHIncome_mean_chg_1990to2020 AUTO
   HHIncome_mean_chg_2000to2010 AUTO
   HHIncome_mean_chg_2010to2020 AUTO
-  HouseValue_agg_1990 AUTO
-  HouseValue_agg_2000 AUTO
-  HouseValue_agg_2010 AUTO
-  HouseValue_agg_2020 AUTO
-  HouseValue_agg_chg_1990to2000 AUTO
-  HouseValue_agg_chg_1990to2020 AUTO
-  HouseValue_agg_chg_2000to2010 AUTO
-  HouseValue_agg_chg_2010to2020 AUTO
-  HouseValue_mean_1990 AUTO
+ HouseValue_mean_1990 AUTO
   HouseValue_mean_2000 AUTO
   HouseValue_mean_2010 AUTO
   HouseValue_mean_2020 AUTO
@@ -104,14 +72,6 @@ GET DATA  /TYPE=TXT
   Poverty_pct_chg_1990to2020 AUTO
   Poverty_pct_chg_2000to2010 AUTO
   Poverty_pct_chg_2010to2020 AUTO
-  Poverty_sum_1990 AUTO
-  Poverty_sum_2000 AUTO
-  Poverty_sum_2010 AUTO
-  Poverty_sum_2020 AUTO
-  Poverty_sum_chg_1990to2000 AUTO
-  Poverty_sum_chg_1990to2020 AUTO
-  Poverty_sum_chg_2000to2010 AUTO
-  Poverty_sum_chg_2010to2020 AUTO
   WhiteCollar_pct_1990 AUTO
   WhiteCollar_pct_2000 AUTO
   WhiteCollar_pct_2010 AUTO
@@ -120,14 +80,6 @@ GET DATA  /TYPE=TXT
   WhiteCollar_pct_chg_1990to2020 AUTO
   WhiteCollar_pct_chg_2000to2010 AUTO
   WhiteCollar_pct_chg_2010to2020 AUTO
-  WhiteCollar_sum_1990 AUTO
-  WhiteCollar_sum_2000 AUTO
-  WhiteCollar_sum_2010 AUTO
-  WhiteCollar_sum_2020 AUTO
-  WhiteCollar_sum_chg_1990to2000 AUTO
-  WhiteCollar_sum_chg_1990to2020 AUTO
-  WhiteCollar_sum_chg_2000to2010 AUTO
-  WhiteCollar_sum_chg_2010to2020 AUTO
   /MAP.
 RESTORE.
 CACHE.
@@ -148,207 +100,11 @@ USE ALL.
 SELECT IF (metro_Population_sum_2020  >= 1000000).
 EXECUTE.
 
-*calculate factor scores for decadal changes.
-FACTOR
-  /VARIABLES Bach_pct_chg_1990to2000 ConRent_mean_chg_1990to2000 HHIncome_mean_chg_1990to2000 HouseValue_mean_chg_1990to2000 Poverty_pct_chg_1990to2000 WhiteCollar_pct_chg_1990to2000
-  /MISSING LISTWISE
-  /ANALYSIS Bach_pct_chg_1990to2000 ConRent_mean_chg_1990to2000 HHIncome_mean_chg_1990to2000 HouseValue_mean_chg_1990to2000 Poverty_pct_chg_1990to2000 WhiteCollar_pct_chg_1990to2000
-  /PRINT INITIAL KMO EXTRACTION ROTATION
-  /FORMAT BLANK(.30)
-  /PLOT EIGEN
-  /CRITERIA FACTORS(1) ITERATE(25)
-  /EXTRACTION PC
-  /CRITERIA ITERATE(25)
-  /ROTATION VARIMAX
-  /SAVE REG(ALL)
-  /METHOD=CORRELATION.
-IF (Population_sum_1990 >= 100) FAC_1990to2000 = FAC1_1.
-EXECUTE.
-DELETE VARIABLES  FAC1_1.
-EXECUTE.
-
-FACTOR
-  /VARIABLES Bach_pct_chg_2000to2010 ConRent_mean_chg_2000to2010 HHIncome_mean_chg_2000to2010 HouseValue_mean_chg_2000to2010 Poverty_pct_chg_2000to2010 WhiteCollar_pct_chg_2000to2010
-  /MISSING LISTWISE
-  /ANALYSIS Bach_pct_chg_2000to2010 ConRent_mean_chg_2000to2010 HHIncome_mean_chg_2000to2010 HouseValue_mean_chg_2000to2010 Poverty_pct_chg_2000to2010 WhiteCollar_pct_chg_2000to2010
-  /PRINT INITIAL KMO EXTRACTION ROTATION
-  /FORMAT BLANK(.30)
-  /PLOT EIGEN
-  /CRITERIA FACTORS(1) ITERATE(25)
-  /EXTRACTION PC
-  /CRITERIA ITERATE(25)
-  /ROTATION VARIMAX
-  /SAVE REG(ALL)
-  /METHOD=CORRELATION.
-IF (Population_sum_2000 >=100) FAC_2000to2010 = FAC1_1.
-EXECUTE.
-DELETE VARIABLES  FAC1_1.
-EXECUTE.
-
-FACTOR
-  /VARIABLES Bach_pct_chg_2010to2020 ConRent_mean_chg_2010to2020 HHIncome_mean_chg_2010to2020 HouseValue_mean_chg_2010to2020 Poverty_pct_chg_2010to2020 WhiteCollar_pct_chg_2010to2020
-  /MISSING  LISTWISE
-  /ANALYSIS Bach_pct_chg_2010to2020 ConRent_mean_chg_2010to2020 HHIncome_mean_chg_2010to2020 HouseValue_mean_chg_2010to2020 Poverty_pct_chg_2010to2020 WhiteCollar_pct_chg_2010to2020
-  /PRINT INITIAL KMO EXTRACTION ROTATION
-  /FORMAT BLANK(.30)
-  /PLOT EIGEN
-  /CRITERIA FACTORS(1) ITERATE(25)
-  /EXTRACTION PC
-  /CRITERIA ITERATE(25)
-  /ROTATION VARIMAXVARIMAX
-  /SAVE REG(ALL)
-  /METHOD=CORRELATION.
-* Encoding: UTF-8.
-
-* import longitudinal dataset with relevant variables. 
-PRESERVE.
-SET DECIMAL DOT.
-
-GET DATA  /TYPE=TXT
-  /FILE="C:\Users\johnl\My Drive (jlauerma@pratt.edu)\Research\Gentrification "+
-    "mapping\data\metrodata_allyears_2020tr.csv"
-  /ENCODING='UTF8'
-  /DELIMITERS=","
-  /QUALIFIER='"'
-  /ARRANGEMENT=DELIMITED
-  /FIRSTCASE=2
-  /LEADINGSPACES IGNORE=YES
-  /DATATYPEMIN PERCENTAGE=95.0
-  /VARIABLES=
-  tr2020gj AUTO
-  GEOID AUTO
-  STATEFP AUTO
-  COUNTYFP AUTO
-  TRACTCE AUTO
-  CBSAFP AUTO
-  CBSA_NAME AUTO
-  CBSA_NAMELSAD AUTO
-  LOCALE AUTO
-  LocaleType AUTO
-  Bach_pct_1990 AUTO
-  Bach_pct_2000 AUTO
-  Bach_pct_2010 AUTO
-  Bach_pct_2020 AUTO
-  Bach_pct_chg_1990to2000 AUTO
-  Bach_pct_chg_1990to2020 AUTO
-  Bach_pct_chg_2000to2010 AUTO
-  Bach_pct_chg_2010to2020 AUTO
-  Bach_sum_1990 AUTO
-  Bach_sum_2000 AUTO
-  Bach_sum_2010 AUTO
-  Bach_sum_2020 AUTO
-  Bach_sum_chg_1990to2000 AUTO
-  Bach_sum_chg_1990to2020 AUTO
-  Bach_sum_chg_2000to2010 AUTO
-  Bach_sum_chg_2010to2020 AUTO
-  ConRent_agg_1990 AUTO
-  ConRent_agg_2000 AUTO
-  ConRent_agg_2010 AUTO
-  ConRent_agg_2020 AUTO
-  ConRent_agg_chg_1990to2000 AUTO
-  ConRent_agg_chg_1990to2020 AUTO
-  ConRent_agg_chg_2000to2010 AUTO
-  ConRent_agg_chg_2010to2020 AUTO
-  ConRent_mean_1990 AUTO
-  ConRent_mean_2000 AUTO
-  ConRent_mean_2010 AUTO
-  ConRent_mean_2020 AUTO
-  ConRent_mean_chg_1990to2000 AUTO
-  ConRent_mean_chg_1990to2020 AUTO
-  ConRent_mean_chg_2000to2010 AUTO
-  ConRent_mean_chg_2010to2020 AUTO
-  HHIncome_agg_1990 AUTO
-  HHIncome_agg_2000 AUTO
-  HHIncome_agg_2010 AUTO
-  HHIncome_agg_2020 AUTO
-  HHIncome_agg_chg_1990to2000 AUTO
-  HHIncome_agg_chg_1990to2020 AUTO
-  HHIncome_agg_chg_2000to2010 AUTO
-  HHIncome_agg_chg_2010to2020 AUTO
-  HHIncome_mean_1990 AUTO
-  HHIncome_mean_2000 AUTO
-  HHIncome_mean_2010 AUTO
-  HHIncome_mean_2020 AUTO
-  HHIncome_mean_chg_1990to2000 AUTO
-  HHIncome_mean_chg_1990to2020 AUTO
-  HHIncome_mean_chg_2000to2010 AUTO
-  HHIncome_mean_chg_2010to2020 AUTO
-  HouseValue_agg_1990 AUTO
-  HouseValue_agg_2000 AUTO
-  HouseValue_agg_2010 AUTO
-  HouseValue_agg_2020 AUTO
-  HouseValue_agg_chg_1990to2000 AUTO
-  HouseValue_agg_chg_1990to2020 AUTO
-  HouseValue_agg_chg_2000to2010 AUTO
-  HouseValue_agg_chg_2010to2020 AUTO
-  HouseValue_mean_1990 AUTO
-  HouseValue_mean_2000 AUTO
-  HouseValue_mean_2010 AUTO
-  HouseValue_mean_2020 AUTO
-  HouseValue_mean_chg_1990to2000 AUTO
-  HouseValue_mean_chg_1990to2020 AUTO
-  HouseValue_mean_chg_2000to2010 AUTO
-  HouseValue_mean_chg_2010to2020 AUTO
-  Population_sum_1990 AUTO
-  Population_sum_2000 AUTO
-  Population_sum_2010 AUTO
-  Population_sum_2020 AUTO
-  Poverty_pct_1990 AUTO
-  Poverty_pct_2000 AUTO
-  Poverty_pct_2010 AUTO
-  Poverty_pct_2020 AUTO
-  Poverty_pct_chg_1990to2000 AUTO
-  Poverty_pct_chg_1990to2020 AUTO
-  Poverty_pct_chg_2000to2010 AUTO
-  Poverty_pct_chg_2010to2020 AUTO
-  Poverty_sum_1990 AUTO
-  Poverty_sum_2000 AUTO
-  Poverty_sum_2010 AUTO
-  Poverty_sum_2020 AUTO
-  Poverty_sum_chg_1990to2000 AUTO
-  Poverty_sum_chg_1990to2020 AUTO
-  Poverty_sum_chg_2000to2010 AUTO
-  Poverty_sum_chg_2010to2020 AUTO
-  WhiteCollar_pct_1990 AUTO
-  WhiteCollar_pct_2000 AUTO
-  WhiteCollar_pct_2010 AUTO
-  WhiteCollar_pct_2020 AUTO
-  WhiteCollar_pct_chg_1990to2000 AUTO
-  WhiteCollar_pct_chg_1990to2020 AUTO
-  WhiteCollar_pct_chg_2000to2010 AUTO
-  WhiteCollar_pct_chg_2010to2020 AUTO
-  WhiteCollar_sum_1990 AUTO
-  WhiteCollar_sum_2000 AUTO
-  WhiteCollar_sum_2010 AUTO
-  WhiteCollar_sum_2020 AUTO
-  WhiteCollar_sum_chg_1990to2000 AUTO
-  WhiteCollar_sum_chg_1990to2020 AUTO
-  WhiteCollar_sum_chg_2000to2010 AUTO
-  WhiteCollar_sum_chg_2010to2020 AUTO
-  /MAP.
-RESTORE.
-CACHE.
-EXECUTE.
-
-
-*Query large metropolitan regions, with 2020 populations > 1mn.
-SORT CASES BY CBSAFP.
-AGGREGATE
-  /OUTFILE=* MODE=ADDVARIABLES
-  /PRESORTED
-  /BREAK=CBSAFP
-  /metro_Population_sum_2020=SUM(Population_sum_2020).
-EXECUTE.
-
-FILTER OFF.
-USE ALL.
-SELECT IF (metro_Population_sum_2020  >= 1000000).
-EXECUTE.
 
 *calculate factor scores for decadal changes.
 FACTOR
   /VARIABLES Bach_pct_chg_1990to2000 ConRent_mean_chg_1990to2000 HHIncome_mean_chg_1990to2000 HouseValue_mean_chg_1990to2000 Poverty_pct_chg_1990to2000 WhiteCollar_pct_chg_1990to2000
-  /MISSING LISTWISE
+  /MISSING MEANSUB
   /ANALYSIS Bach_pct_chg_1990to2000 ConRent_mean_chg_1990to2000 HHIncome_mean_chg_1990to2000 HouseValue_mean_chg_1990to2000 Poverty_pct_chg_1990to2000 WhiteCollar_pct_chg_1990to2000
   /PRINT INITIAL KMO EXTRACTION ROTATION
   /FORMAT BLANK(.30)
@@ -366,7 +122,7 @@ EXECUTE.
 
 FACTOR
   /VARIABLES Bach_pct_chg_2000to2010 ConRent_mean_chg_2000to2010 HHIncome_mean_chg_2000to2010 HouseValue_mean_chg_2000to2010 Poverty_pct_chg_2000to2010 WhiteCollar_pct_chg_2000to2010
-  /MISSING LISTWISE
+  /MISSING MEANSUB
   /ANALYSIS Bach_pct_chg_2000to2010 ConRent_mean_chg_2000to2010 HHIncome_mean_chg_2000to2010 HouseValue_mean_chg_2000to2010 Poverty_pct_chg_2000to2010 WhiteCollar_pct_chg_2000to2010
   /PRINT INITIAL KMO EXTRACTION ROTATION
   /FORMAT BLANK(.30)
@@ -384,7 +140,7 @@ EXECUTE.
 
 FACTOR
   /VARIABLES Bach_pct_chg_2010to2020 ConRent_mean_chg_2010to2020 HHIncome_mean_chg_2010to2020 HouseValue_mean_chg_2010to2020 Poverty_pct_chg_2010to2020 WhiteCollar_pct_chg_2010to2020
-  /MISSING  LISTWISE
+  /MISSING  MEANSUB
   /ANALYSIS Bach_pct_chg_2010to2020 ConRent_mean_chg_2010to2020 HHIncome_mean_chg_2010to2020 HouseValue_mean_chg_2010to2020 Poverty_pct_chg_2010to2020 WhiteCollar_pct_chg_2010to2020
   /PRINT INITIAL KMO EXTRACTION ROTATION
   /FORMAT BLANK(.30)
@@ -402,7 +158,7 @@ EXECUTE.
 
 FACTOR
   /VARIABLES Bach_pct_chg_1990to2020 ConRent_mean_chg_1990to2020 HHIncome_mean_chg_1990to2020 HouseValue_mean_chg_1990to2020 Poverty_pct_chg_1990to2020  WhiteCollar_pct_chg_1990to2020 
-  /MISSING  LISTWISE
+  /MISSING  MEANSUB
   /ANALYSIS Bach_pct_chg_1990to2020 ConRent_mean_chg_1990to2020 HHIncome_mean_chg_1990to2020 HouseValue_mean_chg_1990to2020 Poverty_pct_chg_1990to2020  WhiteCollar_pct_chg_1990to2020 
   /PRINT INITIAL KMO EXTRACTION ROTATION
   /FORMAT BLANK(.30)
@@ -521,11 +277,11 @@ EXECUTE.
 
 
 * identify gentrified tracts based on factor scores and class patterns.
-IF (FAC_1990to2000 >= metro_FAC_1990to2000) Gentrifying_90to00 = 1. 
+IF ((FAC_1990to2000 >= metro_FAC_1990to2000) AND (Population_sum_1990 >=100)) Gentrifying_90to00 = 1. 
 IF (FAC_1990to2000 < metro_FAC_1990to2000) Gentrifying_90to00 = 0. 
-IF (FAC_2000to2010 >= metro_FAC_2000to2010) Gentrifying_00to10 = 1.
+IF ((FAC_2000to2010 >= metro_FAC_2000to2010) AND (Population_sum_2000 >= 100)) Gentrifying_00to10 = 1.
 IF (FAC_2000to2010 < metro_FAC_2000to2010) Gentrifying_00to10 = 0.
-IF (FAC_2010to2020 >= metro_FAC_2010to2020) Gentrifying_10to20 = 1. 
+IF ((FAC_2010to2020 >= metro_FAC_2010to2020) AND (Population_sum_2010 >= 100)) Gentrifying_10to20 = 1. 
 IF (FAC_2010to2020 < metro_FAC_2010to2020) Gentrifying_10to20 = 0. 
 EXECUTE.
 
@@ -572,37 +328,9 @@ IF (HistoricallyAffluent = 1) classtype = 'historically affluent'.
 EXECUTE. 
 
 *save results back to a CSV.
-SAVE TRANSLATE OUTFILE='C:\Users\johnl\My Drive (jlauerma@pratt.edu)\Research\Gentrification mapping\data\largemetros_allyears_2020tr.csv'
-  /TYPE=CSV
+SAVE TRANSLATE OUTFILE="C:\Users\johnl\My Drive (jlauerma@pratt.edu)\Research\Gentrification mapping\data\largemetros_allyears_2020tr.csv"
   /ENCODING='UTF8'
   /MAP
   /REPLACE
   /FIELDNAMES
   /CELLS=VALUES.
-
-
-
-*query out only gentrified, super-gentrified, or historically affluent tracts.
-FILTER OFF.
-USE ALL.
-SELECT IF (Gentrified = 1 OR SuperGentrified = 1 OR HistoricallyAffluent = 1).
-EXECUTE.
-
-*hierachical cluster analysis. explore for optimal value of k. 
-
-
-PROXIMITIES   Bach_pct_2020 Bach_pct_chg_1990to2020 ConRent_mean_2020 ConRent_mean_chg_1990to2020 
-    HHIncome_mean_2020 HHIncome_mean_chg_1990to2020 HouseValue_mean_2020 HouseValue_mean_chg_1990to2020 
-    Poverty_pct_2020 Poverty_pct_chg_1990to2020 WhiteCollar_pct_2020 WhiteCollar_pct_chg_1990to2020
-  /MATRIX OUT(D0.5739386572834789)
-  /VIEW=CASE
-  /MEASURE=SEUCLID
-  /PRINT NONE
-  /STANDARDIZE=VARIABLE Z.
-CLUSTER
-  /MATRIX IN(D0.5739386572834789)
-  /METHOD WARD
-  /PRINT SCHEDULE CLUSTER(2,10)
-  /PLOT VICICLE
-  /SAVE CLUSTER(2,10).
-

@@ -40,7 +40,7 @@ ds <- define_extract_nhgis(
             data_tables = c("NH24", "NH33"),
             geog_levels = "blck_grp_598_101"),
     ds_spec("1990_STF3", 
-                     data_tables = c("NP57", "NP70", "NP78", "NP85", "NP121", "NH29", "NH62", "NH33", "NH24"),
+                     data_tables = c("NP57", "NP70", "NP78", "NP81", "NP121", "NH29", "NH62", "NH33", "NH24"),
                      geog_levels = "blck_grp_598_101")
   ),
   geographic_extents = "*"
@@ -170,7 +170,8 @@ variables_bgp_STF3 <- c(
   Ed_Graduate_sum = "E33007",
   Employed_F_sum = "E4I006",
   Employed_M_sum = "E4I002",
-  HHIncome_agg = "E4Z001",
+  HHIncome_under150k_agg = "E4V001",
+  HHIncome_over150k_agg = "E4V002",
   HouseValue_Mortgaged_agg = "EZJ001",
   Owner_MovedIn_2to5yrs_sum = "EYC002",
   Owner_MovedIn_5to10yrs_sum= "EYC003",
@@ -211,7 +212,8 @@ data_bgp <- within(data_bgp, {
   Ed_Graduate_sum <- Ed_Graduate_sum * wt_adult
   Employed_F_sum <- Employed_F_sum * wt_pop
   Employed_M_sum <- Employed_M_sum * wt_pop
-  HHIncome_agg <- as.numeric(HHIncome_agg) * wt_hh
+  HHIncome_under150k_agg <- HHIncome_under150k_agg * wt_hh
+  HHIncome_over150k_agg <- HHIncome_over150k_agg * wt_hh
   HouseValue_agg <- HouseValue_agg * wt_ownhu
   HouseValue_Mortgaged_agg <- as.numeric(HouseValue_Mortgaged_agg) * wt_ownhu
   Owner_MovedIn_under1yr_sum <- Owner_MovedIn_under1yr_sum * wt_ownhu
@@ -232,6 +234,7 @@ data_bgp <- within(data_bgp, {
 data_bgp <- within(data_bgp, {
   Bach_sum <- Ed_Bach_sum + Ed_Graduate_sum
   Employed_sum <- Employed_F_sum + Employed_M_sum
+  HHIncome_agg <- HHIncome_under150k_agg + HHIncome_over150k_agg
   MovedIn_under10yrs_sum <- Owner_MovedIn_under1yr_sum + Owner_MovedIn_2to5yrs_sum +
     Owner_MovedIn_5to10yrs_sum + Renter_MovedIn_under1yr_sum +
     Renter_MovedIn_2to5yrs_sum + Renter_MovedIn_5to10yrs_sum
@@ -265,7 +268,7 @@ url <- "https://api.ipums.org/supplemental-data/nhgis/crosswalks/nhgis_bg2010_tr
 download.file(url, "nhgis_bg2010_tr2020.zip", headers = c(Authorization = my_key))
 
 ##crosswalk and merge again, to tracts
-crosswalks <- read_nhgis("crosswalks_nhgis/nhgis_bg2010_tr2020.zip")
+crosswalks <- read_nhgis("nhgis_bg2010_tr2020.zip")
 data_bgp <- left_join(crosswalks, data_bgp, by = "bg2010gj")
 rm(crosswalks)
 

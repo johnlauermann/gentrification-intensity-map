@@ -8,7 +8,7 @@ library(dplyr)
 library(stringr)
 
 #set working directory & source data
-setwd("Your directory...run script to generate data for each decade first")
+setwd("Your directory")
 data1990 <- read.csv("tractdata_1990_2020tr.csv")
 data2000 <- read.csv("tractdata_2000_2020tr.csv")
 data2010 <- read.csv("tractdata_2010_2020tr.csv")
@@ -243,5 +243,6 @@ write.csv(data, file = "tractdata_allyears_2020tr.csv", na="")
 
 ##save a sample of 'urban' census tracts
 metros <- read.csv("metrotracts_2020.csv")
+metros <- metros %>% rename(tr2020gj = GISJOIN)
 data <- metros %>% left_join(data, by = "tr2020gj")
 write.csv(data, file = "metrodata_allyears_2020tr.csv", na="")

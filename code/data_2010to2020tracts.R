@@ -1,4 +1,4 @@
-#This script
+#This script 
 ## 1)pulls raw data from the NGHIS API, 
 ## 2) crosswalks the data to modern census boundaries
 ## 3) cleans data and calculates derivative statistics (e.g. percents, means)

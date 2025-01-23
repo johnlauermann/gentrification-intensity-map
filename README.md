@@ -3,8 +3,12 @@
 This repository contains code and data related to a national longitudinal tract database on gentrification patterns in American cities. It contains two data products:
 
 ## Gentrification patterns on 2020 tract boundaries
-This dataset includes gentrification-related data from 1990 to 2020, adjusted to 2020 census tract boundaries. This is based on Decennial Census and American Community Survey data, drawn from [National Historical GIS]([url](https://www.nhgis.org/)) using the [IPUMS API]([url](https://developer.ipums.org/docs/v2/get-started/)). 
+Gentrification-related data from 1990 to 2020, adjusted to 2020 census tract boundaries. This is based on Decennial Census and American Community Survey data, drawn from [National Historical GIS](https://www.nhgis.org/) using the [IPUMS API](ttps://developer.ipums.org/docs/v2/get-started/). Crosswalks are based on the [NHGIS Geographic Crosswalk](https://www.nhgis.org/geographic-crosswalks) methodology. 
 
 ## Historical data on 2010 tract boundaries
+Gentrification indicators from 1970 to 2020, adjusted to 2010 census tract boundaries. This is base don Decennial Census and American Community Survey data, drawn from from [National Historical GIS](https://www.nhgis.org/))using the [IPUMS API](https://developer.ipums.org/docs/v2/get-started/). Crosswalks are based on methods from both [NHGIS Geographic Crosswalks](https://www.nhgis.org/geographic-crosswalks) and the [Longitudinal Tract Data Base](https://s4.ad.brown.edu/projects/diversity/researcher/bridging.htm).
+
+## Related data & publications
+Lauermann, John; Wang, Ziqi; Feldman, Anna; Wu, Yuanhao; Smash, Nathan, 2025, "Replication Data for: Mapping super-gentrification in large US cities, 1990 to 2020",  Harvard Dataverse, V2, https://doi.org/10.7910/DVN/BSAF99
 
 

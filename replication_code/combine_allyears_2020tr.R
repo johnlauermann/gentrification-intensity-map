@@ -234,15 +234,15 @@ for (column in names(data)) {
 
 ##View descriptive to verify
 metrics <- metrics %>% arrange(Variable)
-write.csv(metrics, "metrics.csv")
+write.csv(metrics, "metrics.csv", row.names = FALSE)
 
 #final cleanup and save
 ##archive all data
 data <- data %>% select(tr2020gj, sort(setdiff(names(.), "tr2020gj")))
-write.csv(data, file = "tractdata_allyears_2020tr.csv", na="")
+write.csv(data, file = "tractdata_2020tr.csv", na="", row.names = FALSE)
 
 ##save a sample of 'urban' census tracts
 metros <- read.csv("metrotracts_2020.csv")
 metros <- metros %>% rename(tr2020gj = GISJOIN)
-data <- metros %>% left_join(data, by = "tr2020gj")
-write.csv(data, file = "metrodata_allyears_2020tr.csv", na="")
+metros <- metros %>% left_join(data, by = "tr2020gj")
+write.csv(metros, file = "metrotracts_data_2020tr.csv", na="", row.names = FALSE)

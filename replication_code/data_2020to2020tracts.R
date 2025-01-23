@@ -1,4 +1,4 @@
-#This script 
+#This script
 ## 1)pulls raw data from the NGHIS API, 
 ## 2) crosswalks the data to modern census boundaries
 ## 3) cleans data and calculates derivative statistics (e.g. percents, means)
@@ -104,7 +104,7 @@ divide_pop <- Vectorize(function(numerator, denominator) {
 
 divide_units <- Vectorize(function(numerator, denominator) {
   if (!is.na(numerator) && !is.na(denominator) && numerator < denominator && denominator >= 10) {
-    return(numerator / denominator)
+    return(as.numeric(numerator) / as.numeric(denominator))
   } else {
     return(NA)
   }
@@ -112,7 +112,7 @@ divide_units <- Vectorize(function(numerator, denominator) {
 
 divide_value <- Vectorize(function(numerator, denominator) {
   if (!is.na(numerator) && !is.na(denominator) && denominator >= 10) {
-    return(numerator / denominator)
+    return(as.numeric(numerator) / as.numeric(denominator))
   } else {
     return(NA)
   }
@@ -197,5 +197,5 @@ file.rename(filepath, paste0("nhgis_", year, "_tracts.zip" ))
 
 ##save cleaned data
 filename <- paste0("tractdata_", year, "_2020tr.csv")
-write.csv(data, file = filename, na="")
+write.csv(data, file = filename, na="", row.names = FALSE)
 

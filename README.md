@@ -17,6 +17,8 @@ The finished GIS data are available in the replication data cited below on Harva
 
 
 ## Related data & publications
-Lauermann, John; Wang, Ziqi; Feldman, Anna; Wu, Yuanhao; Smash, Nathan, 2025, "Replication Data for: Mapping super-gentrification in large US cities, 1990 to 2020",  Harvard Dataverse, V2, https://doi.org/10.7910/DVN/BSAF99
+Lauermann, John, Alexander, Zoe, & Wang, Ziqi (2025) Mapping super-gentrification in large US cities, 1990-2020, _Urban Geography_, https://doi.org/10.1080/02723638.2025.2528418
+
+Lauermann, John, Wang, Ziqi, Feldman, Anna, Wu, Yuanhao, & Smash, Nathan (2025) "Replication Data for: Mapping super-gentrification in large US cities, 1990 to 2020",  Harvard Dataverse, V2, https://doi.org/10.7910/DVN/BSAF99
 
 

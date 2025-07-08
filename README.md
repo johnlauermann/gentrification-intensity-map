@@ -10,9 +10,9 @@ Gentrification indicators from 1970 to 2020, adjusted to 2010 census tract bound
 
 
 ## How to use
-The finished GIS data are available in the `data` folder as a geodatabase (for open-source users, here's how to read a geodatabase in [QGIS](https://qgis-in-mineral-exploration.readthedocs.io/en/latest/source/how_to/esri_files.html), [R](https://r.esri.com/assets/arcgisbinding-vignette.html), or [Python](https://geopandas.org/en/v0.6.0/io.html)). 
-
 The replication code are available in the `code` folder, including annotated scripts explaining how to choose different Census/ACS variables in your workflow. The workflow primarily runs on R. Each script defines its required packages, uses the [IPUMS API](https://developer.ipums.org/docs/v2/apiprogram/) to call source data, and uses [here](https://here.r-lib.org/) to create and save project-oriented workflows with relative file paths. To run the scripts, simply download them to your local drive and then run locally. You'll also need a free IPUMS account and API key ([register here](https://developer.ipums.org/docs/v2/get-started/)).  
+
+The finished GIS data are available in the replication data cited below on Harvard Dataverse. Most data are available there in geodatabase format (for open-source users, here's how to read a geodatabase in [QGIS](https://qgis-in-mineral-exploration.readthedocs.io/en/latest/source/how_to/esri_files.html), [R](https://r.esri.com/assets/arcgisbinding-vignette.html), or [Python](https://geopandas.org/en/v0.6.0/io.html)). 
 
 
 

@@ -1,14 +1,23 @@
-#This script creates a longitudinal tract database. It:
+#This script creates a longitudinal tract database from 1970 to 2020. It:
 #1) combines each decade of tract-level data
 #2) calculates change-related variables
 #3) saves a longitudinal tract database for all tracts in the US
 #4) saves a longitudinal tract database for urban tracts in the US
 
+
+if (!require(dplyr)) install.packages("dplyr")
+if (!require(here)) install.packages("here")
+if (!require(stringr)) install.packages("stringr")
+
 library(dplyr)
+library(here)
 library(stringr)
 
-#set working directory & source data
-setwd("Your directory")
+
+#set working directory 
+here::i_am("combinte_allyears_2010tr.R")
+
+#load data
 data1970 <- read.csv("tractdata_1970_2010tr.csv")
 data1980 <- read.csv("tractdata_1980_2010tr.csv")
 data1990 <- read.csv("tractdata_1990_2010tr.csv")

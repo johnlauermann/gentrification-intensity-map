@@ -1,14 +1,20 @@
 #This script
 ## 1)pulls raw data from the NGHIS API, 
-## 2) crosswalks the data to modern census boundaries
+## 2) crosswalks the data to 2020 census boundaries
 ## 3) cleans data and calculates derivative statistics (e.g. percents, means)
 
-library(ipumsr)
+if (!require(dplyr)) install.packages("dplyr")
+if (!require(here)) install.packages("here")
+if (!require(ipumsr)) install.packages("ipumsr")
+if (!require(purr)) install.packages("purr")
+
 library(dplyr)
-library(purrr)
+library(here)
+library(ipumsr)
+library(purr)
 
 #set working directory & general attributes
-setwd("Your directory")
+here::i_am("data_2020to2020tracts.R")
 year <- "2020"
 inflation <- 1
 
@@ -22,7 +28,8 @@ metadata <- get_metadata_nhgis(dataset = "2016_2020_ACS5a")
 
 #pulling data from the IPUMS API
 ##define the data to extract
-ds <- define_extract_nhgis(
+ds <- define_extract_agg(
+  collection = "nhgis",
   description = "Gentrification map data, 2020 tracts",
   datasets = ds_spec("2016_2020_ACS5a",
                      data_tables = c("B01003", "B02001", "B03003", "B11001", 

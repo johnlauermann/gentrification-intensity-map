@@ -1,6 +1,6 @@
 #This script
 ## 1) pulls raw data from the NGHIS API, 
-## 2) crosswalks the data to modern census boundaries
+## 2) crosswalks the data to 2010 census boundaries
 ## 3) cleans data and calculates derivative statistics (e.g. percents, means)
 
 #To run this, you will need:
@@ -8,12 +8,18 @@
 ## an IPUMPS API key (https://developer.ipums.org/docs/v2/get-started/)
 ## crosswalk files from the Brown Longitudinal Tract Database (https://s4.ad.brown.edu/projects/diversity/researcher/LTDB.htm)
 
-library(ipumsr)
+if (!require(dplyr)) install.packages("dplyr")
+if (!require(here)) install.packages("here")
+if (!require(ipumsr)) install.packages("ipumsr")
+
 library(dplyr)
+library(here)
+library(ipumsr)
+
 
 
 #set working directory & general attributes
-setwd("Your directory")
+here::i_am("data_1970to2010tracts.R")
 year <- "1970"
 inflation <- 6.545  #based on BLS CPI calculator: https://data.bls.gov/cgi-bin/cpicalc.pl?cost1=1%2C000.00&year1=197012&year2=202012 
 
@@ -34,7 +40,8 @@ metadata_ts <- get_metadata_nhgis(time_series_table = "A35")  ## etc...
 
 #pulling data from the IPUMS API
 ##define the data to extract
-ds <- define_extract_nhgis(
+ds <- define_extract_agg(
+  collection = "nhgis",
   description = "Gentrification map data, 1970 tracts & 1980 time series",
   datasets = list(
     ds_spec("1970_Cnt3", data_tables = c("NT1A", "NT2A") , geog_levels = "tract"),

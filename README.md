@@ -1,5 +1,5 @@
 # National Gentrification Intensity Map
-#### Team: [John Lauermann](https://www.pratt.edu/people/john-lauermann/), [Yuanhao Wu](https://www.linkedin.com/in/yuanhao-wu-80603723a/), [Anna Feldman](https://www.linkedin.com/in/annaelsafeldman/), [Ziqi Wang](https://www.linkedin.com/in/ziqi-wang-0623/), [Nathan Smash](https://www.linkedin.com/in/nathan-smash-b6b93a24a/)
+#### Team: [John Lauermann](https://www.pratt.edu/people/john-lauermann/), [Yuanhao Wu](https://www.linkedin.com/in/yuanhao-wu-80603723a/), [Alice Viggiani](https://www.aliceviggiani.com/), [Anna Feldman](https://www.linkedin.com/in/annaelsafeldman/), [Ziqi Wang](https://www.linkedin.com/in/ziqi-wang-0623/), [Nathan Smash](https://www.linkedin.com/in/nathan-smash-b6b93a24a/)
 This repository contains code and data related to a national longitudinal tract database on gentrification patterns in American cities. It includes two data products:
 
 #### Gentrification patterns on 2020 tract boundaries

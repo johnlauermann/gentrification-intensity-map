@@ -21,7 +21,7 @@ The finished GIS data are available in the replication data cited below on Harva
 
 
 ## How to cite
-Lauermann, John, et al., 2025, "National Gentrification Intensity Map", https://doi.org/10.7910/DVN/DPKO3I, Harvard Dataverse, DRAFT VERSION, UNF:6:A2bD8JGLPSQbghgxaBGN0Q== [fileUNF] (https://dataverse.harvard.edu/previewurl.xhtml?token=c430da44-3ff2-4d1a-8eb0-451180015b4c)
+Lauermann, John, et al., 2025, "National Gentrification Intensity Map", https://doi.org/10.7910/DVN/DPKO3I, _Harvard Dataverse_, (https://dataverse.harvard.edu/previewurl.xhtml?token=c430da44-3ff2-4d1a-8eb0-451180015b4c)
 
 ## Related publications
 Lauermann, John & Mallak, Khouloud (2023). Elite capture and urban geography: Analyzing geographies of privilege. _Progress in Human Geography_, 47(5), 645-663. https://doi.org/10.1177/03091325231186810

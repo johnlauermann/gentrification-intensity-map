@@ -1,14 +1,8 @@
-@font-face {
-  font-family: 'webflow-icons';
-  src: url("data:application/x-font-ttf;charset=utf-8;base64,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") format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
 [class^="w-icon-"],
 [class*=" w-icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'webflow-icons' !important;
-  speak: none;
+  /* speak: none; */
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -42,18 +36,6 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-html {
-  height: 100%;
-}
-body {
-  margin: 0;
-  min-height: 100%;
-  background-color: #fff;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  line-height: 20px;
-  color: #333;
-}
 img {
   max-width: 100%;
   vertical-align: middle;
@@ -65,10 +47,7 @@ html.w-mod-touch * {
 .w-block {
   display: block;
 }
-.w-inline-block {
-  max-width: 100%;
-  display: inline-block;
-}
+
 .w-clearfix:before,
 .w-clearfix:after {
   content: " ";
@@ -95,21 +74,7 @@ html.w-mod-touch * {
   cursor: pointer;
   border-radius: 0;
 }
-input.w-button {
-  -webkit-appearance: button;
-}
-html[data-w-dynpage] [data-w-cloak] {
-  color: transparent !important;
-}
-.w-code-block {
-  margin: unset;
-}
-pre.w-code-block code {
-  all: inherit;
-}
-.w-optimization {
-  display: contents;
-}
+
 .w-webflow-badge,
 .w-webflow-badge > img {
   box-sizing: unset;
@@ -192,11 +157,6 @@ pre.w-code-block code {
   opacity: 1 !important;
   vertical-align: middle !important;
 }
-h1,
-h2,
-h3,
-h4,
-h5,
 h6 {
   font-weight: bold;
   margin-bottom: 10px;
@@ -329,7 +289,6 @@ label {
   font-size: 14px;
   line-height: 1.42857143;
   color: #333333;
-  vertical-align: middle;
   background-color: #ffffff;
   border: 1px solid #cccccc;
 }
@@ -923,7 +882,7 @@ textarea.w-select {
   background: #dddddd;
   clear: both;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  tap-highlight-color: rgba(0, 0, 0, 0);
+  /* tap-highlight-color: rgba(0, 0, 0, 0); */
 }
 .w-slider-mask {
   position: relative;
@@ -956,7 +915,7 @@ textarea.w-select {
   height: 40px;
   text-align: center;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  tap-highlight-color: rgba(0, 0, 0, 0);
+  /* tap-highlight-color: rgba(0, 0, 0, 0); */
 }
 .w-slider-nav.w-round > div {
   border-radius: 100%;
@@ -1014,7 +973,7 @@ textarea.w-select {
   color: white;
   font-size: 40px;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  tap-highlight-color: rgba(0, 0, 0, 0);
+  /* tap-highlight-color: rgba(0, 0, 0, 0); */
   user-select: none;
 }
 .w-slider-arrow-left [class^='w-icon-'],
@@ -1057,66 +1016,6 @@ textarea.w-select {
 }
 .w-slider-force-show {
   display: block !important;
-}
-.w-dropdown {
-  display: inline-block;
-  position: relative;
-  text-align: left;
-  margin-left: auto;
-  margin-right: auto;
-  z-index: 900;
-}
-.w-dropdown-btn,
-.w-dropdown-toggle,
-.w-dropdown-link {
-  position: relative;
-  vertical-align: top;
-  text-decoration: none;
-  color: #222222;
-  padding: 20px;
-  text-align: left;
-  margin-left: auto;
-  margin-right: auto;
-  white-space: nowrap;
-}
-.w-dropdown-toggle {
-  user-select: none;
-  display: inline-block;
-  cursor: pointer;
-  padding-right: 40px;
-}
-.w-dropdown-toggle:focus {
-  outline: 0;
-}
-.w-icon-dropdown-toggle {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  margin-right: 20px;
-  width: 1em;
-  height: 1em;
-}
-.w-dropdown-list {
-  position: absolute;
-  background: #dddddd;
-  display: none;
-  min-width: 100%;
-}
-.w-dropdown-list.w--open {
-  display: block;
-}
-.w-dropdown-link {
-  padding: 10px 20px;
-  display: block;
-  color: #222222;
-}
-.w-dropdown-link.w--current {
-  color: #0082f3;
-}
-.w-dropdown-link:focus {
-  outline: 0;
 }
 @media screen and (max-width: 767px) {
   .w-nav-brand {
@@ -1657,7 +1556,7 @@ textarea.w-select {
   display: none;
   cursor: pointer;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  tap-highlight-color: rgba(0, 0, 0, 0);
+  /* tap-highlight-color: rgba(0, 0, 0, 0); */
   user-select: none;
 }
 .w-nav-button:focus {

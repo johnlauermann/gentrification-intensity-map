@@ -1,0 +1,95 @@
+@font-face {
+  font-family: Atlas Grotesk;
+  src: url('../fonts/AtlasGrotesk-ThinItalic.otf') format("opentype");
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Atlas Grotesk;
+  src: url('../fonts/AtlasGrotesk-Black.otf') format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Atlas Grotesk;
+  src: url('../fonts/AtlasGrotesk-Thin.otf') format("opentype");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Atlas Grotesk;
+  src: url('../fonts/AtlasGrotesk-Light.otf') format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Atlas Grotesk;
+  src: url('../fonts/AtlasGrotesk-RegularItalic.otf') format("opentype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Atlas Grotesk;
+  src: url('../fonts/AtlasGrotesk-Regular.otf') format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Atlas Grotesk;
+  src: url('../fonts/AtlasGrotesk-MediumItalic.otf') format("opentype");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Atlas Grotesk;
+  src: url('../fonts/AtlasGrotesk-LightItalic.otf') format("opentype");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Atlas Grotesk;
+  src: url('../fonts/AtlasGrotesk-BlackItalic.otf') format("opentype");
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Atlas Grotesk;
+  src: url('../fonts/AtlasGrotesk-Bold.otf') format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Atlas Grotesk;
+  src: url('../fonts/AtlasGrotesk-BoldItalic.otf') format("opentype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Atlas Grotesk;
+  src: url('../fonts/AtlasGrotesk-Medium.otf') format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}

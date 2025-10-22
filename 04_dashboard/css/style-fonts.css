@@ -93,3 +93,19 @@
   font-style: normal;
   font-display: swap;
 }
+
+@font-face {
+  font-family: Fakt Mono;
+  src: url('../fonts/FaktMono-Normal.woff2') format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Fakt Mono;
+  src: url('../fonts/FaktMono-Blond.woff2') format("opentype");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}

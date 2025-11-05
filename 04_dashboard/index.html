@@ -122,6 +122,53 @@
         </div>
     </section>
 
+    <!-- <script>
+        // dropdown cities
+        const cities_centers = {
+            "New York City": {center: [-74.0000, 40.7300], zoom: 10},
+            "Los Angeles": {center: [-118.2437, 34.0522], zoom: 10},
+            "Chicago": {center: [-87.6298, 41.8781], zoom: 10},
+            "Dallas": {center: [-96.7970, 32.7767], zoom: 10},
+            "Houston": {center: [-95.3698, 29.7604], zoom: 10},
+            "Washington DC": {center: [-77.0369, 38.9072], zoom: 10},
+            "Philadelphia": {center: [-75.1652, 39.9526], zoom: 10},
+            "Atlanta": {center: [-84.3880, 33.7490], zoom: 10},
+            "US": {center: [-98.5795, 39.8283], zoom: 4}
+        };
+
+        const selected = document.getElementById('dropdown-selected-city');
+        const menu = document.getElementById('dropdown-menu-city');
+
+        selected.addEventListener("click", (e) => {
+            e.stopPropagation();
+            menu.classList.toggle("open");
+        })
+        
+        document.addEventListener("click", () => {
+            menu.classList.remove("open");
+        });
+
+        menu.querySelectorAll('.dropdown-link').forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const city = link.textContent.trim();
+                const view = cities_centers[city];
+                if (!view || !window.map) return;
+
+                window.map.easeTo({
+                    center: view.center,
+                    zoom: view.zoom,
+                    duration: 900
+                });
+
+                document.querySelector('#dropdown-selected-city .txt-menu').textContent = city;
+                menu.classList.remove('open');
+            });
+        });
+    </script> -->
+
     <script src="js/script-2.js"></script>
 
 </body>

@@ -249,10 +249,32 @@
 
 .legend-icon {
   color: var(--color-1);
-  background-color: #e2bff3;
+  background-color: lightgrey;
   border-radius: 8px;
   width: 16px;
   height: 16px;
+}
+
+.legend-icon._1 {
+  background-color: #F5BFE1;
+}
+.legend-icon._2 {
+  background-color: #E2BFF3;
+}
+.legend-icon._3 {
+  background-color: #BFCFF3;
+}
+.legend-icon._4 {
+  background-color: #84B5F2;
+}
+.legend-icon._5 {
+  background-color: #3381F0;
+}
+.legend-icon._6 {
+  background-color: #3267A9;
+}
+.legend-icon._7 {
+  background-color: #314A80;
 }
 
 

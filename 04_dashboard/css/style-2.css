@@ -73,7 +73,8 @@
 
 .txt-menu {
   color: var(--color-1);
-  padding: 4px;
+  text-indent: -8px;
+  margin-left: 8px
 }
 
 .txt-legend {
@@ -232,14 +233,37 @@
 
 /* legend */
 
+.checkbox-wrapper {
+  display: grid;
+  grid-template-columns: 16px auto;
+  grid-row: auto auto;
+  column-gap: 24px;
+  align-items: start;
+}
+
+#legend-index-input {
+  grid-row: 1 / span 2;
+  margin: 0;
+  align-self: start;
+
+}
+
+#legend-text-gent,
+#legend-text-sd {
+  display: block;
+  margin: 0;
+}
+
 .legend-wrapper {
+  margin-top: 16px;
   display: flex;
   gap: 4px;
-  padding-left: 20px;
+  margin-left: 32px;
+  /* background-color: #3381F0; */
 }
 
 .legend-icon-wrapper {
-  gap: 4px;
+  gap: 6px;
   display: flex;
   flex-flow: column;
   justify-content: flex-start;

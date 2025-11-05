@@ -62,3 +62,111 @@ window.addEventListener('load', () => {
     }
   }, 1000);
 });
+
+
+// hover popup
+const popup = new mapboxgl.Popup({
+  className: 'popup-override',
+  closeButton: false,
+  closeOnClick: false,
+  closeOnMove: false,
+  anchor: 'left',
+  offset: {left: [32, 32]} // elements coming from mapbox needs to be customized in th js, not in the css
+});
+
+// to later limit redraws
+let rafId; 
+
+// loading popup
+map.on('load', () => {
+  const layer_index = 'large_metros_intensity'; // to uniformize the names
+  const layer_base = map.getLayer(layer_index);
+
+  if (!layer_base) {
+    console.error(`Layer ${layer_index} not found`);
+    return;
+  }
+  
+  const source_base = layer_base.source; // from mapbox: "composite"
+  const source_sub_layer = layer_base['source-layer'];  // from mapbox: "largemetros_layer_6-5dhbcd"
+  console.log(layer_base);
+
+  // highlighting the hovered tract
+  const hover_index = `${layer_index}-hover`;
+  const hover_def = {
+    id: hover_index,
+    type: 'line',
+    source: source_base,
+    filter: ['==', ['get', 'GEOID'], '__none__'], // Mapbox GL JS language
+    paint: {
+      'line-color': '#314A80',
+      'line-width': 2,
+      'line-opacity': 1
+    }
+  };
+
+  if (source_sub_layer) 
+    hover_def['source-layer'] = source_sub_layer;
+  map.addLayer(hover_def);
+
+  // updating the filter during hover
+  map.on('mousemove', layer_index, (e) => {
+    const f = e.features && e.features[0];
+    if (!f) return;
+    const geoid_highlight = String(f.properties.GEOID ?? '');
+    map.setFilter(hover_index, ['==', ['get', 'GEOID'], geoid_highlight]);
+  });
+
+  // turning off highlight on leave
+  map.on('mouseleave', layer_index, () => {
+    map.setFilter(hover_index, ['==', ['get', 'GEOID'], '__none__']);
+  });
+
+  // pop-up for the hovered tract
+  // creating separately from the highlight, so it keeps independently for using with future layers
+  map.on('mouseenter', layer_index, () => {
+    map.getCanvas().style.cursor = 'default';
+    if (!popup.isOpen())
+      popup.addTo(map);
+  });
+
+  map.on('mousemove', layer_index, (e) => {
+    const f = e.features && e.features[0];
+    if (!f) return;
+    console.log(f.properties); 
+
+    // popup content
+    const cbsa  = (f.properties.CBSA_NAME || '')
+      .split(',')[0]
+      .replaceAll('-', '<br>');
+    const index = f.properties.FAC_1990to;
+    const type  = (f.properties.classtype || '')
+      .replace(/^./, c => c.toUpperCase());
+    const geoid_popup = f.properties.GEOID || '';
+    const html = `
+      <div>
+        <strong>${cbsa}</strong><br><br>
+        <div class="line pop"></div>
+        <div class="popup-content">
+          <div><strong>Census tract</strong><br>${geoid_popup}</div>
+          <div><strong>Gentrification intensity index</strong><br>${index}</div>
+          <div><strong>Class</strong><br>${type}</div>
+        </div>
+      </div>
+    `;
+
+    // smoothing follow
+    cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(() => {
+      popup.setLngLat(e.lngLat).setHTML(html);
+    });
+  });
+
+  map.on('mouseleave', layer_index, () => {
+    // map.getCanvas().style.cursor = 'default';
+    popup.remove();
+  });
+
+}
+
+);

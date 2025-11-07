@@ -3,17 +3,20 @@
 ##2) Classifies gentrified tracts based on factor scores
 
 if (!require(dplyr)) install.packages("dplyr")
-if (!require(here)) install.packages("here")
+if (!require(psych)) install.packages("mapboxapi")
 if (!require(psych)) install.packages("psych")
+if (!require(psych)) install.packages("sf")
 if (!require(tidyverse)) install.packages("tidyverse")
 
 library(dplyr)
-library(here)
+library(mapboxapi)
 library(psych)
+library(sf)
 library(tidyverse)
 
 # set environment
-here::i_am("gentrificationscores_2020tr.R")
+wd <- getwd()
+setwd(wd)
 
 
 #set up the data for large metros over 1mn residents
@@ -31,12 +34,6 @@ pattern <- paste(variables, collapse = "|")
 data <- read_csv("metrotracts_data_2020tr.csv") %>%
   select(tr2020gj, CBSAFP, matches(pattern))
 
-##if filtering for only large metros...otherwise ignore this
-data <- data %>%  
-  group_by(CBSAFP) %>%
-  mutate(metro_Population_sum_2020 = sum(Population_sum_2020, na.rm=TRUE)) %>%
-  filter(metro_Population_sum_2020 >= 1000000)%>%
-  ungroup()
 
 #factor analysis for decadal change scores
 class_upgrading_score <- function(data, startyear, endyear){
@@ -208,6 +205,7 @@ data <- data %>%
 table(data$classtype)
 
 
-#save data
+# save tabular data
 data <- data %>% select(tr2020gj, CBSAFP, sort(setdiff(names(.), "tr2020gj")))
 write.csv(data, file = "metrotracts_gentscores_2020tr.csv", na="", row.names = FALSE)
+

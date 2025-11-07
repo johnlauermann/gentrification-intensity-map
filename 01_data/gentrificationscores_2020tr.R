@@ -1,17 +1,13 @@
-# This script:
-## 1) Generates class upgrading and class status scores based on factor analysis
-## 2) Classifies gentrified tracts based on factor scores
+#This script:
+##1) Generates class upgrading and class status scores based on factor analysis
+##2) Classifies gentrified tracts based on factor scores
 
 if (!require(dplyr)) install.packages("dplyr")
-if (!require(psych)) install.packages("mapboxapi")
 if (!require(psych)) install.packages("psych")
-if (!require(psych)) install.packages("sf")
 if (!require(tidyverse)) install.packages("tidyverse")
 
 library(dplyr)
-library(mapboxapi)
 library(psych)
-library(sf)
 library(tidyverse)
 
 # set environment
@@ -208,4 +204,3 @@ table(data$classtype)
 # save tabular data
 data <- data %>% select(tr2020gj, CBSAFP, sort(setdiff(names(.), "tr2020gj")))
 write.csv(data, file = "metrotracts_gentscores_2020tr.csv", na="", row.names = FALSE)
-

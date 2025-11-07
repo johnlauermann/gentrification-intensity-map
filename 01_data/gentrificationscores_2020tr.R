@@ -1,6 +1,6 @@
-#This script:
-##1) Generates class upgrading and class status scores based on factor analysis
-##2) Classifies gentrified tracts based on factor scores
+# This script:
+## 1) Generates class upgrading and class status scores based on factor analysis
+## 2) Classifies gentrified tracts based on factor scores
 
 if (!require(dplyr)) install.packages("dplyr")
 if (!require(psych)) install.packages("mapboxapi")

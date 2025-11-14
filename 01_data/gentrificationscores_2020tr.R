@@ -1,4 +1,4 @@
-#This script:
+#This script: 
 ##1) Generates class upgrading and class status scores based on factor analysis
 ##2) Classifies gentrified tracts based on factor scores
 

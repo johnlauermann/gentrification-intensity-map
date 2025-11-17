@@ -228,6 +228,6 @@ data <- data %>%
 table(data$classtype)
 
 
-#save data
+#save tabular data
 data <- data %>% select(tr2010gj, CBSAFP, sort(setdiff(names(.), "tr2010gj")))
 write.csv(data, file = "metrotracts_gentscores_2010tr.csv", na="", row.names = FALSE)

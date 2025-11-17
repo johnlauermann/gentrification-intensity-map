@@ -105,18 +105,24 @@
             <!--  mapbox scripts  -->
             <script src="https://api.mapbox.com/mapbox-gl-js/v3.15.0/mapbox-gl.js"></script>
             <script>
-                mapboxgl.accessToken = 'pk.eyJ1IjoiYWxpY2V2aWdnaWFuaSIsImEiOiJjbG53Mzc5MDcwNGplMm1wY3UwcDZsOTNvIn0.YHmzjHuq5sSd-lgg22nEjg';
+                // mapboxgl.accessToken = 'pk.eyJ1IjoiYWxpY2V2aWdnaWFuaSIsImEiOiJjbG53Mzc5MDcwNGplMm1wY3UwcDZsOTNvIn0.YHmzjHuq5sSd-lgg22nEjg'; // alice
+                mapboxgl.accessToken = 'pk.eyJ1IjoiamxhdWVybWEiLCJhIjoiY2xoMHh4anlkMDM4eTNjcXJpZG5idjN5dCJ9.Ph4gYrj6b2Krr3qd0YCfAw'; // john's default public token
                 window.map = new mapboxgl.Map({
                     container: 'map',
-                    style: 'mapbox://styles/aliceviggiani/cmdj8bubf00bs01s541k72w6k',
+                    // style: 'mapbox://styles/aliceviggiani/cmdj8bubf00bs01s541k72w6k', // old alice's account
+                    style: 'mapbox://styles/jlauerma/cmi3f9nfn004j01rs9d6m7bxj', // new at john's account
                     center: [-74, 40.73],
                     zoom: 10
                 });
-                // ensure the layers are visible
+                // layers visibility on start
                 map.on('load', () => {
-                map.setLayoutProperty('large_metros_intensity', 'visibility', 'visible');
-                map.setLayoutProperty('nyc-streets', 'visibility', 'none');
-                map.setLayoutProperty('municipality-nyc-line', 'visibility', 'visible');
+                    // map.setLayoutProperty('large_metros_intensity', 'visibility', 'visible'); // old alice's layers
+                    // map.setLayoutProperty('nyc-streets', 'visibility', 'none');
+                    // map.setLayoutProperty('municipality-nyc-line', 'visibility', 'visible');
+                    map.setLayoutProperty('gi-fac-1990', 'visibility', 'none');
+                    map.setLayoutProperty('gi-fac-1990_2000', 'visibility', 'none');
+                    map.setLayoutProperty('gi-fac-2020', 'visibility', 'visible');
+                    map.setLayoutProperty('municipality-nyc-line', 'visibility', 'visible');
                 });
             </script>
         </div>

@@ -51,11 +51,12 @@ window.addEventListener('load', () => {
       checkbox_index.addEventListener('change', (e) => {
         const visibility = e.target.checked ? 'visible' : 'none';
         window.map.setLayoutProperty(
-          'large_metros_intensity',
+          // 'large_metros_intensity', // old alice
+          'gi-fac-2020',
           'visibility',
           visibility
         );
-        console.log('Intensity layer:', visibility);
+        console.log('Intensity layer gi-fac-2020:', visibility);
       });
     } else {
       console.error('Map not found!');
@@ -79,7 +80,8 @@ let rafId;
 
 // loading popup
 map.on('load', () => {
-  const layer_index = 'large_metros_intensity'; // to uniformize the names
+  // const layer_index = 'large_metros_intensity'; // to uniformize the names // alice old
+  const layer_index = 'gi-fac-2020'; 
   const layer_base = map.getLayer(layer_index);
 
   if (!layer_base) {
@@ -139,7 +141,7 @@ map.on('load', () => {
     const cbsa  = (f.properties.CBSA_NAME || '')
       .split(',')[0]
       .replaceAll('-', '<br>');
-    const index = f.properties.FAC_1990to;
+    const index = f.properties.FAC_2020;
     const type  = (f.properties.classtype || '')
       .replace(/^./, c => c.toUpperCase());
     const geoid_popup = f.properties.GEOID || '';

@@ -3,17 +3,17 @@
 ##2) Classifies gentrified tracts based on factor scores
 
 if (!require(dplyr)) install.packages("dplyr")
-if (!require(here)) install.packages("here")
 if (!require(psych)) install.packages("psych")
 if (!require(tidyverse)) install.packages("tidyverse")
 
 library(dplyr)
-library(here)
 library(psych)
 library(tidyverse)
 
 # set environment
-here::i_am("gentrificationscores_2010tr.R")
+wd <- getwd()
+setwd(wd)
+
 
 #set up the data for large metros over 1mn residents
 ##identify variables of interest
@@ -30,12 +30,6 @@ pattern <- paste(variables, collapse = "|")
 data <- read_csv("metrotracts_data_2010tr.csv") %>%
   select(tr2010gj, CBSAFP, matches(pattern))
 
-##if filtering for only large metros...otherwise ignore this
-data <- data %>%
-  group_by(CBSAFP) %>%
-  mutate(metro_Population_sum_2020 = sum(Population_sum_2020, na.rm=TRUE)) %>%
-  filter(metro_Population_sum_2020 >= 1000000)%>%
-  ungroup()
 
 #factor analysis for decadal change scores
 class_upgrading_score <- function(data, startyear, endyear){

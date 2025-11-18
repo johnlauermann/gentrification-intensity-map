@@ -79,8 +79,7 @@ let rafId;
 
 // loading popup
 map.on('load', () => {
-  // const layer_index = 'large_metros_intensity'; // to uniformize the names // alice old
-  const layer_index = 'gi-fac-1990_2020'; 
+  const layer_index = 'gi-fac-1990_2020'; // to uniformize the names
   const layer_base = map.getLayer(layer_index);
 
   if (!layer_base) {
@@ -89,7 +88,7 @@ map.on('load', () => {
   }
   
   const source_base = layer_base.source; // from mapbox: "composite"
-  const source_sub_layer = layer_base['source-layer'];  // from mapbox: "largemetros_layer_6-5dhbcd"
+  const source_sub_layer = layer_base['source-layer'];
   console.log(layer_base);
 
   // highlighting the hovered tract
@@ -111,6 +110,7 @@ map.on('load', () => {
   map.addLayer(hover_def);
 
   // updating the filter during hover
+  // using geoid as key
   map.on('mousemove', layer_index, (e) => {
     const f = e.features && e.features[0];
     if (!f) return;
@@ -140,10 +140,17 @@ map.on('load', () => {
     const cbsa  = (f.properties.CBSA_NAME || '')
       .split(',')[0]
       .replaceAll('-', '<br>');
-    const index = f.properties.FAC_1990to2020;
+    const geoid_popup = f.properties.GEOID || '';
+    const index = Number(f.properties.FAC_1990to2020).toFixed(2);
+    const bach = Number(f.properties.Bach_pct_2020).toFixed(2);
+    const rent = Number(f.properties.ConRent_mean_2020).toFixed(2);
+    const income = Number(f.properties.HHIncome_mean_2020).toFixed(2);
+    const house_value = Number(f.properties.HouseValue_mean_2020).toFixed(2);
+    const poverty = Number(f.properties.Poverty_pct_2020).toFixed(2);
+    const white_collar = Number(f.properties.WhiteCollar_pct_2020).toFixed(2);
     const type  = (f.properties.classtype || '')
       .replace(/^./, c => c.toUpperCase());
-    const geoid_popup = f.properties.GEOID || '';
+    
     const html = `
       <div>
         <strong>${cbsa}</strong><br><br>
@@ -151,6 +158,14 @@ map.on('load', () => {
         <div class="popup-content">
           <div><strong>Census tract</strong><br>${geoid_popup}</div>
           <div><strong>Gentrification intensity index</strong><br>${index}</div>
+          <div class="line pop"></div>
+          <div><strong>Bachelor, %</strong><br>${bach}</div>
+          <div><strong>Rental contract, mean</strong><br>${rent}</div>
+          <div><strong>Household income, mean</strong><br>${income}</div>
+          <div><strong>House value, mean</strong><br>${house_value}</div>
+          <div><strong>Poverty, %</strong><br>${poverty}</div>
+          <div><strong>White collar positions, %</strong><br>${white_collar}</div>
+          <div class="line pop"></div>
           <div><strong>Class</strong><br>${type}</div>
         </div>
       </div>

@@ -143,9 +143,12 @@ map.on('load', () => {
     const geoid_popup = f.properties.GEOID || '';
     const index = Number(f.properties.FAC_1990to2020).toFixed(2);
     const bach = Number(f.properties.Bach_pct_2020).toFixed(2);
-    const rent = Number(f.properties.ConRent_mean_2020).toFixed(2);
-    const income = Number(f.properties.HHIncome_mean_2020).toFixed(2);
-    const house_value = Number(f.properties.HouseValue_mean_2020).toFixed(2);
+    const rent = Number(f.properties.ConRent_mean_2020)
+      .toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    const income = Number(f.properties.HHIncome_mean_2020)
+      .toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    const house_value = Number(f.properties.HouseValue_mean_2020)
+      .toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
     const poverty = Number(f.properties.Poverty_pct_2020).toFixed(2);
     const white_collar = Number(f.properties.WhiteCollar_pct_2020).toFixed(2);
     const type  = (f.properties.classtype || '')
@@ -159,12 +162,12 @@ map.on('load', () => {
           <div><strong>Census tract</strong><br>${geoid_popup}</div>
           <div><strong>Gentrification intensity index</strong><br>${index}</div>
           <div class="line pop"></div>
-          <div><strong>Bachelor, %</strong><br>${bach}</div>
-          <div><strong>Rental contract, mean</strong><br>${rent}</div>
-          <div><strong>Household income, mean</strong><br>${income}</div>
-          <div><strong>House value, mean</strong><br>${house_value}</div>
-          <div><strong>Poverty, %</strong><br>${poverty}</div>
-          <div><strong>White collar positions, %</strong><br>${white_collar}</div>
+          <div><strong>Rental contract, mean</strong><br>$${rent}</div>
+          <div><strong>Household income, mean</strong><br>$${income}</div>
+          <div><strong>House value, mean</strong><br>$${house_value}</div>
+          <div><strong>Poverty</strong><br>${poverty}%</div>
+          <div><strong>Bachelor</strong><br>${bach}%</div>
+          <div><strong>White collar positions</strong><br>${white_collar}%</div>
           <div class="line pop"></div>
           <div><strong>Class</strong><br>${type}</div>
         </div>

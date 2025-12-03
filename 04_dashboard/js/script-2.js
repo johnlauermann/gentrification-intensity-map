@@ -19,27 +19,99 @@ menu.addEventListener('click', (e) => {
   e.stopPropagation();
 });
 
+// cities zooms
+const cities_centers = {
+  "New York City": {center: [-74.0000, 40.7300], zoom: 10},
+  "Los Angeles": {center: [-118.2437, 34.0522], zoom: 8.5},
+  "Chicago": {center: [-87.6298, 41.8781], zoom: 9},
+  "Dallas": {center: [-96.7970, 32.7767], zoom: 10},
+  "Houston": {center: [-95.3698, 29.7604], zoom: 9},
+  "Washington DC": {center: [-77.0369, 38.9072], zoom: 9},
+  "Philadelphia": {center: [-75.1652, 39.9526], zoom: 10},
+  "Atlanta": {center: [-84.3880, 33.7490], zoom: 8},
+  "US": {center: [-98.5795, 39.8283], zoom: 4}
+};
+
+// when clicking on a city name
+menu.querySelectorAll('.dropdown-link').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const city = link.textContent.trim();
+    const view = cities_centers[city];
+
+    if (!view || !window.map) return;
+
+    window.map.easeTo({
+      center: view.center,
+      zoom: view.zoom,
+      duration: 400
+    });
+
+    // update the label of the selected button
+    document.querySelector('#dropdown-selected-city .txt-menu').textContent = city;
+
+    // close menu
+    menu.classList.remove('open');
+  });
+});
+
+
 
 // checkbox municipality
+// const checkbox_municipality = document.getElementById('checkbox-municipality-input');
+
+// window.addEventListener('load', () => {
+//   setTimeout(() => {
+//     if (window.map) {
+//       checkbox_municipality.addEventListener('change', (e) => {
+//         const visibility = e.target.checked ? 'visible' : 'none';
+//         window.map.setLayoutProperty(
+//           'municipality-nyc-line',
+//           'visibility',
+//           visibility
+//         );
+//         console.log('Municipality outline:', visibility);
+//       });
+//     } else {
+//       console.error('Map not found!');
+//     }
+//   }, 1000);
+// });
+
+// checkbox municipality new
 const checkbox_municipality = document.getElementById('checkbox-municipality-input');
 
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    if (window.map) {
-      checkbox_municipality.addEventListener('change', (e) => {
-        const visibility = e.target.checked ? 'visible' : 'none';
-        window.map.setLayoutProperty(
-          'municipality-nyc-line',
-          'visibility',
-          visibility
-        );
-        console.log('Municipality outline:', visibility);
-      });
-    } else {
-      console.error('Map not found!');
-    }
-  }, 1000);
+function setMunicipalityVisibility(visible) {
+  if (!window.map) return;
+  const layerId = 'municipality-nyc-line';
+
+  if (!window.map.getLayer(layerId)) {
+    console.warn('Layer not found:', layerId);
+    return;
+  }
+
+  window.map.setLayoutProperty(
+    layerId,
+    'visibility',
+    visible ? 'visible' : 'none'
+  );
+  console.log('Municipality outline:', visible ? 'visible' : 'none');
+}
+
+// change on click
+checkbox_municipality.addEventListener('change', (e) => {
+  setMunicipalityVisibility(e.target.checked);
 });
+
+// make sure initial state matches the checkbox
+if (checkbox_municipality.checked) {
+  setMunicipalityVisibility(true);
+} else {
+  setMunicipalityVisibility(false);
+}
+
 
 
 // checkbox index

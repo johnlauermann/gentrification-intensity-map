@@ -22,14 +22,14 @@ menu.addEventListener('click', (e) => {
 // cities zooms
 const cities_centers = {
   "New York City": {center: [-74.0000, 40.7300], zoom: 10},
-  "Los Angeles": {center: [-118.2437, 34.0522], zoom: 8.5},
-  "Chicago": {center: [-87.6298, 41.8781], zoom: 9},
+  "Los Angeles": {center: [-118.2437, 34.0522], zoom: 10},
+  "Chicago": {center: [-87.6298, 41.8781], zoom: 10},
   "Dallas": {center: [-96.7970, 32.7767], zoom: 10},
-  "Houston": {center: [-95.3698, 29.7604], zoom: 9},
-  "Washington DC": {center: [-77.0369, 38.9072], zoom: 9},
+  "Houston": {center: [-95.3698, 29.7604], zoom: 10},
+  "Washington DC": {center: [-77.0369, 38.9072], zoom: 10},
   "Philadelphia": {center: [-75.1652, 39.9526], zoom: 10},
-  "Atlanta": {center: [-84.3880, 33.7490], zoom: 8},
-  "US": {center: [-98.5795, 39.8283], zoom: 4}
+  "Atlanta": {center: [-84.3880, 33.7490], zoom: 10},
+  "US": {center: [-98.5795, 39.8283], zoom: 5}
 };
 
 // when clicking on a city name
@@ -58,42 +58,20 @@ menu.querySelectorAll('.dropdown-link').forEach(link => {
 });
 
 
-
 // checkbox municipality
-// const checkbox_municipality = document.getElementById('checkbox-municipality-input');
-
-// window.addEventListener('load', () => {
-//   setTimeout(() => {
-//     if (window.map) {
-//       checkbox_municipality.addEventListener('change', (e) => {
-//         const visibility = e.target.checked ? 'visible' : 'none';
-//         window.map.setLayoutProperty(
-//           'municipality-nyc-line',
-//           'visibility',
-//           visibility
-//         );
-//         console.log('Municipality outline:', visibility);
-//       });
-//     } else {
-//       console.error('Map not found!');
-//     }
-//   }, 1000);
-// });
-
-// checkbox municipality new
 const checkbox_municipality = document.getElementById('checkbox-municipality-input');
 
 function setMunicipalityVisibility(visible) {
   if (!window.map) return;
-  const layerId = 'municipality-nyc-line';
+  const municipality_id = 'municipality-limits';
 
-  if (!window.map.getLayer(layerId)) {
-    console.warn('Layer not found:', layerId);
+  if (!window.map.getLayer(municipality_id)) {
+    console.warn('Layer not found:', municipality_id);
     return;
   }
 
   window.map.setLayoutProperty(
-    layerId,
+    municipality_id,
     'visibility',
     visible ? 'visible' : 'none'
   );
@@ -122,11 +100,7 @@ window.addEventListener('load', () => {
     if (window.map) {
       checkbox_index.addEventListener('change', (e) => {
         const visibility = e.target.checked ? 'visible' : 'none';
-        window.map.setLayoutProperty(
-          'gi-fac-1990_2020',
-          'visibility',
-          visibility
-        );
+        window.map.setLayoutProperty('gi-fac-1990_2020', 'visibility', visibility);
         console.log('Intensity layer gi-fac-1990_2020:', visibility);
       });
     } else {

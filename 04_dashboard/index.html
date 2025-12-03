@@ -108,18 +108,14 @@
                 mapboxgl.accessToken = 'pk.eyJ1IjoiamxhdWVybWEiLCJhIjoiY21pM210azZ6MXJvajJqcHkxcGN1NGdkOCJ9.tENRQ9ijIMLWhbjI7XJzWQ'; // john's
                 window.map = new mapboxgl.Map({
                     container: 'map',
-                    // style: 'mapbox://styles/aliceviggiani/cmdj8bubf00bs01s541k72w6k', // old alice's account
-                    style: 'mapbox://styles/jlauerma/cmi3f9nfn004j01rs9d6m7bxj', // new at john's account
+                    style: 'mapbox://styles/jlauerma/cmi3f9nfn004j01rs9d6m7bxj', // john's account
                     center: [-74, 40.73],
                     zoom: 10
                 });
                 // layers visibility on start
                 map.on('load', () => {
-                    // map.setLayoutProperty('large_metros_intensity', 'visibility', 'visible'); // old alice's layers
-                    // map.setLayoutProperty('nyc-streets', 'visibility', 'none');
-                    // map.setLayoutProperty('municipality-nyc-line', 'visibility', 'visible');
                     map.setLayoutProperty('gi-fac-1990_2020', 'visibility', 'visible');
-                    map.setLayoutProperty('municipality-nyc-line', 'visibility', 'visible');
+                    map.setLayoutProperty('municipality-limits', 'visibility', 'visible');
                 });
             </script>
         </div>

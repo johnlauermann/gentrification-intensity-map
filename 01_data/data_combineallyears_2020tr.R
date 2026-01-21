@@ -6,12 +6,10 @@
 
 if (!require(dplyr)) install.packages("dplyr")
 if (!require(here)) install.packages("here")
-if (!require(sf)) install.packages("sf")
 if (!require(stringr)) install.packages("stringr")
 
 library(dplyr)
 library(here)
-library(sf)
 library(stringr)
 
 #set working directory & source data
@@ -33,7 +31,6 @@ data <- data %>% select(tr2020gj, sort(setdiff(names(.), "tr2020gj")))
 
 
 #calculate rates of change
-
 ## function for calculating decadal change
 decadal_change <- function(data, variables, year1, year2) {
   for (v in variables) {
@@ -121,6 +118,7 @@ boundaries <- read.csv(here("03_spatial/metrotracts_2020tr.csv"))
 data <- boundaries %>%
   left_join(data, by = c("GISJOIN" = "tr2020gj")) %>%
   select(-ends_with(".y")) %>% 
-  rename_with(~ sub("\\.x$", "", .x), .cols = ends_with(".x"))
+  rename_with(~ sub("\\.x$", "", .x), .cols = ends_with(".x")) %>%
+  rename(tr2020gj = GISJOIN)
 
 write.csv(data, file = "metrotracts_data_2020tr.csv", na="", row.names = FALSE)

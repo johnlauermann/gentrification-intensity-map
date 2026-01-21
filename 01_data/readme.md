@@ -14,4 +14,4 @@ _Combine the CSVs above into a longitudinal series and calculate rates of change
 - [data_combineallyears_2020tr.R](data_combineallyears_2020tr.R), which generates `metrotracts_data_2020tr.csv` 
 
 _Calculate gentrification intensity scores using he longitudinal series_
-- [gentrificationscores_2020tr.R](gentrificationscores_2020tr.R), which generates `metrotracts_gentscores_2020tr.csv`. This final `csv` contains gentrification intensity scores ~56,000 census tracts in ~880 core-based statistical areas. It can be joined to boundary data from the [`03_spatial`](/gentrification-intensity-map/03_spatial/) folder for mapping the data. 
+- [gentrificationscores_2020tr.R](gentrificationscores_2020tr.R), which generates `metrotracts_gentscores_2020tr.csv`. This final `csv` contains gentrification intensity scores ~56,000 census tracts in ~880 core-based statistical areas. It can be joined to boundary data from the [`03_spatial`](/03_spatial/) folder for mapping the data. 

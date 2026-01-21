@@ -21,8 +21,7 @@ The replication code are available three folders:
 
 The statistical workflow runs on R, primarily using `ipumsr` for querying APIs, `dplyr` for data management, and `psych` and `cluster` for calculating gentrification scores. The spatial boundary files are developed in Python, primarily using `ipumpspy` and `requests` for querying APIs and `geopandas` for geoprocessing. Each script defines its required packages, uses the [IPUMS API](https://developer.ipums.org/docs/v2/apiprogram/) to call source data, and uses project-oriented workflows with relative file paths. To run the scripts, simply download the entire folder structure to your local drive and then run from any directory folder. You'll also need a free IPUMS account and API key ([register here](https://developer.ipums.org/docs/v2/get-started/)).  
 
-The finished GIS data are available in the replication data cited below on Harvard Dataverse. Most data are available there in csv and geopackage formats for open-source users. Here's how to read a geopackage in [ArcGIS](https://pro.arcgis.com/en/pro-app/latest/help/data/databases/work-with-sqlite-databases-in-arcgis-pro.htm), [QGIS](https://learn.openwaterfoundation.org/owf-learn-geopackage/using-geopackage/qgis/), [R library `sf`](https://mapping-in-r-workshop.ryanpeek.org/02_import_export_gpkg), or [Python library `geopandas`](https://geopandas.org/en/stable/docs/user_guide/io.html).
-
+The spatial boundary files are developed in Python, primarily using `ipumpspy` and `requests` for querying data and `geopandas` for geoprocessing. The finished csv tables and boundary layers are available in the replication data cited below on Harvard Dataverse.
 
 # How to cite
 Lauermann, John, et al., 2025, "National Gentrification Intensity Map", https://doi.org/10.7910/DVN/DPKO3I, _Harvard Dataverse_, (https://dataverse.harvard.edu/previewurl.xhtml?token=c430da44-3ff2-4d1a-8eb0-451180015b4c)

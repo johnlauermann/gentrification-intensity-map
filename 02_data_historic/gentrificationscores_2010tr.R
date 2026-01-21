@@ -3,16 +3,17 @@
 ##2) Classifies gentrified tracts based on factor scores
 
 if (!require(dplyr)) install.packages("dplyr")
+if (!require(here)) install.packages("here")
 if (!require(psych)) install.packages("psych")
 if (!require(tidyverse)) install.packages("tidyverse")
 
 library(dplyr)
+library(here)
 library(psych)
 library(tidyverse)
 
 # set environment
-wd <- getwd()
-setwd(wd)
+here::i_am("02_data_historic/gentrificationscores_2010tr.r")
 
 
 #set up the data for large metros over 1mn residents
@@ -28,10 +29,10 @@ pattern <- paste(variables, collapse = "|")
 
 ##load and filter data
 data <- read_csv("metrotracts_data_2010tr.csv") %>%
-  select(tr2010gj, CBSAFP, matches(pattern))
+  select(tr2010gj, CBSAFP, matches(pattern)) 
 
 
-#factor analysis for decadal change scores
+#Factor analysis for decadal change scores
 class_upgrading_score <- function(data, startyear, endyear){
   
   ## define variables
@@ -42,10 +43,10 @@ class_upgrading_score <- function(data, startyear, endyear){
                  paste0("Poverty_pct_chg_", startyear, "to", endyear),
                  paste0("WhiteCollar_pct_chg_", startyear, "to", endyear))
  
-   ##Calculate factor scores
-  fa_result <- principal(data[variables], nfactors = 1, rotate = "varimax", scores = TRUE, 
+   ##Calculate Factor scores
+  fa_result <- principal(data[variables], nGentIntensitytors = 1, rotate = "varimax", scores = TRUE, 
                          missing = TRUE, method = "cor", impute = "mean")
-  data[[paste0("FAC_", startyear, "to", endyear)]] <- fa_result$scores[,1]
+  data[[paste0("GentIntensity_", startyear, "to", endyear)]] <- fa_result$scores[,1]
   
   ##create reports
   kmo_result <- KMO(data[variables])
@@ -68,7 +69,7 @@ class_upgrading_score <- function(data, startyear, endyear){
   
 }
 
-#factor analysis for decade crosssectional scores
+#GentIntensitytor analysis for decade crosssectional scores
 class_status_score <- function(data, year){
   
   ## define year and variables
@@ -79,10 +80,10 @@ class_status_score <- function(data, year){
                  paste0("Poverty_pct_", year),
                  paste0("WhiteCollar_pct_", year))
   
-  ##Calculate factor scores
-  fa_result <- principal(data[variables], nfactors = 1, rotate = "varimax", scores = TRUE, 
+  ##Calculate GentIntensitytor scores
+  fa_result <- principal(data[variables], nGentIntensitytors = 1, rotate = "varimax", scores = TRUE, 
                          missing = TRUE, method = "cor", impute = "mean")
-  data[[paste0("FAC_", year)]] <- fa_result$scores[,1]
+  data[[paste0("GentIntensity_", year)]] <- fa_result$scores[,1]
   
   ##create reports
   kmo_result <- KMO(data[variables])
@@ -122,43 +123,43 @@ data <- class_status_score(data, 2020)
 
 
 #classify tracts based on scores
-##Aggregate factor scores by metro
+##Aggregate GentIntensitytor scores by metro
 data <- data %>%
   group_by(CBSAFP) %>% 
   mutate(
-    metro_FAC_1970 = mean(FAC_1970),
-    metro_FAC_1970to1980 = mean(FAC_1970to1980),
-    metro_FAC_1980 = mean(FAC_1980),
-    metro_FAC_1980to1990 = mean(FAC_1980to1990),
-    metro_FAC_1990 = mean(FAC_1990),
-    metro_FAC_1990to2000 = mean(FAC_1990to2000),
-    metro_FAC_2000 = mean(FAC_2000),
-    metro_FAC_2000to2010 = mean(FAC_2000to2010),
-    metro_FAC_2010 = mean(FAC_2010),
-    metro_FAC_2010to2020 = mean(FAC_2010to2020),
-    metro_FAC_2020 = mean(FAC_2020)
+    metro_GentIntensity_1970 = mean(GentIntensity_1970),
+    metro_GentIntensity_1970to1980 = mean(GentIntensity_1970to1980),
+    metro_GentIntensity_1980 = mean(GentIntensity_1980),
+    metro_GentIntensity_1980to1990 = mean(GentIntensity_1980to1990),
+    metro_GentIntensity_1990 = mean(GentIntensity_1990),
+    metro_GentIntensity_1990to2000 = mean(GentIntensity_1990to2000),
+    metro_GentIntensity_2000 = mean(GentIntensity_2000),
+    metro_GentIntensity_2000to2010 = mean(GentIntensity_2000to2010),
+    metro_GentIntensity_2010 = mean(GentIntensity_2010),
+    metro_GentIntensity_2010to2020 = mean(GentIntensity_2010to2020),
+    metro_GentIntensity_2020 = mean(GentIntensity_2020)
   ) %>%
   ungroup()
 
-##Identify middle class tracts with factor scores, controlling to remove any small tracts (less than 100 people)
+##Identify middle class tracts with GentIntensity scores, controlling to remove any small tracts (less than 100 people)
 data <- data %>%
   mutate(
-    MiddleorUpperClass_1970 = ifelse((FAC_1970 >= metro_FAC_1970) & (Population_sum_1970 >= 100), 1, 0),
-    MiddleorUpperClass_1980 = ifelse((FAC_1980 >= metro_FAC_1980) & (Population_sum_1980 >= 100), 1, 0),
-    MiddleorUpperClass_1990 = ifelse((FAC_1990 >= metro_FAC_1990) & (Population_sum_1990 >= 100), 1, 0),
-    MiddleorUpperClass_2000 = ifelse((FAC_2000 >= metro_FAC_2000) & (Population_sum_2000 >= 100), 1, 0),
-    MiddleorUpperClass_2010 = ifelse((FAC_2010 >= metro_FAC_2010) & (Population_sum_2010 >= 100), 1, 0),
-    MiddleorUpperClass_2020 = ifelse((FAC_2020 >= metro_FAC_2020) & (Population_sum_2020 >= 100), 1, 0)
+    MiddleorUpperClass_1970 = ifelse((GentIntensity_1970 >= metro_GentIntensity_1970) & (Population_sum_1970 >= 100), 1, 0),
+    MiddleorUpperClass_1980 = ifelse((GentIntensity_1980 >= metro_GentIntensity_1980) & (Population_sum_1980 >= 100), 1, 0),
+    MiddleorUpperClass_1990 = ifelse((GentIntensity_1990 >= metro_GentIntensity_1990) & (Population_sum_1990 >= 100), 1, 0),
+    MiddleorUpperClass_2000 = ifelse((GentIntensity_2000 >= metro_GentIntensity_2000) & (Population_sum_2000 >= 100), 1, 0),
+    MiddleorUpperClass_2010 = ifelse((GentIntensity_2010 >= metro_GentIntensity_2010) & (Population_sum_2010 >= 100), 1, 0),
+    MiddleorUpperClass_2020 = ifelse((GentIntensity_2020 >= metro_GentIntensity_2020) & (Population_sum_2020 >= 100), 1, 0)
   )
 
 ##Identify tracts with above average class upgrading
 data <- data %>%
   mutate(
-    Gentrifying_70to80 = ifelse((FAC_1970to1980 >= metro_FAC_1970to1980) & (Population_sum_1970 >= 100), 1, 0),
-    Gentrifying_80to90 = ifelse((FAC_1980to1990 >= metro_FAC_1980to1990) & (Population_sum_1980 >= 100), 1, 0),
-    Gentrifying_90to00 = ifelse((FAC_1990to2000 >= metro_FAC_1990to2000) & (Population_sum_1990 >= 100), 1, 0),
-    Gentrifying_00to10 = ifelse((FAC_2000to2010 >= metro_FAC_2000to2010) & (Population_sum_2000 >= 100), 1, 0),
-    Gentrifying_10to20 = ifelse((FAC_2010to2020 >= metro_FAC_2010to2020) & (Population_sum_2010 >= 100), 1, 0)
+    Gentrifying_70to80 = ifelse((GentIntensity_1970to1980 >= metro_GentIntensity_1970to1980) & (Population_sum_1970 >= 100), 1, 0),
+    Gentrifying_80to90 = ifelse((GentIntensity_1980to1990 >= metro_GentIntensity_1980to1990) & (Population_sum_1980 >= 100), 1, 0),
+    Gentrifying_90to00 = ifelse((GentIntensity_1990to2000 >= metro_GentIntensity_1990to2000) & (Population_sum_1990 >= 100), 1, 0),
+    Gentrifying_00to10 = ifelse((GentIntensity_2000to2010 >= metro_GentIntensity_2000to2010) & (Population_sum_2000 >= 100), 1, 0),
+    Gentrifying_10to20 = ifelse((GentIntensity_2010to2020 >= metro_GentIntensity_2010to2020) & (Population_sum_2010 >= 100), 1, 0)
   )
 
 ##Identify gentrified tracts
@@ -189,7 +190,7 @@ data <- data %>%
   mutate(Gentrified = ifelse(Gentrified_70to80 == 1 | Gentrified_80to90 == 1 | Gentrified_90to00 == 1 | Gentrified_00to10 == 1 | Gentrified_10to20 == 1, 1, 0))
 table(data$Gentrified)
 
-## Identify super-gentrification with factor scores
+## Identify super-gentrification with GentIntensitytor scores
 data <- data %>%
   mutate(
     SuperGentrified_80to00 = ifelse((Gentrified_70to80 == 1 | Gentrified_80to90 == 1) &
@@ -205,7 +206,7 @@ data <- data %>%
   )
 table(data$SuperGentrified)
 
-## Identify historically affluent with factor scores
+## Identify historically affluent with GentIntensitytor scores
 data <- data %>%
   mutate(
     HistoricallyAffluent = ifelse((MiddleorUpperClass_1970 == 1 & MiddleorUpperClass_1980 == 1 & MiddleorUpperClass_1990 == 1 & MiddleorUpperClass_2000 == 1 & MiddleorUpperClass_2010 == 1 & MiddleorUpperClass_2020 == 1) & 

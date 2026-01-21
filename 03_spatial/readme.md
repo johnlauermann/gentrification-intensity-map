@@ -1,1 +1,8 @@
+# Create spatial boundary files
+
+This code creates spatial boundary files for two separate geographies:
+1. [map_metrotracts_2020tr.ipynb](map_metrotracts_2020tr.ipynb): The primary verison of the gentrification map supports data from 1990-2020, longitudinally adjusted to 2020 census tracts. The resulting layer includes boundaries and related geographic identifiers for ~56,000 urban census tracts in ~880 core-based statistical areas. We recommend using this version of the map for most applications.
+2. [map_metrotracts_2020tr.ipynb](map_metrotracts_2020tr.ipynb): The supplementary historic version of the gentrification map supports data from 1970-2020, longitudinally adjusted to 2010 census tracts. The resulting layer includes boundaries and related geographic identifiers for ~49,600 urban census tracts in ~860 core-based statistical areas. While this map may be useful for historical research, we do not recommend using it for most applications due to spatial noise introduced through the geographic crosswalking method. 
+
+The spatial boundary files are developed in Python, primarily using `ipumpspy` and `requests` for querying data and `geopandas` for geoprocessing. The boundary layers are saved to a geopackage format to support open-source GIS users. Here's how to read a geopackage in [ArcGIS](https://pro.arcgis.com/en/pro-app/latest/help/data/databases/work-with-sqlite-databases-in-arcgis-pro.htm), [QGIS](https://learn.openwaterfoundation.org/owf-learn-geopackage/using-geopackage/qgis/), [R library `sf`](https://mapping-in-r-workshop.ryanpeek.org/02_import_export_gpkg), or [Python library `geopandas`](https://geopandas.org/en/stable/docs/user_guide/io.html).
 

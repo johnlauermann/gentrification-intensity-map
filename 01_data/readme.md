@@ -1,11 +1,11 @@
 # Mapping gentrification patterns on 2020 tract boundaries
 Gentrification-related data from 1990 to 2020, adjusted to 2020 census tract boundaries. This is based on Decennial Census and American Community Survey data, drawn from National Historical GIS using the IPUMS API. Crosswalks are based on the NHGIS Geographic Crosswalk methodology. 
 
-## Structure
-```mermaid
-+---01_data
-|       .Rhistory
-|       data_1990to2020tracts.R
+## How to use
+Code was written to be deployed in the following order:
+
+_Query data from IPUMS API & geographically crosswalk_
+- [data_1990to2020tracts.R]
 |       data_2000to2020tracts.R
 |       data_2010to2020tracts.R
 |       data_2020to2020tracts.R

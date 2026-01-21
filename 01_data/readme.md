@@ -4,8 +4,9 @@ Gentrification-related data from 1990 to 2020, adjusted to 2020 census tract bou
 ## How to use
 Code was written to be deployed in the following order:
 
-_Query data from IPUMS API & geographically crosswalk_
-- [data_1990to2020tracts.R]
+_Query data from API & geographically crosswalk to modern boundaries_
+- [data_1990to2020tracts.R](data_1990to2020_tracts.R)
+- 
 |       data_2000to2020tracts.R
 |       data_2010to2020tracts.R
 |       data_2020to2020tracts.R

@@ -1,4 +1,4 @@
-# Mapping gentrification patterns on 2010 tract boundaries
+# Mapping historical data on 2010 tract boundaries
 Gentrification indicators from 1970 to 2020, adjusted to 2010 census tract boundaries. This is based on Decennial Census and American Community Survey data, drawn from from [National Historical GIS](https://www.nhgis.org/) using the [IPUMS API](https://developer.ipums.org/docs/v2/get-started/). Crosswalks are based on methods from both [NHGIS Geographic Crosswalks](https://www.nhgis.org/geographic-crosswalks) and the [Longitudinal Tract Data Base](https://s4.ad.brown.edu/projects/diversity/researcher/bridging.htm). 
 
 ## How to use

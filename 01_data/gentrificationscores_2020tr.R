@@ -3,16 +3,17 @@
 ##2) Classifies gentrified tracts based on factor scores
 
 if (!require(dplyr)) install.packages("dplyr")
+if (!require(here)) install.packages("here")
 if (!require(psych)) install.packages("psych")
 if (!require(tidyverse)) install.packages("tidyverse")
 
 library(dplyr)
+library(here)
 library(psych)
 library(tidyverse)
 
 # set environment
-wd <- getwd()
-setwd(wd)
+here::i_am("01_data/gentrification_scores_2020tr.r")
 
 
 #set up the data for large metros over 1mn residents

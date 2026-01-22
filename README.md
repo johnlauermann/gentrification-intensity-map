@@ -4,8 +4,6 @@ This repository contains code and data related to a national longitudinal tract 
 
 # Map products 
 
-Explore the map here: https://prattsavi.maps.arcgis.com/apps/instant/basic/index.html?appid=ba07ac922fdb4c4fa7cc99a53cc503eb
-
 The map is available in two formats: 
 
 #### Gentrification patterns on 2020 tract boundaries

@@ -31,7 +31,7 @@
 
 .txt-title {
   font-size: var(--font-title);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 /* .txt-title:hover {
@@ -60,14 +60,14 @@
 .txt-arrow {
   font-family: Fakt Mono, sans-serif;
   font-size: 22px;
-  font-weight: 200;
+  font-weight: 300;
   line-height: 1;
   text-decoration: none;
 }
 
 .txt-arrow:hover {
   color: var(--color-2);
-  font-weight: 700;
+  font-weight: 600;
   text-decoration: none;
 }
 

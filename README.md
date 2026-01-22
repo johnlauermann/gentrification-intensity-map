@@ -4,12 +4,7 @@ This repository contains code and data related to a national longitudinal tract 
 
 # Map products 
 
-<iframe 
-  src="https://prattsavi.maps.arcgis.com/apps/instant/basic/index.html?appid=ba07ac922fdb4c4fa7cc99a53cc503eb" 
-  width="100%" 
-  height="600" 
-  style="border: none;">
-</iframe>
+[![Open the National Gentrification Intensity Map](https://img.shields.io/badge/Open%20Web%20Map-Blue?style=for-the-badge)](https://prattsavi.maps.arcgis.com/apps/instant/basic/index.html?appid=ba07ac922fdb4c4fa7cc99a53cc503eb)
 
 The map is available in two formats: 
 

@@ -15,7 +15,7 @@ library(purrr)
 
 
 #set working directory & general attributes
-here::i_am("data_2020to2020tracts.R")
+here::i_am("01_data/data_2020to2020tracts.R")
 year <- "2020"
 inflation <- 1
 
@@ -29,7 +29,8 @@ metadata <- get_metadata_nhgis(dataset = "2016_2020_ACS5a")
 
 #pulling data from the IPUMS API
 ##define the data to extract
-ds <- define_extract_nhgis(
+ds <- define_extract_agg(
+  collection = "nhgis",
   description = "Gentrification map data, 2020 tracts",
   datasets = ds_spec("2016_2020_ACS5a",
                      data_tables = c("B01003", "B02001", "B03003", "B11001", 

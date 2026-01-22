@@ -1,28 +1,28 @@
 #This script joins tabular and spatial data, then publishes a web map via Mapbox API
 
 if (!require(dplyr)) install.packages("dplyr")
+if (!require(here)) install.packages("here")
 if (!require(ggplot2)) install.packages("ggplot2")
 if (!require(mapboxapi)) install.packages("mapboxapi")
 if (!require(sf)) install.packages("sf")
 
 library(dplyr)
+library(here)
 library(ggplot2)
 library(mapboxapi)
 library(sf)
 
 # set environment
-wd <- getwd()
-setwd(wd)
-setwd('../') # moving up one directory level, since this script is stored in a subfolder
+here::i_am("map_publishtoweb_2010tr.r")
 
 # load data 
 ## tabular data
-data <- read.csv("02_data_historic/metrotracts_gentscores_2010tr.csv") %>%
+data <- read.csv(here("02_data_historic/metrotracts_gentscores_2010tr.csv")) %>%
   rename(GISJOIN = tr2010gj)
 
-## spatial stata
-st_layers("03_spatial/tract_boundaries.gpkg")
-boundaries <- st_read(dsn = "03_spatial/tract_boundaries.gpkg", 
+## spatial data
+st_layers(here("03_spatial/tract_boundaries.gpkg"))
+boundaries <- st_read(dsn = here("03_spatial/tract_boundaries.gpkg"), 
                       layer = "metrotracts_2010tr")
 
 
@@ -38,7 +38,7 @@ northeast <- map_data %>%
            STATEFP10 == "36" | STATEFP10 == "44" | STATEFP10 == "50")
 
 ggplot(data = northeast) +  # defines the plot space
-  geom_sf(aes(fill = FAC_1970to2020), color = NA) +  # viz type = map
+  geom_sf(aes(fill = GentIntensity_1970to2020), color = NA) +  # viz type = map
   coord_sf(crs = "ESRI:102010") +   # a relevant map projection for the region
   scale_fill_gradient2(low = "blue",   # color ramp
                        mid = "gray70", 
@@ -55,7 +55,7 @@ ggplot(data = northeast) +  # defines the plot space
 Manhattan <- map_data %>%
   filter(STATEFP10 == "36" & COUNTYFP10 == "061")
 ggplot(data = Manhattan) +
-  geom_sf(aes(fill = FAC_1970to2020), color = NA) +  
+  geom_sf(aes(fill = GentIntensity_1970to2020), color = NA) +  
   coord_sf(crs = "EPSG:32618") +  
   scale_fill_gradient2(low = "blue", 
                        mid = "gray70", 

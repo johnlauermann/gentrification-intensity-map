@@ -19,7 +19,7 @@ library(ipumsr)
 library(purrr)
 
 #set working directory & general attributes
-here::i_am("data_2000to2010tracts.R")
+here::i_am("02_data_historic/data_2000to2010tracts.R")
 year <- "2000"
 inflation <- 1.5477  #based on BLS CPI inflation calculator, https://data.bls.gov/cgi-bin/cpicalc.pl?cost1=1%2C000.00&year1=199912&year2=202012
 
@@ -34,7 +34,8 @@ metadata_SF3b <- get_metadata_nhgis(dataset = "2000_SF3b")
 
 #pulling data from the IPUMS API
 ##define the data to extract
-ds <- define_extract_nhgis(
+ds <- define_extract_agg(
+  collection = "nhgis",
   description = "Gentrification map data, 2000 block group parts & time series (on 2010tr)",
   time_series_tables = list(
     tst_spec("CL8", geog_levels = "tract", years = "2000"),

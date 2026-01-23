@@ -40,22 +40,21 @@ set_ipums_api_key(my_key)
 
 # crosswalk historic data
 ###load crosswalk from IPUMS API
-url <- "https://secure-assets.ipums.org/nhgis/crosswalks/nhgis_tr2020_tr2010.zip"
-download.file(url, here("01_data/nhgis_tr2020_tr2010.zip"), headers = c(Authorization = my_key))
+url <- "https://secure-assets.ipums.org/nhgis/crosswalks/nhgis_tr2010_tr2020.zip"
+download.file(url, "nhgis_tr2010_tr2020.zip", headers = c(Authorization = my_key))
 
 ###join with data to identify 2010 to 2020 matches (only complete matches)
-crosswalks <- read_ipums_agg(here("01_data/nhgis_tr2020_tr2010.zip")) %>%
+crosswalks <- read_ipums_agg("nhgis_tr2010_tr2020.zip") %>%
   filter(wt_pop == 1)
 historic_data <- historic_data %>% 
   left_join(crosswalks, historic_data, by = "tr2010gj")
-
 
 # identify overlaps
 ## join historical data to modern
 overlaps <- inner_join(modern_data, historic_data, by = "tr2020gj") %>%
   select(tr2020gj, Gentrified_70to80, Gentrified_80to90) 
 
-## remove duplicate rows
+## remove any duplicate rows
 overlaps <- overlaps %>%
   group_by(tr2020gj) %>%
   summarise(Gentrified_70to80 = mean(Gentrified_70to80),

@@ -14,10 +14,10 @@
 
 <body class="body">
 
-    <!-- header -->
+    <!-- content -->
     <section class="content-container">
 
-        <!-- box 1 –title and info -->
+        <!-- box 1 title and info -->
         <div id="box-1" class="box-container">
             <div class="wrapper">
                 <div class="txt-title">US Gentrification intensity index</div>
@@ -25,7 +25,7 @@
             <div class="line"></div>
             <div class="wrapper">
                 <div class="txt-body">Index created based on indicators of class status and upgrading, based on
-                    indicators of class status and upgrading.<br></div>
+                    indicators of class status and upgrading created based on indicators of class status indicators.</div>
             </div>
             <!-- <div class="wrapper">
                 <div class="txt-subtitle">John Lauermann<br></div>
@@ -34,7 +34,7 @@
                 <div class="learn_more-wrapper">
                     <a href="https://github.com/johnlauermann/gentrification-intensity-map" target="_blank"
                         class="link-wrapper">
-                        <span class="txt-link">National Gentrification<br> Intensity Map Lab</span>
+                        <span class="txt-link">National Gentrification Lab<br></span>
                     </a>
                     <button id="dropdown-learn_more" class="dropdown-minus">
                         <img src="images/picto-minus.png" alt="" class="picto">
@@ -44,16 +44,16 @@
         </div>
 
 
-        <!-- box 2 –dropdowns -->
+        <!-- box 2 buttons -->
         <div id="box-2" class="box-container">
 
-            <!-- dropdown menu -->
-            <div class="wrapper">
+            <!-- municipality menu dropdown -->
+            <div class="wrapper dropdown-wrap">
                 <button id="dropdown-selected-city" class="dropdown-selected">
                     <span class="txt-menu">New York City</span>
                     <img src="images/picto-arrow.png" alt="" class="picto">
                 </button>
-                <nav id="dropdown-menu-city" class="dropdown-menu">
+                <nav id="dropdown-menu-city" class="dropdown-menu" aria-hidden="true">
                     <a href="#" class="dropdown-link">Atlanta</a>
                     <a href="#" class="dropdown-link">Chicago</a>
                     <a href="#" class="dropdown-link">Dallas</a>
@@ -68,7 +68,7 @@
 
             <div class="line"></div>
 
-            <!-- municipality checkbox -->
+            <!-- boundaries checkbox -->
             <div class="boundaries-wrapper">
                 <span class="txt-menu">Boundaries</span>
                 <div class="on_off">
@@ -91,52 +91,10 @@
             </div>
 
             <div class="line"></div>
-
-            <!-- index legend
-            <div id="checkbox-index-wrapper" class="wrapper">
-                <div class="legend-header">
-                    <label class="legend-label-wrapper">
-                        <span id="legend-text-gent" class="txt-menu">Index</span>
-                        <span class="txt-body">Standard deviation</span>
-                    </label>
-
-                    <button id="toggle-details" class="toggle-details-btn" aria-expanded="false" aria-controls="box-3">
-                        <img src="images/picto-plus.png" alt="Expand" class="picto">
-                    </button>
-                </div>
-                <div class="legend-wrapper">
-                    <div class="legend-icon-wrapper">
-                        <div class="legend-icon _1"></div>
-                        <div class="txt-legend">-4</div>
-                    </div>
-                    <div class="legend-icon-wrapper">
-                        <div class="legend-icon _2"></div>
-                    </div>
-                    <div class="legend-icon-wrapper">
-                        <div class="legend-icon _3"></div>
-                        <div class="txt-legend">0</div>
-                    </div>
-                    <div class="legend-icon-wrapper">
-                        <div class="legend-icon _4"></div>
-                    </div>
-                    <div class="legend-icon-wrapper">
-                        <div class="legend-icon _5"></div>
-                        <div class="txt-legend">2</div>
-                    </div>
-                    <div class="legend-icon-wrapper">
-                        <div class="legend-icon _6"></div>
-                    </div>
-                    <div class="legend-icon-wrapper">
-                        <div class="legend-icon _7"></div>
-                        <div class="txt-legend">4</div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
+        </div>
 
 
-        <!-- box 3 details panel, popup -->
-
+        <!-- box 3 details panel -->        
         <div id="box-3" class="box-container details-box">
 
             <!-- index legend -->
@@ -153,7 +111,14 @@
 
             <!-- legend -->
             <div class="wrapper">
-                <div class="legend-wrapper">
+                <div id="legend_wrap" class="legend-wrapper">
+                    <!-- marker -->
+                    <div id="legend_marker" class="legend-marker" aria-hidden="true" style="display:none;">
+                        <div id="legend_marker_value" class="legend-marker-value">—</div>
+                        <div class="legend-marker-line"></div>
+                    </div>
+
+                    <!-- legend items -->
                     <div class="legend-icon-wrapper">
                         <div class="legend-icon _1"></div>
                         <div class="txt-legend">-4</div>
@@ -182,46 +147,43 @@
                 </div>
             </div>
 
+            <div class="line"></div>
+            
             <!-- details (can collapse) -->
             <div id="details-body" class="details-body">
-                <div class="line"></div>
                 <div class="wrapper">
                     <div class="txt-menu">Tract</div>
-                    <div id="detail-tract" class="txt-body">—</div>
+                    <div id="detail-tract" class="txt-value">—</div>
                 </div>
-
-                <div class="line"></div>
 
                 <div class="wrapper">
                     <div class="txt-menu">Metro</div>
-                    <div id="detail-metro" class="txt-body">—</div>
+                    <div id="detail-metro" class="txt-value">—</div>
                 </div>
-
-                <div class="line"></div>
 
                 <div class="wrapper">
                     <div class="txt-menu">Class</div>
-                    <div id="detail-class" class="txt-body">—</div>
+                    <div id="detail-class" class="txt-value">—</div>
                 </div>
 
                 <div class="line"></div>
 
                 <div class="wrapper">
-                    <div class="txt-menu">Indicators</div>
+                    <div class="txt-menu">Indicators</div><br>
                     <div class="txt-body">
-                        <div><span class="popup-label">Rental contract</span><br><span id="detail-rent">—</span></div><br>
-                        <div><span class="popup-label">House value</span><br><span id="detail-house">—</span></div><br>
-                        <div><span class="popup-label">Household income</span><br><span id="detail-income">—</span></div><br>
-                        <div><span class="popup-label">Poverty</span><br><span id="detail-poverty">—</span></div><br>
-                        <div><span class="popup-label">Bachelor degree</span><br><span id="detail-bach">—</span></div><br>
-                        <div><span class="popup-label">White collar positions</span><br><span id="detail-white">—</span></div>
+                        <div><span class="txt-label">Rental contract</span><br><span id="detail-rent" class="txt-value">—</span></div><br>
+                        <div><span class="txt-label">House value</span><br><span id="detail-house" class="txt-value">—</span></div><br>
+                        <div><span class="txt-label">Household income</span><br><span id="detail-income" class="txt-value">—</span></div><br>
+                        <div><span class="txt-label">Poverty</span><br><span id="detail-poverty" class="txt-value">—</span></div><br>
+                        <div><span class="txt-label">Bachelor degree</span><br><span id="detail-bach" class="txt-value">—</span></div><br>
+                        <div><span class="txt-label">White collar positions</span><br><span id="detail-white" class="txt-value">—</span></div>
                     </div>
                 </div>
 
             </div>
         </div>
-
     </section>
+
 
     <section class="map-container">
         <div id="map" class="box-map-container">

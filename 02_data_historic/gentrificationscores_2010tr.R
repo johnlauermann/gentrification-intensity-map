@@ -123,7 +123,7 @@ data <- class_status_score(data, 2020)
 
 
 #classify tracts based on scores
-##Aggregate GentIntensitytor scores by metro
+##Aggregate factor scores by metro
 data <- data %>%
   group_by(CBSAFP) %>% 
   mutate(
@@ -137,11 +137,12 @@ data <- data %>%
     metro_GentIntensity_2000to2010 = mean(GentIntensity_2000to2010),
     metro_GentIntensity_2010 = mean(GentIntensity_2010),
     metro_GentIntensity_2010to2020 = mean(GentIntensity_2010to2020),
-    metro_GentIntensity_2020 = mean(GentIntensity_2020)
+    metro_GentIntensity_2020 = mean(GentIntensity_2020),
+    metro_GentIntensity_1970to2020 = mean(GentIntensity_1970to2020)
   ) %>%
   ungroup()
 
-##Identify middle class tracts with GentIntensity scores, controlling to remove any small tracts (less than 100 people)
+##Identify middle class tracts with factor scores, controlling to remove any small tracts (less than 100 people)
 data <- data %>%
   mutate(
     MiddleorUpperClass_1970 = ifelse((GentIntensity_1970 >= metro_GentIntensity_1970) & (Population_sum_1970 >= 100), 1, 0),
@@ -190,7 +191,7 @@ data <- data %>%
   mutate(Gentrified = ifelse(Gentrified_70to80 == 1 | Gentrified_80to90 == 1 | Gentrified_90to00 == 1 | Gentrified_00to10 == 1 | Gentrified_10to20 == 1, 1, 0))
 table(data$Gentrified)
 
-## Identify super-gentrification with GentIntensitytor scores
+## Identify super-gentrification with factor scores
 data <- data %>%
   mutate(
     SuperGentrified_80to00 = ifelse((Gentrified_70to80 == 1 | Gentrified_80to90 == 1) &
@@ -206,7 +207,7 @@ data <- data %>%
   )
 table(data$SuperGentrified)
 
-## Identify historically affluent with GentIntensitytor scores
+## Identify historically affluent with facttor scores
 data <- data %>%
   mutate(
     HistoricallyAffluent = ifelse((MiddleorUpperClass_1970 == 1 & MiddleorUpperClass_1980 == 1 & MiddleorUpperClass_1990 == 1 & MiddleorUpperClass_2000 == 1 & MiddleorUpperClass_2010 == 1 & MiddleorUpperClass_2020 == 1) & 

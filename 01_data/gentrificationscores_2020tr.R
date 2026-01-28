@@ -130,7 +130,8 @@ data <- data %>%
     metro_GentIntensity_2000to2010 = mean(GentIntensity_2000to2010),
     metro_GentIntensity_2010 = mean(GentIntensity_2010),
     metro_GentIntensity_2010to2020 = mean(GentIntensity_2010to2020),
-    metro_GentIntensity_2020 = mean(GentIntensity_2020)
+    metro_GentIntensity_2020 = mean(GentIntensity_2020),
+    metro_GentIntensity_1990to2020 = mean(GentIntensity_1990to2020)
   ) %>%
   ungroup()
 

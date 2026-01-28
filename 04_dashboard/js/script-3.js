@@ -173,24 +173,24 @@ function period_select(is_1970) {
 
 // hovered and selected tract
 
-// hover popup
+// hover popup (no shadow)
 const popup = new mapboxgl.Popup({
   className: "popup-override",
   closeButton: false,
   closeOnClick: false,
   closeOnMove: false,
   anchor: "left",
-  offset: {left: [32, 32]}
+  offset: { left: [32, 32] }
 });
 
-// selected popup (fixed, with shadow)
+// selected popup (fixed, with shadow via CSS)
 const popup_selected = new mapboxgl.Popup({
   className: "popup-selected",
   closeButton: false,
   closeOnClick: false,
   closeOnMove: false,
   anchor: "left",
-  offset: {left: [26, 26]}
+  offset: { left: [32, 32] }
 });
 
 let raf_id; // animation frame id
@@ -204,7 +204,7 @@ const selected_id = "gi-selected";
 function money(v) {
   const n = Number(v);
   if (!Number.isFinite(n)) return "—";
-  return "$ " + n.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  return "$ " + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 function pct(v) {
@@ -213,22 +213,45 @@ function pct(v) {
   return n.toFixed(2) + "%";
 }
 
+function reset_details_ui() {
+  document.getElementById("detail-tract").textContent = "—";
+  document.getElementById("detail-metro").textContent = "—";
+  document.getElementById("detail-class").textContent = "—";
+  document.getElementById("detail-rent").textContent = "—";
+  document.getElementById("detail-house").textContent = "—";
+  document.getElementById("detail-income").textContent = "—";
+  document.getElementById("detail-poverty").textContent = "—";
+  document.getElementById("detail-bach").textContent = "—";
+  document.getElementById("detail-white").textContent = "—";
+}
+
+function set_details_from_feature(f) {
+  const { idx_num } = update_details(f);
+  set_legend_marker(idx_num);
+}
+
 function set_selected_feature(f, lngLat) {
   const geoid = String(f?.properties?.GEOID ?? "");
   if (!geoid) return;
 
+  // NEW: clicking the already-selected tract toggles selection off
+  if (selected_geoid && geoid === selected_geoid) {
+    clear_selected();
+    return;
+  }
+
   selected_geoid = geoid;
 
-  // selected outline only (no dropshadow on tract)
+  // selected outline only (no shadow layer)
   if (window.map.getLayer(selected_id)) {
     window.map.setFilter(selected_id, ["==", ["get", "GEOID"], selected_geoid]);
   }
 
-  // update box 3 + legend marker from selected tract
+  // freeze box 3 + legend marker to selected
   const { idx_txt, idx_num } = update_details(f);
   set_legend_marker(idx_num);
 
-  // fixed popup shows selected tract info
+  // fixed popup shows selected tract info (+ shadow via CSS)
   const p = f.properties || {};
   const geoid_txt = String(p.GEOID ?? "—");
   const fixed_html = `
@@ -254,6 +277,9 @@ function clear_selected() {
 
   popup_selected.remove();
   hide_legend_marker();
+
+  // NEW: reset box 3 back to empty state
+  reset_details_ui();
 }
 
 
@@ -297,9 +323,9 @@ const legend_marker_value = document.getElementById("legend_marker_value");
 
 // legend scale range
 const legend_min = -4;
-const legend_max =  4;
+const legend_max = 4;
 
-function clamp_1(t) {return Math.max(0, Math.min(1, t));}
+function clamp_1(t) { return Math.max(0, Math.min(1, t)); }
 
 function set_legend_marker(idx_num) {
   if (!legend_wrap || !legend_marker || !legend_marker_value) return;
@@ -309,16 +335,14 @@ function set_legend_marker(idx_num) {
     hide_legend_marker();
     return;
   }
-  const t = clamp_1((n - legend_min) / (legend_max - legend_min)); // normalized value from 0 to 1
-  const w = legend_wrap.getBoundingClientRect().width; // width of the legend area
-  const mw = legend_marker.getBoundingClientRect().width || 0; // marker width
-  const x_px = (t * w) - (mw / 2); // pixel position along the bar
+  const t = clamp_1((n - legend_min) / (legend_max - legend_min));
+  const w = legend_wrap.getBoundingClientRect().width;
+  const mw = legend_marker.getBoundingClientRect().width || 0;
+  const x_px = (t * w) - (mw / 2);
 
-  // marker position
   legend_marker.style.left = `${x_px}px`;
 
-  // show + update text
-  legend_marker_value.textContent = n.toFixed(2); //decimals
+  legend_marker_value.textContent = n.toFixed(2);
   legend_marker.style.display = "block";
   legend_marker.setAttribute("aria-hidden", "false");
 }
@@ -340,7 +364,6 @@ window.addEventListener("resize", () => {
 window.map.on("load", () => {
   const layer_ids = ["gi-fac-1990_2020", "gi-fac-1970_2020_temp"];
 
-  // pick a base layer to copy source from
   const base_layer_id = layer_ids.find((id) => window.map.getLayer(id));
   if (!base_layer_id) {
     console.error("no period layers found:", layer_ids);
@@ -351,7 +374,7 @@ window.map.on("load", () => {
   const source_base = base_layer.source;
   const source_sub_layer = base_layer["source-layer"];
 
-  // selected tract outline (NO shadow layer)
+  // selected tract outline
   if (!window.map.getLayer(selected_id)) {
     const selected_def = {
       id: selected_id,
@@ -381,7 +404,6 @@ window.map.on("load", () => {
         "line-opacity": 1
       }
     };
-
     if (source_sub_layer) hover_def["source-layer"] = source_sub_layer;
     window.map.addLayer(hover_def);
   }
@@ -401,10 +423,16 @@ window.map.on("load", () => {
       const f = e.features && e.features[0];
       if (!f) return;
 
+      // hover outline always updates
       const geoid = String(f.properties?.GEOID ?? "");
       window.map.setFilter(hover_id, ["==", ["get", "GEOID"], geoid]);
 
-      // hover popup (NOT selected)
+      // box 3 follows hover ONLY if nothing is selected
+      if (!selected_geoid) {
+        set_details_from_feature(f);
+      }
+
+      // hover popup always follows cursor
       const p = f.properties || {};
       const geoid_txt = String(p.GEOID ?? "—");
       const idx = Number(p.FAC_1990to2020);
@@ -428,15 +456,18 @@ window.map.on("load", () => {
       window.map.setFilter(hover_id, ["==", ["get", "GEOID"], "__none__"]);
       popup.remove();
       window.map.getCanvas().style.cursor = "";
-      // keep legend marker if there is a selection
-      if (!selected_geoid) hide_legend_marker();
+
+      // if nothing is selected, leaving should hide marker + reset details
+      if (!selected_geoid) {
+        hide_legend_marker();
+        reset_details_ui();
+      }
     });
   }
 
-  // bind both layers so hover works no matter which is visible
   layer_ids.forEach(bind_hover);
 
-  // one click handler for selection (sets fixed popup + details)
+  // one click handler for selection (toggle same tract off; empty space clears)
   window.map.on("click", (e) => {
     const features = window.map.queryRenderedFeatures(e.point, {
       layers: ["gi-fac-1990_2020", "gi-fac-1970_2020_temp"]

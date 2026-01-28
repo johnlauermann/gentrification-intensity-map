@@ -2,9 +2,10 @@
   /* colors */
   /* --color-1: #3381F0; */
   --color-1: #007BFF;
-  --color-2: #edffff;
-  --color-2_rgb: 237, 255, 255; /* #edffff */
+  --color-2: #f0ffff;
+  --color-2_rgb: 240, 255, 255; /* #f0ffff */
   --color-3: #0013F7;
+  --color-4: #3193fc;
   --bg-color: white;
   
   /* spacings */
@@ -268,7 +269,7 @@
   max-width: var(--column);
   background: white;
   outline: 1px solid var(--color-1);
-  box-shadow: var(--spacing-2) var(--spacing-2) 0 #84B5F2;
+  box-shadow: var(--spacing-2) var(--spacing-2) 0 var(--color-4);
   
   /* hidden state */
   display: none;
@@ -618,6 +619,7 @@
   font-size: var(--font-txt);
   pointer-events: none;
   outline: 1px solid var(--color-1);
+  transition: transform 160ms ease, opacity 120ms ease;
 }
 
 .mapboxgl-popup-tip {
@@ -649,4 +651,5 @@
   pointer-events: none;
   outline: 1px solid var(--color-1);
   box-shadow: var(--spacing-3) var(--spacing-3) 0 var(--color-1);
+  transform: translate(-6px, -6px);
 }

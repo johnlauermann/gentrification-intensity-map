@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // box 1 collapse
   const box1 = document.getElementById("box-1");
   const btn1 = document.getElementById("dropdown-learn_more");
+
   if (box1 && btn1) {
     const icon1 = btn1.querySelector("img.picto");
     const body_wrapper = box1.querySelector(".txt-body")?.closest(".wrapper");
@@ -173,24 +174,24 @@ function period_select(is_1970) {
 
 // hovered and selected tract
 
-// hover popup (no shadow)
+// hover popup
 const popup = new mapboxgl.Popup({
   className: "popup-override",
   closeButton: false,
   closeOnClick: false,
   closeOnMove: false,
   anchor: "left",
-  offset: { left: [32, 32] }
+  offset: {left: [32, 32]}
 });
 
-// selected popup (fixed, with shadow via CSS)
+// selected popup
 const popup_selected = new mapboxgl.Popup({
   className: "popup-selected",
   closeButton: false,
   closeOnClick: false,
   closeOnMove: false,
   anchor: "left",
-  offset: { left: [32, 32] }
+  offset: {left: [26, 26]}
 });
 
 let raf_id; // animation frame id
@@ -234,7 +235,7 @@ function set_selected_feature(f, lngLat) {
   const geoid = String(f?.properties?.GEOID ?? "");
   if (!geoid) return;
 
-  // NEW: clicking the already-selected tract toggles selection off
+  // clicking the already-selected tract toggles selection off
   if (selected_geoid && geoid === selected_geoid) {
     clear_selected();
     return;
@@ -242,7 +243,7 @@ function set_selected_feature(f, lngLat) {
 
   selected_geoid = geoid;
 
-  // selected outline only (no shadow layer)
+  // selected outline
   if (window.map.getLayer(selected_id)) {
     window.map.setFilter(selected_id, ["==", ["get", "GEOID"], selected_geoid]);
   }
@@ -251,7 +252,7 @@ function set_selected_feature(f, lngLat) {
   const { idx_txt, idx_num } = update_details(f);
   set_legend_marker(idx_num);
 
-  // fixed popup shows selected tract info (+ shadow via CSS)
+  // fixed popup shows selected tract info
   const p = f.properties || {};
   const geoid_txt = String(p.GEOID ?? "—");
   const fixed_html = `
@@ -278,10 +279,9 @@ function clear_selected() {
   popup_selected.remove();
   hide_legend_marker();
 
-  // NEW: reset box 3 back to empty state
+  // reset box 3 back to empty state
   reset_details_ui();
 }
-
 
 // update box 3 details
 function update_details(f) {
@@ -360,7 +360,7 @@ window.addEventListener("resize", () => {
 });
 
 
-// popup + highlight
+// load
 window.map.on("load", () => {
   const layer_ids = ["gi-fac-1990_2020", "gi-fac-1970_2020_temp"];
 

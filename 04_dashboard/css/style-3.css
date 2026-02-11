@@ -692,6 +692,10 @@
     height: auto;
   }
 
+  #line-bottom {
+    display: none;
+  }
+
   /* boxes clickable */
   .content-container > .box-container {
     pointer-events: auto;

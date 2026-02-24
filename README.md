@@ -2,7 +2,8 @@
 #### Team: [John Lauermann](https://www.pratt.edu/people/john-lauermann/), [Yuanhao Wu](https://www.linkedin.com/in/yuanhao-wu-80603723a/), [Alice Viggiani](https://www.aliceviggiani.com/), [Anna Feldman](https://www.linkedin.com/in/annaelsafeldman/), [Ziqi Wang](https://www.linkedin.com/in/ziqi-wang-0623/), [Nathan Smash](https://www.linkedin.com/in/nathan-smash-b6b93a24a/)
 This repository contains code and data related to a national longitudinal tract database on gentrification patterns in American cities. This is a spatial data science project that seeks to map varying degrees of gentrification intensity across most US metropolitan and micorpolitan communities. The map was developed by [John Lauermann's](https://www.pratt.edu/people/john-lauermann/) lab group in the [School of Information](https://www.pratt.edu/information/) at Pratt Institute. The work received support from the US National Science Foundation, [award #2306194](https://www.nsf.gov/awardsearch/show-award?AWD_ID=2306194). 
 
-An interactive version of the map is [viewable here](https://prattsavi.maps.arcgis.com/apps/instant/basic/index.html?appid=ba07ac922fdb4c4fa7cc99a53cc503eb). 
+An interactive version of the map is viewable here: https://prattsavi.maps.arcgis.com/apps/instant/basic/index.html?appid=ba07ac922fdb4c4fa7cc99a53cc503eb
+
 
 # Map products 
 

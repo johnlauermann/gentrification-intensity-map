@@ -2,6 +2,8 @@
 #### Team: [John Lauermann](https://www.pratt.edu/people/john-lauermann/), [Yuanhao Wu](https://www.linkedin.com/in/yuanhao-wu-80603723a/), [Alice Viggiani](https://www.aliceviggiani.com/), [Anna Feldman](https://www.linkedin.com/in/annaelsafeldman/), [Ziqi Wang](https://www.linkedin.com/in/ziqi-wang-0623/), [Nathan Smash](https://www.linkedin.com/in/nathan-smash-b6b93a24a/)
 This repository contains code and data related to a national longitudinal tract database on gentrification patterns in American cities. This is a spatial data science project that seeks to map varying degrees of gentrification intensity across most US metropolitan and micorpolitan communities. The map was developed by [John Lauermann's](https://www.pratt.edu/people/john-lauermann/) lab group in the [School of Information](https://www.pratt.edu/information/) at Pratt Institute. The work received support from the US National Science Foundation, [award #2306194](https://www.nsf.gov/awardsearch/show-award?AWD_ID=2306194). 
 
+An interactive version of the map is [viewable here](https://prattsavi.maps.arcgis.com/apps/instant/basic/index.html?appid=ba07ac922fdb4c4fa7cc99a53cc503eb). 
+
 # Map products 
 
 The map is available in two formats: 
@@ -27,11 +29,9 @@ If you want to skip the code and go straight to the data, the finished csv table
  Lauermann J, Wu Y, Feldman A, et al. (2026) National Gentrification Intensity Map. Harvard Dataverse. Available at: https://dataverse.harvard.edu/citation?persistentId=doi:10.7910/DVN/DPKO3I
 
 # Related publications
-Lauermann, John & Mallak, Khouloud (2023). Elite capture and urban geography: Analyzing geographies of privilege. _Progress in Human Geography_, 47(5), 645-663. https://doi.org/10.1177/03091325231186810
+Lauermann, John, Viggiani, Alice, Wu, Yuanhao, & Smash, Nathan (2026) National Gentrification Intensity Map: Mapping gentrification across US communities, 1970 to 2020, _The Professional Geographer_, https://doi.org/10.1080/00330124.2026.2625975
 
-Lauermann, John, Viggiani, Alice, Wu, Yuanhao, & Smash, Nathan (forthcoming) National Gentrification Intensity Map: Mapping gentrification across US communities, 1970 to 2020, _The Professional Geographer_
-
-Lauermann, John, Alexander, Zoe, & Wang, Ziqi (2025) Mapping super-gentrification in large US cities, 1990-2020, _Urban Geography_, https://doi.org/10.1080/02723638.2025.2528418
+Lauermann, John, Alexander, Zoe, & Wang, Ziqi (2025) Mapping super-gentrification in large US cities, 1990-2020, _Urban Geography_, https://doi.org/10.1080/02723638.2025.2528418 
 <br>
 <br>
 <br>

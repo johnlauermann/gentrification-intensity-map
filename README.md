@@ -3,7 +3,7 @@
 This repository contains code and data related to a national longitudinal tract database on gentrification patterns in American cities. This is a spatial data science project that seeks to map varying degrees of gentrification intensity across most US metropolitan and micorpolitan communities. The map was developed by [John Lauermann's](https://www.pratt.edu/people/john-lauermann/) lab group in the [School of Information](https://www.pratt.edu/information/) at Pratt Institute. The work received support from the US National Science Foundation, [award #2306194](https://www.nsf.gov/awardsearch/show-award?AWD_ID=2306194). 
 
 
-# Map products 
+## Map products 
 
 The map is available in two formats: 
 
@@ -13,8 +13,7 @@ Gentrification-related data from 1990 to 2020, adjusted to 2020 census tract bou
 #### Historical data on 2010 tract boundaries
 Gentrification indicators from 1970 to 2020, adjusted to 2010 census tract boundaries. This is based on Decennial Census and American Community Survey data, drawn from from [National Historical GIS](https://www.nhgis.org/) using the [IPUMS API](https://developer.ipums.org/docs/v2/get-started/). Crosswalks are based on methods from both [NHGIS Geographic Crosswalks](https://www.nhgis.org/geographic-crosswalks) and the [Longitudinal Tract Data Base](https://s4.ad.brown.edu/projects/diversity/researcher/bridging.htm). It covers ~49,000 census tracts in ~860 core-based statistical areas, with all data crosswalked to 2010 census boundaries. While this map may be useful for historical research, we do not recommend using it for most applications due to spatial noise introduced through the geographic crosswalking method. Replication code is in `02_data_historic`.
 
-
-# How to use
+## How to use
 The replication code are available three folders:
 - `01_data` contains the code to construct gentrification indicator data, for the main map product (drawing information from 1990 to 2020, on 2020 tract boundaries)
 - `02_data_historic` contains the code to construct the historical version of gentrification indicator data (drawing information from 1970 to 2020, on 2010 tract boundaries)
@@ -24,10 +23,13 @@ The statistical workflow runs on R, primarily using `ipumsr` for querying APIs, 
 
 If you want to skip the code and go straight to the data, the finished csv tables and boundary layers are available for download on Harvard Dataverse in the replication data cited below.
 
-# How to cite
- Lauermann J, Wu Y, Feldman A, et al. (2026) National Gentrification Intensity Map. Harvard Dataverse. Available at: https://dataverse.harvard.edu/citation?persistentId=doi:10.7910/DVN/DPKO3I
+## How to cite
+Lauermann, John, Viggiani, Alice, Wu, Yuanhao, & Smash, Nathan (2026) National Gentrification Intensity Map: Mapping gentrification across US communities, 1970 to 2020, _The Professional Geographer_, https://doi.org/10.1080/00330124.2026.2625975
 
-# Related publications
+## Replication data
+Lauermann J, Wu Y, Feldman A, et al. (2026) National Gentrification Intensity Map. _Harvard Dataverse_. Available at: https://dataverse.harvard.edu/citation?persistentId=doi:10.7910/DVN/DPKO3I
+
+## Related publications
 Lauermann, John, Viggiani, Alice, Wu, Yuanhao, & Smash, Nathan (2026) National Gentrification Intensity Map: Mapping gentrification across US communities, 1970 to 2020, _The Professional Geographer_, https://doi.org/10.1080/00330124.2026.2625975
 
 Lauermann, John, Alexander, Zoe, & Wang, Ziqi (2025) Mapping super-gentrification in large US cities, 1990-2020, _Urban Geography_, https://doi.org/10.1080/02723638.2025.2528418 

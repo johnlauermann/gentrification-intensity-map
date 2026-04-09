@@ -112,7 +112,7 @@ menu.querySelectorAll('.dropdown-link').forEach(link => {
     const view = cities_centers[city];
     if (!view || !window.map) return;
 
-    window.map.easeTo({ center: view.center, zoom: view.zoom, duration: 400 });
+    window.map.easeTo({center: view.center, zoom: view.zoom, duration: 400});
     document.querySelector('#dropdown-selected-city .txt-menu').textContent = city;
     menu_set(false);
   });
@@ -121,7 +121,6 @@ menu.querySelectorAll('.dropdown-link').forEach(link => {
 
 
 // checkbox boundaries
-
 const checkbox_municipality = document.getElementById('checkbox-municipality-input');
 
 function set_municipality_visibility(visible) {
@@ -154,7 +153,7 @@ if (checkbox_municipality.checked) {
 // data period toggle
 
 const checkbox_period = document.getElementById('checkbox-period-input');
-const layer_1970 = 'gi-fac-1970_2020_temp';
+const layer_1970 = 'gi-fac-1970_2020';
 const layer_1990 = 'gi-fac-1990_2020';
 
 function period_select(is_1970) {
@@ -362,7 +361,7 @@ window.addEventListener("resize", () => {
 
 // load
 window.map.on("load", () => {
-  const layer_ids = ["gi-fac-1990_2020", "gi-fac-1970_2020_temp"];
+  const layer_ids = ["gi-fac-1990_2020", "gi-fac-1970_2020"];
 
   const base_layer_id = layer_ids.find((id) => window.map.getLayer(id));
   if (!base_layer_id) {
@@ -470,7 +469,7 @@ window.map.on("load", () => {
   // one click handler for selection (toggle same tract off; empty space clears)
   window.map.on("click", (e) => {
     const features = window.map.queryRenderedFeatures(e.point, {
-      layers: ["gi-fac-1990_2020", "gi-fac-1970_2020_temp"]
+      layers: ["gi-fac-1990_2020", "gi-fac-1970_2020"]
     });
 
     const f = features && features[0];

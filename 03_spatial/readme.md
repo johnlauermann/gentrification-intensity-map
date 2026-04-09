@@ -1,8 +1,15 @@
-# Create spatial boundary files
+# Spatial data workflows
 
-This code creates spatial boundary files for two separate geographies:
+## Create spatial boundary layers
+We create spatial boundary files for two separate geographies:
 1. [map_metrotracts_2020tr.ipynb](map_metrotracts_2020tr.ipynb): The primary verison of the gentrification map supports data from 1990-2020, longitudinally adjusted to 2020 census tracts. The resulting layer includes boundaries and related geographic identifiers for ~56,000 urban census tracts in ~880 core-based statistical areas. We recommend using this version of the map for most applications.
-2. [map_metrotracts_2020tr.ipynb](map_metrotracts_2020tr.ipynb): The supplementary historic version of the gentrification map supports data from 1970-2020, longitudinally adjusted to 2010 census tracts. The resulting layer includes boundaries and related geographic identifiers for ~49,600 urban census tracts in ~860 core-based statistical areas. While this map may be useful for historical research, we do not recommend using it for most applications due to spatial noise introduced through the geographic crosswalking method. 
+2. [map_metrotracts_2010tr.ipynb](map_metrotracts_2010tr.ipynb): The supplementary historic version of the gentrification map supports data from 1970-2020, longitudinally adjusted to 2010 census tracts. The resulting layer includes boundaries and related geographic identifiers for ~49,600 urban census tracts in ~860 core-based statistical areas. While this map may be useful for historical research, we do not recommend using it for most applications due to spatial noise introduced through the geographic crosswalking method. 
 
 The spatial boundary files are developed in Python, primarily using `ipumpspy` and `requests` for querying data and `geopandas` for geoprocessing. The boundary layers are saved to a geopackage format to support open-source GIS users. Here's how to read a geopackage in [ArcGIS](https://pro.arcgis.com/en/pro-app/latest/help/data/databases/work-with-sqlite-databases-in-arcgis-pro.htm), [QGIS](https://learn.openwaterfoundation.org/owf-learn-geopackage/using-geopackage/qgis/), [R library `sf`](https://mapping-in-r-workshop.ryanpeek.org/02_import_export_gpkg), or [Python library `geopandas`](https://geopandas.org/en/stable/docs/user_guide/io.html).
+
+
+## Publish to Mapbox
+To publish data on Mapbox for use in our dashboard:
+1. [map_publishtoweb_2020tr.r](map_publishtoweb_2020tr.r): Queries relevant variables for web mapping, converts to `geojson` for web publishing, creates and published a tileset on Mapbox using `mapboxapi`. Applies to the 1990-2020 version of the data stored in [`01_data`](https://github.com/johnlauermann/gentrification-intensity-map/tree/main/01_data)
+2. [map_publishtoweb_2010tr.r](map_publishtoweb_2021tr.r): Queries relevant variables for web mapping, converts to `geojson` for web publishing, creates and published a tileset on Mapbox using `mapboxapi`. Applies to the 1970-2020 historical version of the data stored in [`02_data_historic`](https://github.com/johnlauermann/gentrification-intensity-map/tree/main/02_data_historic)
 

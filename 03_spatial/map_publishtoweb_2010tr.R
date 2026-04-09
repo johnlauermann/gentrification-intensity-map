@@ -12,19 +12,57 @@ library(ggplot2)
 library(mapboxapi)
 library(sf)
 
+
 # set environment
-here::i_am("map_publishtoweb_2010tr.r")
+here::i_am("03_spatial/map_publishtoweb_2010tr.r")
+
 
 # load data 
 ## tabular data
 data <- read.csv(here("02_data_historic/metrotracts_gentscores_2010tr.csv")) %>%
-  rename(GISJOIN = tr2010gj)
+  select(tr2010gj, 
+         CBSAFP, 
+         Bach_pct_chg_1970to2020,
+         classtype, 
+         ConRent_mean_chg_1970to2020,
+         GentIntensity_1970,
+         GentIntensity_1980,
+         GentIntensity_1990,
+         GentIntensity_2000,
+         GentIntensity_2010,
+         GentIntensity_2010,
+         GentIntensity_1970to1980,
+         GentIntensity_1980to1990,
+         GentIntensity_1990to2000,
+         GentIntensity_2000to2010,
+         GentIntensity_2010to2020,
+         GentIntensity_1970to2020,
+         Gentrified,
+         HHIncome_mean_chg_1970to2020,
+         HistoricallyAffluent,
+         HouseValue_mean_chg_1970to2020,
+         Poverty_pct_chg_1970to2020,
+         SuperGentrified,
+         WhiteCollar_pct_chg_1970to2020) %>%
+  rename(GISJOIN = tr2010gj) 
 
-## spatial data
+## convert to units of std dev
+variables <- data %>%
+  select(starts_with("GentIntensity")) %>%
+  names()
+
+for (var in variables) {
+  mean <- mean(data[[var]], na.rm = TRUE)
+  sd <- sd(data[[var]], na.rm = TRUE)
+  name <- paste0(var, "_sdfrommean")
+  data[[name]] <- (data[[var]] - mean) / sd
+}
+
+
+# spatial data
 st_layers(here("03_spatial/tract_boundaries.gpkg"))
 boundaries <- st_read(dsn = here("03_spatial/tract_boundaries.gpkg"), 
                       layer = "metrotracts_2010tr")
-
 
 # join the dataframes
 map_data <- boundaries %>%
@@ -71,15 +109,37 @@ ggplot(data = Manhattan) +
 
 # publish to Mapbox
 ## set up parameters
-token = "your private token"
+token = "your secret token"
 username = "your username"
+tilesetname = "gentscores_1970to2020"
+mts_list_tilesets(username = username, access_token = token)
 
-## upload data
-upload_tiles(
-  input = map_data,
-  username = username,
-  access_token = token,
-  tileset_id = "gentscores_2010tr",
-  tileset_name = "gentrification_intensity_index_1970to2020", 
-  multipart = TRUE, 
-)
+## prep data for upload
+map_data <- st_make_valid(map_data)
+map_data <- st_transform(x = map_data, crs = 4326)
+
+## create source
+mts_create_source(data = map_data, 
+                  tileset_id = tilesetname, 
+                  username = username, 
+                  access_token = token)
+
+## define tileset recipe
+tract_layer <- recipe_layer(
+  source = paste0("mapbox://tileset-source/", username, "/", tilesetname),
+  minzoom = 7, 
+  maxzoom = 14)
+recipe <- mts_make_recipe(tract_layer)
+mts_validate_recipe(recipe = recipe, 
+                    access_token = token)
+
+## create tileset
+mts_create_tileset(tileset_name = tilesetname,
+                   username = username,
+                   recipe = recipe,
+                   access_token = token)
+
+## upload content
+mts_publish_tileset(tileset_name = tilesetname,
+                    username = username, 
+                    access_token = token)

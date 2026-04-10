@@ -91,15 +91,15 @@ menu.addEventListener('click', (e) => e.stopPropagation());
 
 // cities zoom
 const cities_centers = {
-  "New York City": {center: [-74.0000, 40.7300], zoom: 10},
-  "Los Angeles": {center: [-118.2437, 34.0522], zoom: 10},
-  "Chicago": {center: [-87.6298, 41.8781], zoom: 10},
-  "Dallas": {center: [-96.7970, 32.7767], zoom: 10},
-  "Houston": {center: [-95.3698, 29.7604], zoom: 10},
-  "Washington DC": {center: [-77.0369, 38.9072], zoom: 10},
-  "Philadelphia": {center: [-75.1652, 39.9526], zoom: 10},
-  "Atlanta": {center: [-84.3880, 33.7490], zoom: 10},
-  "US": {center: [-98.5795, 39.8283], zoom: 5}
+  "New York City": { center: [-74.0000, 40.7300], zoom: 10 },
+  "Los Angeles": { center: [-118.2437, 34.0522], zoom: 10 },
+  "Chicago": { center: [-87.6298, 41.8781], zoom: 10 },
+  "Dallas": { center: [-96.7970, 32.7767], zoom: 10 },
+  "Houston": { center: [-95.3698, 29.7604], zoom: 10 },
+  "Washington DC": { center: [-77.0369, 38.9072], zoom: 10 },
+  "Philadelphia": { center: [-75.1652, 39.9526], zoom: 10 },
+  "Atlanta": { center: [-84.3880, 33.7490], zoom: 10 },
+  "US": { center: [-98.5795, 39.8283], zoom: 5 }
 };
 
 // when clicking on a city name
@@ -113,7 +113,7 @@ menu.querySelectorAll('.dropdown-link').forEach(link => {
     if (!view || !window.map) return;
 
     // centering municipalities
-    window.map.easeTo({center: view.center, zoom: view.zoom, duration: 400, padding: {left: 516}}); // 516 > boxes width
+    window.map.easeTo({ center: view.center, zoom: view.zoom, duration: 400, padding: { left: 516 } }); // 516 > boxes width
     document.querySelector('#dropdown-selected-city .txt-menu').textContent = city;
     menu_set(false);
   });
@@ -181,7 +181,7 @@ const popup = new mapboxgl.Popup({
   closeOnClick: false,
   closeOnMove: false,
   anchor: "left",
-  offset: {left: [32, 32]}
+  offset: { left: [32, 32] }
 });
 
 // selected popup
@@ -191,7 +191,7 @@ const popup_selected = new mapboxgl.Popup({
   closeOnClick: false,
   closeOnMove: false,
   anchor: "left",
-  offset: {left: [26, 26]}
+  offset: { left: [26, 26] }
 });
 
 let raf_id; // animation frame id
@@ -205,7 +205,7 @@ const selected_id = "gi-selected";
 function money(v) {
   const n = Number(v);
   if (!Number.isFinite(n)) return "—";
-  return "$ " + n.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  return "$ " + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 function pct(v) {
@@ -232,7 +232,7 @@ function set_details_from_feature(f) {
 }
 
 function set_selected_feature(f, lngLat) {
-  const geoid = String(f?.properties?.GEOID ?? "");
+  const geoid = Number(f?.properties?.GEOID);
   if (!geoid) return;
 
   // clicking the already-selected tract toggles selection off
@@ -302,8 +302,7 @@ function update_details(f) {
   document.getElementById("detail-bach").textContent = pct(p.Bach_pct_chg_1990to2020);
   document.getElementById("detail-white").textContent = pct(p.WhiteCollar_pct_chg_1990to2020);
 
-  console.log(Object.keys(f.properties || {}));
-  return {geoid, idx_txt, idx_num: idx};
+  return { geoid, idx_txt, idx_num: idx };
 }
 
 // run once when the map style is ready
@@ -331,11 +330,11 @@ const scale_colors = [
   [-3, "#f197d0"],
   [-2, "#E2BFF3"],
   [-1, "#CCBFF3"],
-  [ 0, "#BFCFF3"],
-  [ 1, "#3381F0"],
-  [ 2, "#3267A9"],
-  [ 3, "#314A80"],
-  [ 7, "#314A80"]
+  [0, "#BFCFF3"],
+  [1, "#3381F0"],
+  [2, "#3267A9"],
+  [3, "#314A80"],
+  [7, "#314A80"]
 ];
 
 // mapbox expression to linear color scale
@@ -354,7 +353,7 @@ const gradient_stops = scale_colors.map(([val, color]) => {
   return `${color} ${legend_pct}%`;
 }).join(", ");
 
-document.querySelector(".legend-gradient").style.background = 
+document.querySelector(".legend-gradient").style.background =
   `linear-gradient(to right, ${gradient_stops})`;
 
 
@@ -376,14 +375,6 @@ function set_legend_marker(idx_num) {
   legend_marker.style.left = `${first_center + t * run_width}px`;
   legend_marker_value.textContent = n.toFixed(2);
   legend_marker.style.display = "block";
-
-  console.log(first_center + t * run_width)
-  console.log("n:", n, "t:", t, "x:", first_center + t * run_width);
-
-  ticks.forEach((el, i) => {
-  console.log(i, el.getBoundingClientRect().left + el.getBoundingClientRect().width/2 - wrap_left);
-});
-
 }
 
 function hide_legend_marker() {
@@ -395,32 +386,12 @@ function hide_legend_marker() {
 window.map.on("load", () => {
   const layer_ids = ["gi-fac-1990_2020", "gi-fac-1970_2020"];
 
-  const base_layer_id = layer_ids.find((id) => window.map.getLayer(id));
-  if (!base_layer_id) {
-    console.error("no period layers found:", layer_ids);
+  if (!window.map.getLayer("gi-fac-1990_2020")) {
+    console.error("base layer not found");
     return;
   }
 
-  const base_layer = window.map.getLayer(base_layer_id);
-  const source_base = base_layer.source;
-  const source_sub_layer = base_layer["source-layer"];
-
-  // selected tract outline
-  if (!window.map.getLayer(selected_id)) {
-    const selected_def = {
-      id: selected_id,
-      type: "line",
-      source: source_base,
-      filter: ["==", ["get", "GEOID"], "__none__"],
-      paint: {
-        "line-color": "white",
-        "line-width": 2,
-        "line-opacity": 1
-      }
-    };
-    if (source_sub_layer) selected_def["source-layer"] = source_sub_layer;
-    window.map.addLayer(selected_def);
-  }
+  const source_base = window.map.getLayer("gi-fac-1990_2020").source;
 
   // hovered tract
   if (!window.map.getLayer(hover_id)) {
@@ -435,9 +406,34 @@ window.map.on("load", () => {
         "line-opacity": 1
       }
     };
-    if (source_sub_layer) hover_def["source-layer"] = source_sub_layer;
-    window.map.addLayer(hover_def);
+    if (!window.map.getLayer(hover_id)) {
+      window.map.addLayer({
+        id: hover_id,
+        type: "line",
+        source: source_base,
+        "source-layer": "layer1",
+        filter: ["==", ["get", "GEOID"], "__none__"],
+        paint: {
+          "line-color": "#007BFF",
+          "line-width": 2,
+          "line-opacity": 1
+        }
+      });
+    }
   }
+
+  // selected tract outline
+  if (!window.map.getLayer(selected_id)) {
+    window.map.addLayer({
+      id: selected_id,
+      type: "line",
+      source: source_base,
+      "source-layer": "layer1", // temp
+      filter: ["==", ["get", "GEOID"], "__none__"],
+      paint: { "line-color": "white", "line-width": 2, "line-opacity": 1 }
+    });
+  }
+
 
   function bind_hover(layer_id) {
     if (!window.map.getLayer(layer_id)) {
@@ -455,7 +451,7 @@ window.map.on("load", () => {
       if (!f) return;
 
       // hover outline always updates
-      const geoid = String(f.properties?.GEOID ?? "");
+      const geoid = Number(f.properties?.GEOID);
       window.map.setFilter(hover_id, ["==", ["get", "GEOID"], geoid]);
 
       // box 3 follows hover ONLY if nothing is selected
@@ -513,3 +509,6 @@ window.map.on("load", () => {
   });
 
 });
+
+// temp logs to check for bugs
+

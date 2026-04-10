@@ -508,51 +508,56 @@
 
 /* gradient scale */
 .legend-gradient {
-  width: 100%;
-  height: var(--spacing-1);
   margin-bottom: var(--spacing-3);
+  width: calc(100% - (var(--spacing-1)));
+  height: var(--spacing-1);
+  align-self: center;
+  background-color: #BFCFF3; /* fallback */
 
-  background: linear-gradient(
+  background: linear-gradient( /* fallback for JS */
     to right,
-    #F5BFE1 0%,        /* -4 */
-    #F5BFE1 9.09%,     /* -3 */
-    #E2BFF3 18.18%,    /* -2 */
-    #CCBFF3 27.27%,    /* -1 */
-    #BFCFF3 36.36%,    /* 0 */
-    #3381F0 45.45%,    /* 1 */
-    #3267A9 54.54%,    /* 2 */
-    #314A80 63.63%,    /* 3 */
-    #314A80 100%       /* 7 */
+    #F5BFE1 0%, /* -4 */
+    #F5BFE1 9.09%, /* -3 */
+    #E2BFF3 18.18%, /* -2 */
+    #CCBFF3 27.27%, /* -1 */
+    #BFCFF3 36.36%, /* 0 */
+    #3381F0 45.45%, /* 1 */
+    #3267A9 54.54%, /* 2 */
+    #314A80 63.63%, /* 3 */
+    #314A80 100% /* 7 */
   ); 
 }
 
-/* .legend-ticks {
+.legend-ticks-wrap {
   width: 100%;
-  height: var(--spacing-1);
-  min-height: var(--spacing-1);
-  margin-top: var(--spacing-3);
-  margin-bottom: var(--spacing-1);
   display: flex;
-  justify-content: space-between;
   flex-direction: row;
-  gap: var(--spacing-4);
-} */
+  justify-content: space-between;
+}
 
 .legend-ticks {
-  position: relative;
-  width: 100%;
-  min-height: 20px;
-  margin-top: 4px;
+  width: var(--spacing-1);
+  height: var(--spacing-1);
+  text-align: center;
+}
+.legend-ticks:first-child,
+.legend-ticks:last-child {
+  /* width: auto; */
 }
 
-.legend-ticks span {
-  position: absolute;
-  transform: translateX(-50%);
+.legend-label {
   font-size: var(--font-txt);
+  font-weight: 400;
 }
 
-.legend-ticks span:first-child { transform: translateX(0%); }
-.legend-ticks span:last-child { transform: translateX(-100%); }
+
+
+
+
+
+
+
+
 
 
 /* marker */
@@ -565,7 +570,6 @@
   position: absolute;
   top: -24px;
   left: 0; /* defined in js */
-  transform: translateX(-50%);
   pointer-events: none;
   display: none; /* hidden until hover */
   z-index: 5;

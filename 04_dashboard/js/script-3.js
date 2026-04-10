@@ -89,7 +89,7 @@ document.addEventListener('click', () => menu_set(false));
 // clicking inside menu shouldn’t close before your link handler runs
 menu.addEventListener('click', (e) => e.stopPropagation());
 
-// cities zooms
+// cities zoom
 const cities_centers = {
   "New York City": {center: [-74.0000, 40.7300], zoom: 10},
   "Los Angeles": {center: [-118.2437, 34.0522], zoom: 10},
@@ -323,50 +323,73 @@ const legend_marker_value = document.getElementById("legend_marker_value");
 const legend_gradient = document.querySelector(".legend-gradient");
 
 // legend scale range
-const legend_min = -4; // -4.348218
-const legend_max = 3; // 7.16
+const legend_min = -3; // actual is -4.348218
+const legend_max = 5; // actual is 7.16
 
-function clamp_1(t) { return Math.max(0, Math.min(1, t)); }
+const scale_colors = [
+  [-4, "#f197d0"],
+  [-3, "#f197d0"],
+  [-2, "#E2BFF3"],
+  [-1, "#CCBFF3"],
+  [ 0, "#BFCFF3"],
+  [ 1, "#3381F0"],
+  [ 2, "#3267A9"],
+  [ 3, "#314A80"],
+  [ 7, "#314A80"]
+];
+
+// mapbox expression to linear color scale
+// controling the colors from mapbox here
+const mapbox_expression = [
+  "interpolate", ["linear"],
+  ["get", "GentIntensity_1990to2020_sdfrommean"],
+  ...scale_colors.flat()
+];
+
+// css gradient
+// it's in js, so it can be controled along with the layer color
+const legend_total = legend_max - legend_min;
+const gradient_stops = scale_colors.map(([val, color]) => {
+  const legend_pct = ((val - legend_min) / legend_total * 100).toFixed(2);
+  return `${color} ${legend_pct}%`;
+}).join(", ");
+
+document.querySelector(".legend-gradient").style.background = 
+  `linear-gradient(to right, ${gradient_stops})`;
+
 
 function set_legend_marker(idx_num) {
-  if (!legend_wrap || !legend_marker || !legend_marker_value) return;
-
   const n = Number(idx_num);
-  if (!Number.isFinite(n)) {
-    hide_legend_marker();
-    return;
-  }
-  const t = clamp_1((n - legend_min) / (legend_max - legend_min));
-  const w = legend_gradient.getBoundingClientRect().width;
-  const gradient_left = legend_gradient.getBoundingClientRect().left - legend_wrap.getBoundingClientRect().left;
-  const mw = legend_marker.getBoundingClientRect().width || 0;
-  const x_px = gradient_left + (t * w) - (mw / 2);
-  // const x_px = (t * w) - (mw / 2);
+  if (!Number.isFinite(n)) return;
 
-  console.log("gradient rect:", legend_gradient.getBoundingClientRect());
-  console.log("wrap rect:", legend_wrap.getBoundingClientRect());
+  const ticks = document.querySelectorAll(".legend-ticks");
+  const wrap_left = legend_wrap.getBoundingClientRect().left;
+  const first = ticks[0].getBoundingClientRect();
+  const last = ticks[ticks.length - 1].getBoundingClientRect();
+  const first_center = first.left + first.width / 2 - wrap_left;
+  const last_center = last.left + last.width / 2 - wrap_left;
+  const run_width = last_center - first_center;
 
-  const x_clamped = Math.max(0, Math.min(w - mw, x_px));
-  legend_marker.style.left = `${x_clamped}px`;
+  const n_clamped = Math.max(-3, Math.min(5, n));
+  const t = (n_clamped - (-3)) / (5 - (-3));
 
-
+  legend_marker.style.left = `${first_center + t * run_width}px`;
   legend_marker_value.textContent = n.toFixed(2);
   legend_marker.style.display = "block";
-  legend_marker.setAttribute("aria-hidden", "false");
+
+  console.log(first_center + t * run_width)
+  console.log("n:", n, "t:", t, "x:", first_center + t * run_width);
+
+  ticks.forEach((el, i) => {
+  console.log(i, el.getBoundingClientRect().left + el.getBoundingClientRect().width/2 - wrap_left);
+});
+
 }
 
 function hide_legend_marker() {
   if (!legend_marker) return;
   legend_marker.style.display = "none";
-  legend_marker.setAttribute("aria-hidden", "true");
 }
-
-window.addEventListener("resize", () => {
-  if (!legend_marker || legend_marker.style.display !== "block") return;
-  const n = Number(legend_marker_value?.textContent);
-  if (Number.isFinite(n)) set_legend_marker(n);
-});
-
 
 // load
 window.map.on("load", () => {

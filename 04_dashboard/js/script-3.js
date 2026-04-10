@@ -112,7 +112,8 @@ menu.querySelectorAll('.dropdown-link').forEach(link => {
     const view = cities_centers[city];
     if (!view || !window.map) return;
 
-    window.map.easeTo({center: view.center, zoom: view.zoom, duration: 400});
+    // centering municipalities
+    window.map.easeTo({center: view.center, zoom: view.zoom, duration: 400, padding: {left: 516}}); // 516 > boxes width
     document.querySelector('#dropdown-selected-city .txt-menu').textContent = city;
     menu_set(false);
   });
@@ -204,7 +205,7 @@ const selected_id = "gi-selected";
 function money(v) {
   const n = Number(v);
   if (!Number.isFinite(n)) return "—";
-  return "$ " + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return "$ " + n.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
 }
 
 function pct(v) {
@@ -288,21 +289,21 @@ function update_details(f) {
   const geoid = String(p.GEOID ?? "—");
   const cbsa = String(p.CBSA_NAME ?? "").split(",")[0] || "—";
   const type = String(p.classtype ?? "—").replace(/^./, c => c.toUpperCase());
-  const idx = Number(p.FAC_1990to2020);
+  const idx = Number(p.GentIntensity_1990to2020_sdfrommean);
   const idx_txt = Number.isFinite(idx) ? idx.toFixed(2) : "—";
 
   document.getElementById("detail-tract").textContent = geoid;
   document.getElementById("detail-metro").textContent = cbsa;
   document.getElementById("detail-class").textContent = type;
-  document.getElementById("detail-rent").textContent = money(p.ConRent_mean_2020);
-  document.getElementById("detail-house").textContent = money(p.HouseValue_mean_2020);
-  document.getElementById("detail-income").textContent = money(p.HHIncome_mean_2020);
-  document.getElementById("detail-poverty").textContent = pct(p.Poverty_pct_2020);
-  document.getElementById("detail-bach").textContent = pct(p.Bach_pct_2020);
-  document.getElementById("detail-white").textContent = pct(p.WhiteCollar_pct_2020);
+  document.getElementById("detail-rent").textContent = money(p.ConRent_mean_chg_1990to2020);
+  document.getElementById("detail-house").textContent = money(p.HouseValue_mean_chg_1990to2020);
+  document.getElementById("detail-income").textContent = money(p.HHIncome_mean_chg_1990to2020);
+  document.getElementById("detail-poverty").textContent = pct(p.Poverty_pct_chg_1990to2020);
+  document.getElementById("detail-bach").textContent = pct(p.Bach_pct_chg_1990to2020);
+  document.getElementById("detail-white").textContent = pct(p.WhiteCollar_pct_chg_1990to2020);
 
   console.log(Object.keys(f.properties || {}));
-  return { geoid, idx_txt, idx_num: idx };
+  return {geoid, idx_txt, idx_num: idx};
 }
 
 // run once when the map style is ready
@@ -319,10 +320,11 @@ checkbox_period.addEventListener('change', (e) => {
 const legend_wrap = document.getElementById("legend_wrap");
 const legend_marker = document.getElementById("legend_marker");
 const legend_marker_value = document.getElementById("legend_marker_value");
+const legend_gradient = document.querySelector(".legend-gradient");
 
 // legend scale range
-const legend_min = -4;
-const legend_max = 4;
+const legend_min = -4; // -4.348218
+const legend_max = 3; // 7.16
 
 function clamp_1(t) { return Math.max(0, Math.min(1, t)); }
 
@@ -335,11 +337,18 @@ function set_legend_marker(idx_num) {
     return;
   }
   const t = clamp_1((n - legend_min) / (legend_max - legend_min));
-  const w = legend_wrap.getBoundingClientRect().width;
+  const w = legend_gradient.getBoundingClientRect().width;
+  const gradient_left = legend_gradient.getBoundingClientRect().left - legend_wrap.getBoundingClientRect().left;
   const mw = legend_marker.getBoundingClientRect().width || 0;
-  const x_px = (t * w) - (mw / 2);
+  const x_px = gradient_left + (t * w) - (mw / 2);
+  // const x_px = (t * w) - (mw / 2);
 
-  legend_marker.style.left = `${x_px}px`;
+  console.log("gradient rect:", legend_gradient.getBoundingClientRect());
+  console.log("wrap rect:", legend_wrap.getBoundingClientRect());
+
+  const x_clamped = Math.max(0, Math.min(w - mw, x_px));
+  legend_marker.style.left = `${x_clamped}px`;
+
 
   legend_marker_value.textContent = n.toFixed(2);
   legend_marker.style.display = "block";
@@ -434,7 +443,7 @@ window.map.on("load", () => {
       // hover popup always follows cursor
       const p = f.properties || {};
       const geoid_txt = String(p.GEOID ?? "—");
-      const idx = Number(p.FAC_1990to2020);
+      const idx = Number(p.GentIntensity_1990to2020_sdfrommean);
       const idx_txt = Number.isFinite(idx) ? idx.toFixed(2) : "—";
       const small_html = `
         <div class="popup-wrapper">

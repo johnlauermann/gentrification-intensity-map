@@ -218,6 +218,7 @@ function pct(v) {
 }
 
 function reset_details_ui() {
+  document.getElementById("box-3").classList.remove("has-data");
   document.getElementById("detail-tract").textContent = "—";
   document.getElementById("detail-metro").textContent = "—";
   document.getElementById("detail-class").textContent = "—";
@@ -230,7 +231,7 @@ function reset_details_ui() {
 }
 
 function set_details_from_feature(f) {
-  const { idx_num } = update_details(f);
+  const {idx_num} = update_details(f);
   set_legend_marker(idx_num);
 }
 
@@ -295,6 +296,7 @@ function update_details(f) {
   const idx = Number(p.GentIntensity_1990to2020_sdfrommean);
   const idx_txt = Number.isFinite(idx) ? idx.toFixed(2) : "—";
 
+  document.getElementById("box-3").classList.add("has-data");
   document.getElementById("detail-tract").textContent = geoid;
   document.getElementById("detail-metro").textContent = cbsa;
   document.getElementById("detail-class").textContent = type;

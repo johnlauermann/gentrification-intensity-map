@@ -130,6 +130,7 @@
   grid-template-rows: max-content 1fr;
   place-content: start;
   align-items: start;
+  pointer-events: none;
 }
 
 .map-container {
@@ -140,7 +141,7 @@
   height: 100%;
   width: 100%;
   display: block;
-  background: lightsteelblue;
+  background-color: var(--color-2);
 }
 
 
@@ -168,6 +169,7 @@
   transition: transform 160ms ease;
   isolation: isolate; /* lock children */
   background-color: var(--color-2);
+  pointer-events: auto;
 }
 
 .wrapper {
@@ -179,7 +181,7 @@
   max-height: max-content;
   font-weight: 400;
   text-align: left;
-  background-color: var(--color-2);
+  /* background-color: var(--color-2); */
 }
 
 .line {
@@ -431,6 +433,14 @@
   flex-shrink: 0;
 }
 
+#details-prompt {
+  display: block;
+}
+
+.has-data #details-prompt {
+  display: none;
+}
+
 /* index legend */
 .legend-label-wrapper {
   display: flex;
@@ -553,13 +563,6 @@
 
 
 
-
-
-
-
-
-
-
 /* marker */
 #legend_wrap {
   position: relative;
@@ -666,7 +669,7 @@
 }
 
 .mapboxgl-canvas {
-  cursor: default !important;
+  cursor: default;
 }
 
 /* popup */
@@ -768,11 +771,6 @@
   #box-2 {
     grid-column: 2;
     grid-row: 1;
-  }
-
-  #box-1.box-container,
-  #box-2.box-container {
-    background-color: rgba(var(--color-2_rgb), 0.98);
   }
 
   /* single outline around the whole header */

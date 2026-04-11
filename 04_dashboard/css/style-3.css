@@ -665,6 +665,9 @@
   height: 100%;
 }
 
+.mapboxgl-canvas {
+  cursor: default !important;
+}
 
 /* popup */
 

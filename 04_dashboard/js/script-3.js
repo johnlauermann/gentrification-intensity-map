@@ -1,3 +1,6 @@
+// responsiveness 
+const is_touch = navigator.maxTouchPoints > 0 && window.innerWidth <= 1028;
+
 // box collapse
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -434,62 +437,67 @@ window.map.on("load", () => {
     });
   }
 
-
   function bind_hover(layer_id) {
     if (!window.map.getLayer(layer_id)) {
       console.warn("missing layer:", layer_id);
       return;
     }
 
-    window.map.on("mouseenter", layer_id, () => {
-      window.map.getCanvas().style.cursor = "default";
-      if (!popup.isOpen()) popup.addTo(window.map);
-    });
-
-    window.map.on("mousemove", layer_id, (e) => {
-      const f = e.features && e.features[0];
-      if (!f) return;
-
-      // hover outline always updates
-      const geoid = Number(f.properties?.GEOID);
-      window.map.setFilter(hover_id, ["==", ["get", "GEOID"], geoid]);
-
-      // box 3 follows hover ONLY if nothing is selected
-      if (!selected_geoid) {
-        set_details_from_feature(f);
-      }
-
-      // hover popup always follows cursor
-      const p = f.properties || {};
-      const geoid_txt = String(p.GEOID ?? "—");
-      const idx = Number(p.GentIntensity_1990to2020_sdfrommean);
-      const idx_txt = Number.isFinite(idx) ? idx.toFixed(2) : "—";
-      const small_html = `
-        <div class="popup-wrapper">
-          <span class="txt-label">Tract</span>
-          <span class="txt-value">${geoid_txt}</span>
-          <span class="txt-label">Index</span>
-          <span class="txt-value">${idx_txt}</span>
-        </div>
-      `;
-
-      cancelAnimationFrame(raf_id);
-      raf_id = requestAnimationFrame(() => {
-        popup.setLngLat(e.lngLat).setHTML(small_html);
+    // desktop only
+    if (!is_touch) {
+      // mouse enter
+      window.map.on("mouseenter", layer_id, () => {
+        window.map.getCanvas().style.cursor = "crosshair";
+        if (!popup.isOpen()) popup.addTo(window.map);
       });
-    });
 
-    window.map.on("mouseleave", layer_id, () => {
-      window.map.setFilter(hover_id, ["==", ["get", "GEOID"], "__none__"]);
-      popup.remove();
-      window.map.getCanvas().style.cursor = "";
+      // mouse move
+      window.map.on("mousemove", layer_id, (e) => {
+        const f = e.features && e.features[0];
+        if (!f) return;
 
-      // if nothing is selected, leaving should hide marker + reset details
-      if (!selected_geoid) {
-        hide_legend_marker();
-        reset_details_ui();
-      }
-    });
+        // hover outline always updates
+        const geoid = Number(f.properties?.GEOID);
+        window.map.setFilter(hover_id, ["==", ["get", "GEOID"], geoid]);
+
+        // box 3 follows hover ONLY if nothing is selected
+        if (!selected_geoid) {
+          set_details_from_feature(f);
+        }
+
+        // hover popup always follow cursor
+        const p = f.properties || {};
+        const geoid_txt = String(p.GEOID ?? "—");
+        const idx = Number(p.GentIntensity_1990to2020_sdfrommean);
+        const idx_txt = Number.isFinite(idx) ? idx.toFixed(2) : "—";
+        const small_html = `
+          <div class="popup-wrapper">
+            <span class="txt-label">Tract</span>
+            <span class="txt-value">${geoid_txt}</span>
+            <span class="txt-label">Index</span>
+            <span class="txt-value">${idx_txt}</span>
+          </div>
+        `;
+
+        cancelAnimationFrame(raf_id);
+        raf_id = requestAnimationFrame(() => {
+          popup.setLngLat(e.lngLat).setHTML(small_html);
+        });
+      });
+
+      // mouse leave
+      window.map.on("mouseleave", layer_id, () => {
+        window.map.setFilter(hover_id, ["==", ["get", "GEOID"], "__none__"]);
+        popup.remove();
+        window.map.getCanvas().style.cursor = "";
+
+        // if nothing is selected, leaving should hide marker + reset details
+        if (!selected_geoid) {
+          hide_legend_marker();
+          reset_details_ui();
+        }
+      });
+    }
   }
 
   layer_ids.forEach(bind_hover);
@@ -507,7 +515,6 @@ window.map.on("load", () => {
       clear_selected();
     }
   });
-
 });
 
 // temp logs to check for bugs

@@ -125,8 +125,8 @@
   background-color: none;
   display: grid;
   column-gap: var(--spacing-1);
-  row-gap: 0;
-  grid-template-columns: var(--column) var(--column); /* if we want two columns */ 
+  row-gap: var(--spacing-1);
+  grid-template-columns: var(--column) var(--column);
   grid-template-rows: max-content 1fr;
   place-content: start;
   align-items: start;
@@ -148,9 +148,9 @@
 /* boxes */
 
 /* positions */
-#box-1 {grid-column: 1; grid-row: 1 / span 2;}
-#box-2 {z-index: 100 !important; position: relative; grid-column: 2; grid-row: 1;}
-#box-3 {z-index: 200; position: relative; grid-column: 2; grid-row: 2;}
+#box-1 {grid-column: 1; grid-row: 1 / span 1;}
+#box-2 {z-index: 100 !important; position: relative; grid-column: 1; grid-row: 2;}
+#box-3 {z-index: 200; position: relative; grid-column: 2; grid-row: 1 / span 2;}
 
 #box-2.menu-open {
   z-index: 400 !important;
@@ -426,21 +426,24 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  box-shadow: 
+    var(--spacing-2) var(--spacing-2) 0 0 rgba(var(--color-2_rgb), 0.85),
+    var(--spacing-2) var(--spacing-2) 0 1px var(--color-1);
+  background-color: rgba(var(--color-2_rgb), 0.85);
+  /* background-color: color-mix(in srgb, var(--color-2) 85%, transparent); */
 }
 
-#box-3 .line,
-#box-3 > .wrapper {
-  flex-shrink: 0;
+#box-3.has-data {
+  box-shadow: var(--spacing-2) var(--spacing-2) 0 var(--color-1);
+  background-color: rgba(var(--color-2_rgb), 1)
 }
 
-#details-prompt {
-  display: block;
+.details-body {
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1 1 auto;
+  min-height: 0;
 }
-
-.has-data #details-prompt {
-  display: none;
-}
-
 /* index legend */
 .legend-label-wrapper {
   display: flex;
@@ -597,8 +600,9 @@
   background: var(--color-1);
 }
 
-
-
+#detail-metro {
+  min-height: 2lh;
+}
 
 /* colapse details */
 
@@ -651,7 +655,7 @@
   opacity: 1;
   padding-bottom: var(--spacing-1);
   transition: opacity 160ms ease;
-  flex: 0 1 auto;
+  flex: 1 1 auto;
   min-height: 0;
 }
 
@@ -659,6 +663,8 @@
   display: none;
   opacity: 0;
 }
+
+
 
 
 /* map */
@@ -712,7 +718,7 @@
   font-size: var(--font-txt);
   pointer-events: none;
   outline: 1px solid var(--color-1);
-  box-shadow: var(--spacing-3) var(--spacing-3) 0 var(--color-1);
+  box-shadow: var(--spacing-2) var(--spacing-2) 0 var(--color-1);
   transform: translate(-6px, -6px);
 }
 
@@ -769,8 +775,8 @@
     grid-row: 1;
   }
   #box-2 {
-    grid-column: 2;
-    grid-row: 1;
+    grid-column: 1;
+    grid-row: 2;
   }
 
   /* single outline around the whole header */

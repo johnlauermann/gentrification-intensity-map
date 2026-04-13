@@ -207,27 +207,27 @@ const selected_id = "gi-selected";
 // helpers
 function money(v) {
   const n = Number(v);
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "  .";
   return "$ " + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 function pct(v) {
   const n = Number(v);
-  if (!Number.isFinite(n)) return "—";
+  if (!Number.isFinite(n)) return "  .";
   return n.toFixed(2) + "%";
 }
 
 function reset_details_ui() {
   document.getElementById("box-3").classList.remove("has-data");
-  document.getElementById("detail-tract").textContent = "—";
-  document.getElementById("detail-metro").textContent = "—";
-  document.getElementById("detail-class").textContent = "—";
-  document.getElementById("detail-rent").textContent = "—";
-  document.getElementById("detail-house").textContent = "—";
-  document.getElementById("detail-income").textContent = "—";
-  document.getElementById("detail-poverty").textContent = "—";
-  document.getElementById("detail-bach").textContent = "—";
-  document.getElementById("detail-white").textContent = "—";
+  document.getElementById("detail-tract").innerHTML = "<span><br></span>";
+  document.getElementById("detail-metro").innerHTML = "<span><br><br></span>";
+  document.getElementById("detail-class").innerHTML = "<span><br></span>";
+  document.getElementById("detail-rent").innerHTML = "<span><br></span>";
+  document.getElementById("detail-house").innerHTML = "<span><br></span>";
+  document.getElementById("detail-income").innerHTML = "<span><br></span>";
+  document.getElementById("detail-poverty").innerHTML = "<span><br></span>";
+  document.getElementById("detail-bach").innerHTML = "<span><br></span>";
+  document.getElementById("detail-white").innerHTML = "<span><br></span>";
 }
 
 function set_details_from_feature(f) {
@@ -258,7 +258,7 @@ function set_selected_feature(f, lngLat) {
 
   // fixed popup shows selected tract info
   const p = f.properties || {};
-  const geoid_txt = String(p.GEOID ?? "—");
+  const geoid_txt = String(p.GEOID ?? " ");
   const fixed_html = `
     <div class="popup-wrapper">
       <span class="txt-label">Tract</span>
@@ -290,11 +290,11 @@ function clear_selected() {
 // update box 3 details
 function update_details(f) {
   const p = f.properties || {};
-  const geoid = String(p.GEOID ?? "—");
-  const cbsa = String(p.CBSA_NAME ?? "").split(",")[0] || "—";
-  const type = String(p.classtype ?? "—").replace(/^./, c => c.toUpperCase());
+  const geoid = String(p.GEOID ?? " ");
+  const cbsa = String(p.CBSA_NAME ?? "").split(",")[0] || " ";
+  const type = String(p.classtype ?? " ").replace(/^./, c => c.toUpperCase());
   const idx = Number(p.GentIntensity_1990to2020_sdfrommean);
-  const idx_txt = Number.isFinite(idx) ? idx.toFixed(2) : "—";
+  const idx_txt = Number.isFinite(idx) ? idx.toFixed(2) : " ";
 
   document.getElementById("box-3").classList.add("has-data");
   document.getElementById("detail-tract").textContent = geoid;
@@ -469,9 +469,9 @@ window.map.on("load", () => {
 
         // hover popup always follow cursor
         const p = f.properties || {};
-        const geoid_txt = String(p.GEOID ?? "—");
+        const geoid_txt = String(p.GEOID ?? " ");
         const idx = Number(p.GentIntensity_1990to2020_sdfrommean);
-        const idx_txt = Number.isFinite(idx) ? idx.toFixed(2) : "—";
+        const idx_txt = Number.isFinite(idx) ? idx.toFixed(2) : " ";
         const small_html = `
           <div class="popup-wrapper">
             <span class="txt-label">Tract</span>

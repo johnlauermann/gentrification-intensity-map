@@ -201,19 +201,19 @@ let raf_id; // animation frame id
 let selected_geoid = null; // initial state for selected tract
 
 // hover and selected tracts
-const hover_id = "gi-hover";
-const selected_id = "gi-selected";
+// const hover_id = "gi-hover";
+// const selected_id = "gi-selected";
 
 // helpers
 function money(v) {
   const n = Number(v);
-  if (!Number.isFinite(n)) return "  .";
+  if (!Number.isFinite(n)) return "\u00A0";
   return "$ " + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 function pct(v) {
   const n = Number(v);
-  if (!Number.isFinite(n)) return "  .";
+  if (!Number.isFinite(n)) return "\u00A0";
   return n.toFixed(2) + "%";
 }
 
@@ -236,8 +236,7 @@ function set_details_from_feature(f) {
 }
 
 function set_selected_feature(f, lngLat) {
-  const geoid = Number(f?.properties?.GEOID);
-  if (!geoid) return;
+  const geoid = Number(f?.properties?.GEOID ?? f?.properties?.GEOID10);
 
   // clicking the already-selected tract toggles selection off
   if (selected_geoid && geoid === selected_geoid) {
@@ -248,17 +247,18 @@ function set_selected_feature(f, lngLat) {
   selected_geoid = geoid;
 
   // selected outline
-  if (window.map.getLayer(selected_id)) {
-    window.map.setFilter(selected_id, ["==", ["get", "GEOID"], selected_geoid]);
-  }
+  ["gi-selected-1990", "gi-selected-1970"].forEach(id => {
+    if (window.map.getLayer(id)) window.map.setFilter(id, ["==", ["get", "GEOID"], selected_geoid]);
+  });
+
 
   // freeze box 3 + legend marker to selected
-  const { idx_txt, idx_num } = update_details(f);
+  const {idx_txt, idx_num} = update_details(f);
   set_legend_marker(idx_num);
 
   // fixed popup shows selected tract info
   const p = f.properties || {};
-  const geoid_txt = String(p.GEOID ?? " ");
+  const geoid_txt = String(p.GEOID ?? p.GEOID10 ?? " ");
   const fixed_html = `
     <div class="popup-wrapper">
       <span class="txt-label">Tract</span>
@@ -276,10 +276,9 @@ function set_selected_feature(f, lngLat) {
 function clear_selected() {
   selected_geoid = null;
 
-  if (window.map.getLayer(selected_id)) {
-    window.map.setFilter(selected_id, ["==", ["get", "GEOID"], "__none__"]);
-  }
-
+  ["gi-selected-1990", "gi-selected-1970"].forEach(id => {
+    if (window.map.getLayer(id)) window.map.setFilter(id, ["==", ["get", "GEOID"], "__none__"]);
+  });
   popup_selected.remove();
   hide_legend_marker();
 
@@ -287,25 +286,31 @@ function clear_selected() {
   reset_details_ui();
 }
 
-// update box 3 details
+// switch periods
+function get_active_period() {
+  return document.getElementById('checkbox-period-input').checked ? '1970to2020' : '1990to2020';
+}
+
+// update box 3 indicators
 function update_details(f) {
   const p = f.properties || {};
-  const geoid = String(p.GEOID ?? " ");
+  const period = get_active_period();
+  const geoid = String(p.GEOID ?? p.GEOID10 ?? " ");
   const cbsa = String(p.CBSA_NAME ?? "").split(",")[0] || " ";
   const type = String(p.classtype ?? " ").replace(/^./, c => c.toUpperCase());
-  const idx = Number(p.GentIntensity_1990to2020_sdfrommean);
+  const idx = Number(p[`GentIntensity_${period}_sdfrommean`]);
   const idx_txt = Number.isFinite(idx) ? idx.toFixed(2) : " ";
 
   document.getElementById("box-3").classList.add("has-data");
   document.getElementById("detail-tract").textContent = geoid;
   document.getElementById("detail-metro").textContent = cbsa;
   document.getElementById("detail-class").textContent = type;
-  document.getElementById("detail-rent").textContent = money(p.ConRent_mean_chg_1990to2020);
-  document.getElementById("detail-house").textContent = money(p.HouseValue_mean_chg_1990to2020);
-  document.getElementById("detail-income").textContent = money(p.HHIncome_mean_chg_1990to2020);
-  document.getElementById("detail-poverty").textContent = pct(p.Poverty_pct_chg_1990to2020);
-  document.getElementById("detail-bach").textContent = pct(p.Bach_pct_chg_1990to2020);
-  document.getElementById("detail-white").textContent = pct(p.WhiteCollar_pct_chg_1990to2020);
+  document.getElementById("detail-rent").textContent = money(p[`ConRent_mean_chg_${period}`]);
+  document.getElementById("detail-house").textContent = money(p[`HouseValue_mean_chg_${period}`]);
+  document.getElementById("detail-income").textContent = money(p[`HHIncome_mean_chg_${period}`]);
+  document.getElementById("detail-poverty").textContent = pct(p[`Poverty_pct_chg_${period}`]);
+  document.getElementById("detail-bach").textContent = pct(p[`Bach_pct_chg_${period}`]);
+  document.getElementById("detail-white").textContent = pct(p[`WhiteCollar_pct_chg_${period}`]);
 
   return { geoid, idx_txt, idx_num: idx };
 }
@@ -317,6 +322,7 @@ window.map.on('load', () => {
 
 // run on toggle
 checkbox_period.addEventListener('change', (e) => {
+  clear_selected();
   period_select(e.target.checked);
 });
 
@@ -396,48 +402,66 @@ window.map.on("load", () => {
     return;
   }
 
-  const source_base = window.map.getLayer("gi-fac-1990_2020").source;
-
-  // hovered tract
-  if (!window.map.getLayer(hover_id)) {
-    const hover_def = {
-      id: hover_id,
-      type: "line",
-      source: source_base,
-      filter: ["==", ["get", "GEOID"], "__none__"],
-      paint: {
-        "line-color": "#007BFF",
-        "line-width": 2,
-        "line-opacity": 1
-      }
-    };
-    if (!window.map.getLayer(hover_id)) {
+  // hover outline for each data source
+  function add_outline_layer(id, source, source_layer, paint) {
+    if (!window.map.getLayer(id)) {
       window.map.addLayer({
-        id: hover_id,
+        id,
         type: "line",
-        source: source_base,
-        "source-layer": "layer1",
+        source,
+        "source-layer": source_layer,
         filter: ["==", ["get", "GEOID"], "__none__"],
-        paint: {
-          "line-color": "#007BFF",
-          "line-width": 2,
-          "line-opacity": 1
-        }
+        paint
       });
     }
   }
+  const source_1990 = window.map.getLayer("gi-fac-1990_2020").source;
+  const source_1970 = window.map.getLayer("gi-fac-1970_2020").source;
+add_outline_layer("gi-hover-1990", source_1990, "layer1", { "line-color": "#007BFF", "line-width": 2, "line-opacity": 1 });
+add_outline_layer("gi-hover-1970", source_1970, "gentintensity_1970to2020", { "line-color": "#007BFF", "line-width": 2, "line-opacity": 1 });
+add_outline_layer("gi-selected-1990", source_1990, "layer1", { "line-color": "white", "line-width": 2, "line-opacity": 1 });
+add_outline_layer("gi-selected-1970", source_1970, "gentintensity_1970to2020", { "line-color": "white", "line-width": 2, "line-opacity": 1 });
 
-  // selected tract outline
-  if (!window.map.getLayer(selected_id)) {
-    window.map.addLayer({
-      id: selected_id,
-      type: "line",
-      source: source_base,
-      "source-layer": "layer1", // temp
-      filter: ["==", ["get", "GEOID"], "__none__"],
-      paint: { "line-color": "white", "line-width": 2, "line-opacity": 1 }
-    });
-  }
+  // // hovered tract
+  // if (!window.map.getLayer(hover_id)) {
+  //   const hover_def = {
+  //     id: hover_id,
+  //     type: "line",
+  //     source: source_base,
+  //     filter: ["==", ["get", "GEOID"], "__none__"],
+  //     paint: {
+  //       "line-color": "#007BFF",
+  //       "line-width": 2,
+  //       "line-opacity": 1
+  //     }
+  //   };
+  //   if (!window.map.getLayer(hover_id)) {
+  //     window.map.addLayer({
+  //       id: hover_id,
+  //       type: "line",
+  //       source: source_base,
+  //       "source-layer": "layer1",
+  //       filter: ["==", ["get", "GEOID"], "__none__"],
+  //       paint: {
+  //         "line-color": "#007BFF",
+  //         "line-width": 2,
+  //         "line-opacity": 1
+  //       }
+  //     });
+  //   }
+  // }
+
+  // // selected tract outline
+  // if (!window.map.getLayer(selected_id)) {
+  //   window.map.addLayer({
+  //     id: selected_id,
+  //     type: "line",
+  //     source: source_base,
+  //     "source-layer": "layer1", // temp
+  //     filter: ["==", ["get", "GEOID"], "__none__"],
+  //     paint: { "line-color": "white", "line-width": 2, "line-opacity": 1 }
+  //   });
+  // }
 
   function bind_hover(layer_id) {
     if (!window.map.getLayer(layer_id)) {
@@ -459,8 +483,10 @@ window.map.on("load", () => {
         if (!f) return;
 
         // hover outline always updates
-        const geoid = Number(f.properties?.GEOID);
-        window.map.setFilter(hover_id, ["==", ["get", "GEOID"], geoid]);
+        const geoid = Number(f?.properties?.GEOID ?? f?.properties?.GEOID10); //GEOID>1990, GEOID10>1970
+        ["gi-hover-1990", "gi-hover-1970"].forEach(id => {
+          if (window.map.getLayer(id)) window.map.setFilter(id, ["==", ["get", "GEOID"], geoid]);
+        });
 
         // box 3 follows hover ONLY if nothing is selected
         if (!selected_geoid) {
@@ -469,8 +495,9 @@ window.map.on("load", () => {
 
         // hover popup always follow cursor
         const p = f.properties || {};
-        const geoid_txt = String(p.GEOID ?? " ");
-        const idx = Number(p.GentIntensity_1990to2020_sdfrommean);
+        const geoid_txt = String(p.GEOID ?? p.GEOID10 ?? " ");
+        const period = get_active_period();
+        const idx = Number(p[`GentIntensity_${period}_sdfrommean`]);
         const idx_txt = Number.isFinite(idx) ? idx.toFixed(2) : " ";
         const small_html = `
           <div class="popup-wrapper">
@@ -489,7 +516,9 @@ window.map.on("load", () => {
 
       // mouse leave
       window.map.on("mouseleave", layer_id, () => {
-        window.map.setFilter(hover_id, ["==", ["get", "GEOID"], "__none__"]);
+        ["gi-hover-1990", "gi-hover-1970"].forEach(id => {
+          if (window.map.getLayer(id)) window.map.setFilter(id, ["==", ["get", "GEOID"], "__none__"]);
+        });
         popup.remove();
         window.map.getCanvas().style.cursor = "";
 
@@ -509,6 +538,8 @@ window.map.on("load", () => {
     const features = window.map.queryRenderedFeatures(e.point, {
       layers: ["gi-fac-1990_2020", "gi-fac-1970_2020"]
     });
+
+    console.log("clicked features:", features.length, features.map(f => f.layer.id));
 
     const f = features && features[0];
     if (f) {

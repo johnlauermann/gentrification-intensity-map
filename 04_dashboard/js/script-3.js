@@ -1,5 +1,5 @@
 // responsiveness 
-const is_touch = navigator.maxTouchPoints > 0 && window.innerWidth <= 1028;
+const is_touch = navigator.maxTouchPoints > 0
 
 // box collapse
 

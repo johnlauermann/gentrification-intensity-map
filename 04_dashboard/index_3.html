@@ -222,6 +222,7 @@
                 });
                 // layers visibility on start
                 map.on('load', () => {
+                    map.setPadding({left: 300, bottom: 64});
                     map.setLayoutProperty('municipality-limits', 'visibility', 'visible');
 
                     const is_1970 = document.getElementById('checkbox-period-input')?.checked ?? true;

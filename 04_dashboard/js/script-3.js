@@ -6,36 +6,26 @@ const is_touch = navigator.maxTouchPoints > 0
 document.addEventListener("DOMContentLoaded", () => {
   // box 1 collapse
   const box1 = document.getElementById("box-1");
-  const btn1 = document.getElementById("dropdown-learn_more");
+  const expanded = box1.querySelectorAll(".wrapper")[1]; // text + minus
+  const collapsed_el = box1.querySelectorAll(".wrapper")[2]; // link + plus
 
-  if (box1 && btn1) {
-    const icon1 = btn1.querySelector("img.picto");
-    const body_wrapper = box1.querySelector(".txt-body")?.closest(".wrapper");
+  // initial state
+  expanded.style.maxHeight = "420px";
+  expanded.style.opacity = "1";
+  expanded.style.overflow = "hidden";
+  expanded.style.transition = "max-height 220ms ease, opacity 160ms ease";
 
-    if (body_wrapper) {
-      body_wrapper.classList.add("learnmore-collapse");
+  collapsed_el.style.display = "none"; // hide plus on load
 
-      let collapsed = false;
-      btn1.setAttribute("aria-expanded", "true");
-
-      function set_collapsed(next) {
-        collapsed = next;
-        box1.classList.toggle("is-collapsed", collapsed);
-
-        if (icon1) {
-          icon1.src = collapsed ? "images/picto-plus.png" : "images/picto-minus.png";
-          icon1.alt = collapsed ? "Expand" : "Collapse";
-        }
-        btn1.setAttribute("aria-expanded", collapsed ? "false" : "true");
-      }
-
-      btn1.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        set_collapsed(!collapsed);
-      });
-    }
-  }
+  box1.querySelectorAll(".dropdown-icon").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const isOpen = collapsed_el.style.display === "none";
+      expanded.style.maxHeight = isOpen ? "0" : "420px";
+      expanded.style.opacity = isOpen ? "0" : "1";
+      expanded.style.padding = isOpen ? "0" : "";
+      collapsed_el.style.display = isOpen ? "" : "none";
+    });
+  });
 
   // box 3 collapse
   const box3 = document.getElementById("box-3");
@@ -231,7 +221,7 @@ function reset_details_ui() {
 }
 
 function set_details_from_feature(f) {
-  const {idx_num} = update_details(f);
+  const { idx_num } = update_details(f);
   set_legend_marker(idx_num);
 }
 
@@ -253,7 +243,7 @@ function set_selected_feature(f, lngLat) {
 
 
   // freeze box 3 + legend marker to selected
-  const {idx_txt, idx_num} = update_details(f);
+  const { idx_txt, idx_num } = update_details(f);
   set_legend_marker(idx_num);
 
   // fixed popup shows selected tract info
@@ -417,10 +407,10 @@ window.map.on("load", () => {
   }
   const source_1990 = window.map.getLayer("gi-fac-1990_2020").source;
   const source_1970 = window.map.getLayer("gi-fac-1970_2020").source;
-add_outline_layer("gi-hover-1990", source_1990, "layer1", { "line-color": "#007BFF", "line-width": 2, "line-opacity": 1 });
-add_outline_layer("gi-hover-1970", source_1970, "gentintensity_1970to2020", { "line-color": "#007BFF", "line-width": 2, "line-opacity": 1 });
-add_outline_layer("gi-selected-1990", source_1990, "layer1", { "line-color": "white", "line-width": 2, "line-opacity": 1 });
-add_outline_layer("gi-selected-1970", source_1970, "gentintensity_1970to2020", { "line-color": "white", "line-width": 2, "line-opacity": 1 });
+  add_outline_layer("gi-hover-1990", source_1990, "layer1", { "line-color": "#007BFF", "line-width": 2, "line-opacity": 1 });
+  add_outline_layer("gi-hover-1970", source_1970, "gentintensity_1970to2020", { "line-color": "#007BFF", "line-width": 2, "line-opacity": 1 });
+  add_outline_layer("gi-selected-1990", source_1990, "layer1", { "line-color": "white", "line-width": 2, "line-opacity": 1 });
+  add_outline_layer("gi-selected-1970", source_1970, "gentintensity_1970to2020", { "line-color": "white", "line-width": 2, "line-opacity": 1 });
 
   // // hovered tract
   // if (!window.map.getLayer(hover_id)) {

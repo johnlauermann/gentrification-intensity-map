@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Gentrification Intensity Index</title>
+    <title>Gentrification intensity map</title>
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <link href="https://api.mapbox.com/mapbox-gl-js/v3.15.0/mapbox-gl.css" rel="stylesheet">
     <link href="css/style-3.css" rel="stylesheet" type="text/css">
@@ -20,25 +20,35 @@
         <!-- box 1 title and info -->
         <div id="box-1" class="box-container">
             <div class="wrapper">
-                <div class="txt-title">US Gentrification intensity index</div>
+                <div class="txt-title">US gentrification intensity map</div>
             </div>
             <div class="line"></div>
             <div class="wrapper">
-                <div class="txt-body">Index created based on indicators of class status and upgrading, based on
-                    indicators of class status and upgrading created based on indicators of class status indicators.
+                <div class="learn_more-wrapper">
+                    <div class="txt-body">This is a spatial data science project that seeks to map varying degrees of
+                        gentrification intensity across most US metropolitan and micorpolitan communities.
+                        <br><br>
+                        The map was developed in&nbsp;the&nbsp;School of Information at&nbsp;Pratt&nbsp;Institute by
+                        <a href="https://github.com/johnlauermann/gentrification-intensity-map" target="_blank"
+                            class="link-wrapper">
+                            John&nbsp;Lauermann's lab group
+                        </a>
+                    </div>
+                    <button id="dropdown-learn_more-minus" class="dropdown-icon">
+                        <img src="images/picto-minus.png" alt="" class="picto">
+                    </button>
                 </div>
             </div>
-            <!-- <div class="wrapper">
-                <div class="txt-subtitle">John Lauermann<br></div>
-            </div> -->
-            <div class="wrapper">
+
+            <!-- collapsed state -->
+            <div class="wrapper" style="display:none;">
                 <div class="learn_more-wrapper">
                     <a href="https://github.com/johnlauermann/gentrification-intensity-map" target="_blank"
                         class="link-wrapper">
-                        <span class="txt-link">National Gentrification Lab<br></span>
+                        <span class="txt-link">John&nbsp;Lauermann's lab group<br></span>
                     </a>
-                    <button id="dropdown-learn_more" class="dropdown-minus">
-                        <img src="images/picto-minus.png" alt="" class="picto">
+                    <button id="dropdown-learn_more-plus" class="dropdown-icon collapsed">
+                        <img src="images/picto-plus.png" alt="" class="picto">
                     </button>
                 </div>
             </div>
@@ -153,28 +163,21 @@
                 </div>
             </div>
 
-            <div class="line"></div>
-
-            <!-- details initial state -->
-            <!-- <div id="details-prompt" class="wrapper">
-                <div class="txt-body">Navigate over a tract to explore</div>
-            </div> -->
-
             <!-- details (can collapse) -->
             <div id="details-body" class="details-body">
-                <div class="wrapper">
-                    <div class="txt-menu">Tract</div>
-                    <div id="detail-tract" class="txt-value"><br></div>
-                </div>
-
-                <div class="wrapper">
-                    <div class="txt-menu">Metro</div>
-                    <div id="detail-metro" class="txt-value"><br><br></div>
-                </div>
+                <div class="line"></div>
 
                 <div class="wrapper">
                     <div class="txt-menu">Class</div>
                     <div id="detail-class" class="txt-value"><br></div>
+                </div>
+                <div class="wrapper">
+                    <div class="txt-menu">Tract</div>
+                    <div id="detail-tract" class="txt-value"><br></div>
+                </div>
+                <div class="wrapper">
+                    <div class="txt-menu">Metro</div>
+                    <div id="detail-metro" class="txt-value"><br><br></div>
                 </div>
 
                 <div class="line"></div>
@@ -222,7 +225,7 @@
                 });
                 // layers visibility on start
                 map.on('load', () => {
-                    map.setPadding({left: 300, bottom: 64});
+                    map.setPadding({ left: 300, bottom: 64 });
                     map.setLayoutProperty('municipality-limits', 'visibility', 'visible');
 
                     const is_1970 = document.getElementById('checkbox-period-input')?.checked ?? true;

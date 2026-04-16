@@ -55,9 +55,9 @@
 } */
 
 .txt-body {
+  width: 100%;
   max-width: 36ch;
-  /* min-width: 22ch; */
-  overflow: visible;
+  overflow: hidden;
 }
 
 .txt-menu {

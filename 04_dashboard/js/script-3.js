@@ -27,6 +27,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  if (window.innerWidth <= 720) {
+    expanded.style.maxHeight = "0";
+    expanded.style.opacity = "0";
+    expanded.style.padding = "0";
+    collapsed_el.style.display = "";
+  }
+
   // box 3 collapse
   const box3 = document.getElementById("box-3");
   const toggle_btn = document.getElementById("toggle-details");
@@ -83,16 +90,17 @@ document.addEventListener('click', () => menu_set(false));
 menu.addEventListener('click', (e) => e.stopPropagation());
 
 // cities zoom
+const is_mobile = window.innerWidth <= 720;
 const cities_centers = {
-  "New York City": { center: [-74.0000, 40.7300], zoom: 10 },
-  "Los Angeles": { center: [-118.2437, 34.0522], zoom: 10 },
-  "Chicago": { center: [-87.6298, 41.8781], zoom: 10 },
-  "Dallas": { center: [-96.7970, 32.7767], zoom: 10 },
-  "Houston": { center: [-95.3698, 29.7604], zoom: 10 },
-  "Washington DC": { center: [-77.0369, 38.9072], zoom: 10 },
-  "Philadelphia": { center: [-75.1652, 39.9526], zoom: 10 },
-  "Atlanta": { center: [-84.3880, 33.7490], zoom: 10 },
-  "US": { center: [-98.5795, 39.8283], zoom: 5 }
+  "New York City": {center: [-74.0000, 40.7300], zoom: is_mobile ? 9 : 10},
+  "Los Angeles": {center: [-118.2437, 34.0522], zoom: is_mobile ? 9 : 10},
+  "Chicago": {center: [-87.6298, 41.8781], zoom: is_mobile ? 9 : 10},
+  "Dallas": {center: [-96.7970, 32.7767], zoom: is_mobile ? 9 : 10},
+  "Houston": {center: [-95.3698, 29.7604], zoom: is_mobile ? 9 : 10},
+  "Washington DC": {center: [-77.0369, 38.9072], zoom: is_mobile ? 9 : 10},
+  "Philadelphia": {center: [-75.1652, 39.9526], zoom: is_mobile ? 9 : 10},
+  "Atlanta": {center: [-84.3880, 33.7490], zoom: is_mobile ? 9 : 10},
+  "US": {center: [-98.5795, 39.8283], zoom: is_mobile ? 4 : 5}
 };
 
 // when clicking on a city name
@@ -106,7 +114,12 @@ menu.querySelectorAll('.dropdown-link').forEach(link => {
     if (!view || !window.map) return;
 
     // centering municipalities
-    window.map.easeTo({ center: view.center, zoom: view.zoom, duration: 400, padding: { left: 516 } }); // 516 > boxes width
+    window.map.easeTo({
+      center: view.center, 
+      zoom: view.zoom, 
+      duration: 400, 
+      padding: is_mobile ? {left: 0, bottom: 0 } : {left: 516}
+    }); // 516 > boxes width
     document.querySelector('#dropdown-selected-city .txt-menu').textContent = city;
     menu_set(false);
   });

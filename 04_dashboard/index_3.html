@@ -221,11 +221,13 @@
                     container: 'map',
                     style: 'mapbox://styles/jlauerma/cmi3f9nfn004j01rs9d6m7bxj',
                     center: [-74, 40.73],
-                    zoom: 10
+                    zoom: window.innerWidth <= 720 ? 9 : 10
                 });
                 // layers visibility on start
                 map.on('load', () => {
-                    map.setPadding({ left: 300, bottom: 64 });
+                    if (window.innerWidth <= 720) {map.setPadding({left: 0, bottom: 0});} 
+                    else {map.setPadding({left: 300, bottom: 64});}
+
                     map.setLayoutProperty('municipality-limits', 'visibility', 'visible');
 
                     const is_1970 = document.getElementById('checkbox-period-input')?.checked ?? true;

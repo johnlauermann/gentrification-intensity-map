@@ -2,15 +2,19 @@
 
 if (!require(dplyr)) install.packages("dplyr")
 if (!require(here)) install.packages("here")
+if (!require(stringr)) install.packages("stringr")
 if (!require(ggplot2)) install.packages("ggplot2")
 if (!require(mapboxapi)) install.packages("mapboxapi")
 if (!require(sf)) install.packages("sf")
+if (!require(httr)) install.packages("httr")
 
 library(dplyr)
 library(here)
+library(stringr)
+library(sf)
 library(ggplot2)
 library(mapboxapi)
-library(sf)
+library(httr)
 
 
 # set environment
@@ -21,7 +25,6 @@ here::i_am("03_spatial/map_publishtoweb_2010tr.r")
 ## tabular data
 data <- read.csv(here("02_data_historic/metrotracts_gentscores_2010tr.csv")) %>%
   select(tr2010gj, 
-         CBSAFP, 
          Bach_pct_chg_1970to2020,
          classtype, 
          ConRent_mean_chg_1970to2020,
@@ -42,6 +45,8 @@ data <- read.csv(here("02_data_historic/metrotracts_gentscores_2010tr.csv")) %>%
          HistoricallyAffluent,
          HouseValue_mean_chg_1970to2020,
          Poverty_pct_chg_1970to2020,
+         Population_sum_1970, 
+         Population_sum_2020,
          SuperGentrified,
          WhiteCollar_pct_chg_1970to2020) %>%
   rename(GISJOIN = tr2010gj) 
@@ -62,11 +67,17 @@ for (var in variables) {
 # spatial data
 st_layers(here("03_spatial/tract_boundaries.gpkg"))
 boundaries <- st_read(dsn = here("03_spatial/tract_boundaries.gpkg"), 
-                      layer = "metrotracts_2010tr")
+                      layer = "tracts_highres_2010tr") %>%
+  mutate(STATE2  = str_pad(STATEFP10,  width = 2, side = "left", pad = "0"),
+         COUNTY4 = str_pad(COUNTYFP10, width = 4, side = "left", pad = "0"),
+         TRACT7  = str_pad(TRACTCE10,  width = 7, side = "left", pad = "0"),
+         GISJOIN = paste0("G", STATE2, COUNTY4, TRACT7)) %>%
+  select(-c(STATE2, COUNTY4, TRACT7))
+
 
 # join the dataframes
 map_data <- boundaries %>%
-  left_join(data, by = "GISJOIN")
+  inner_join(data, by = "GISJOIN")
 
 
 # view a map, just to verify
@@ -109,9 +120,10 @@ ggplot(data = Manhattan) +
 
 # publish to Mapbox
 ## set up parameters
-token = "your secret token"
-username = "your username"
-tilesetname = "gentscores_1970to2020"
+token = "a secret mapbox token"
+username = "your mapbox username"
+tileset_id = "backend data name"
+tileset_name = "display name"
 mts_list_tilesets(username = username, access_token = token)
 
 ## prep data for upload
@@ -120,26 +132,42 @@ map_data <- st_transform(x = map_data, crs = 4326)
 
 ## create source
 mts_create_source(data = map_data, 
-                  tileset_id = tilesetname, 
+                  tileset_id = tileset_id, 
                   username = username, 
                   access_token = token)
 
 ## define tileset recipe
 tract_layer <- recipe_layer(
-  source = paste0("mapbox://tileset-source/", username, "/", tilesetname),
-  minzoom = 7, 
-  maxzoom = 14)
+  source = paste0("mapbox://tileset-source/", username, "/", tileset_id),
+  minzoom = 5, 
+  maxzoom = 12,
+  tiles = tile_options(layer_size = 2500))
+
 recipe <- mts_make_recipe(tract_layer)
+layer <- recipe$layers[[1]]
+recipe$layers <- list(gentintensity_1970to2020 = layer)
+str(recipe)
+
 mts_validate_recipe(recipe = recipe, 
                     access_token = token)
 
 ## create tileset
-mts_create_tileset(tileset_name = tilesetname,
+mts_create_tileset(tileset_name = tileset_id,
                    username = username,
                    recipe = recipe,
                    access_token = token)
 
 ## upload content
-mts_publish_tileset(tileset_name = tilesetname,
+mts_publish_tileset(tileset_name = tileset_id,
                     username = username, 
                     access_token = token)
+
+## rename the tileset
+PATCH(
+  url = paste0("https://api.mapbox.com/tilesets/v1/", username, ".", tileset_id),
+  query = list(access_token = token),
+  body = list(name = tileset_name),
+  encode = "json"
+)
+
+

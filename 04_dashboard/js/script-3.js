@@ -187,7 +187,7 @@ const popup = new mapboxgl.Popup({
   closeOnClick: false,
   closeOnMove: false,
   anchor: "left",
-  offset: { left: [32, 32] }
+  offset: {left: [32, 32]}
 });
 
 // selected popup
@@ -197,7 +197,7 @@ const popup_selected = new mapboxgl.Popup({
   closeOnClick: false,
   closeOnMove: false,
   anchor: "left",
-  offset: { left: [26, 26] }
+  offset: {left: [26, 26]}
 });
 
 let raf_id; // animation frame id
@@ -211,7 +211,7 @@ let selected_geoid = null; // initial state for selected tract
 function money(v) {
   const n = Number(v);
   if (!Number.isFinite(n)) return "\u00A0";
-  return "$ " + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return "$ " + n.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
 }
 
 function pct(v) {
@@ -315,7 +315,7 @@ function update_details(f) {
   document.getElementById("detail-bach").textContent = pct(p[`Bach_pct_chg_${period}`]);
   document.getElementById("detail-white").textContent = pct(p[`WhiteCollar_pct_chg_${period}`]);
 
-  return { geoid, idx_txt, idx_num: idx };
+  return {geoid, idx_txt, idx_num: idx};
 }
 
 // run once when the map style is ready
@@ -420,51 +420,10 @@ window.map.on("load", () => {
   }
   const source_1990 = window.map.getLayer("gi-fac-1990_2020").source;
   const source_1970 = window.map.getLayer("gi-fac-1970_2020").source;
-  add_outline_layer("gi-hover-1990", source_1990, "layer1", { "line-color": "#007BFF", "line-width": 2, "line-opacity": 1 });
-  add_outline_layer("gi-hover-1970", source_1970, "gentintensity_1970to2020", { "line-color": "#007BFF", "line-width": 2, "line-opacity": 1 });
-  add_outline_layer("gi-selected-1990", source_1990, "layer1", { "line-color": "white", "line-width": 2, "line-opacity": 1 });
-  add_outline_layer("gi-selected-1970", source_1970, "gentintensity_1970to2020", { "line-color": "white", "line-width": 2, "line-opacity": 1 });
-
-  // // hovered tract
-  // if (!window.map.getLayer(hover_id)) {
-  //   const hover_def = {
-  //     id: hover_id,
-  //     type: "line",
-  //     source: source_base,
-  //     filter: ["==", ["get", "GEOID"], "__none__"],
-  //     paint: {
-  //       "line-color": "#007BFF",
-  //       "line-width": 2,
-  //       "line-opacity": 1
-  //     }
-  //   };
-  //   if (!window.map.getLayer(hover_id)) {
-  //     window.map.addLayer({
-  //       id: hover_id,
-  //       type: "line",
-  //       source: source_base,
-  //       "source-layer": "layer1",
-  //       filter: ["==", ["get", "GEOID"], "__none__"],
-  //       paint: {
-  //         "line-color": "#007BFF",
-  //         "line-width": 2,
-  //         "line-opacity": 1
-  //       }
-  //     });
-  //   }
-  // }
-
-  // // selected tract outline
-  // if (!window.map.getLayer(selected_id)) {
-  //   window.map.addLayer({
-  //     id: selected_id,
-  //     type: "line",
-  //     source: source_base,
-  //     "source-layer": "layer1", // temp
-  //     filter: ["==", ["get", "GEOID"], "__none__"],
-  //     paint: { "line-color": "white", "line-width": 2, "line-opacity": 1 }
-  //   });
-  // }
+  add_outline_layer("gi-hover-1990", source_1990, "gentintensity_1990to2020", {"line-color": "#007BFF", "line-width": 2, "line-opacity": 1});
+  add_outline_layer("gi-hover-1970", source_1970, "gentintensity_1970to2020", {"line-color": "#007BFF", "line-width": 2, "line-opacity": 1});
+  add_outline_layer("gi-selected-1990", source_1990, "gentintensity_1990to2020", {"line-color": "white", "line-width": 2, "line-opacity": 1});
+  add_outline_layer("gi-selected-1970", source_1970, "gentintensity_1970to2020", {"line-color": "white", "line-width": 2, "line-opacity": 1});
 
   function bind_hover(layer_id) {
     if (!window.map.getLayer(layer_id)) {

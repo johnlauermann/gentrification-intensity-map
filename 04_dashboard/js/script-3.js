@@ -1,6 +1,18 @@
 // responsiveness 
 const is_touch = navigator.maxTouchPoints > 0
 
+// lookup table cbsa names // temp
+const cbsa_names = {
+  "35620": "New York-Newark-Jersey City",
+  "31080": "Los Angeles, Long Beach, Anaheim",
+  "16980": "Chicago-Naperville-Elgin",
+  "19100": "Dallas-Fort Worth-Arlington",
+  "26420": "Houston-The Woodlands-Sugar Land",
+  "47900": "Washington-Arlington-Alexandria",
+  "37980": "Philadelphia-Camden-Wilmington",
+  "12060": "Atlanta-Sandy Springs-Alpharetta"
+};
+
 // box collapse
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -118,8 +130,8 @@ menu.querySelectorAll('.dropdown-link').forEach(link => {
       center: view.center,
       zoom: view.zoom,
       duration: 400,
-      padding: is_mobile ? { left: 0, bottom: 0 } : { left: 516 }
-    }); // 516 > boxes width
+      padding: is_mobile ? { left: 0, bottom: 0 } : { left: 516 } // 516 > boxes width
+    });
     document.querySelector('#dropdown-selected-city .txt-menu').textContent = city;
     menu_set(false);
   });
@@ -174,6 +186,10 @@ function period_select(is_1970) {
 
   window.map.setLayoutProperty(layer_1970, 'visibility', is_1970 ? 'visible' : 'none');
   window.map.setLayoutProperty(layer_1990, 'visibility', is_1970 ? 'none' : 'visible');
+
+  // update subtitle year
+  document.getElementById("subtitle-mean").textContent = is_1970 ? "Mean change, 1970\u00A0to\u00A02020" : "Mean change, 1990\u00A0to\u00A02020";
+  document.getElementById("subtitle-pct").textContent = is_1970 ? "Percentage change, 1970\u00A0to\u00A02020" : "Percentage change, 1990\u00A0to\u00A02020";
 }
 
 
@@ -281,6 +297,7 @@ function set_selected_feature(f, lngLat) {
 
 function clear_selected() {
   selected_geoid = null;
+  // document.querySelector("#detail-metro").closest(".wrapper").querySelector(".txt-label").style.visibility = "visible";
   if (window.map.getLayer("gi-hover-1990")) window.map.setFilter("gi-hover-1990", ["==", ["get", "GEOID"], "__none__"]);
   if (window.map.getLayer("gi-hover-1970")) window.map.setFilter("gi-hover-1970", ["==", ["get", "GEOID"], "__none__"]);
   if (window.map.getLayer("gi-selected-1990")) window.map.setFilter("gi-selected-1990", ["==", ["get", "GEOID"], "__none__"]);
@@ -298,12 +315,21 @@ function get_active_period() {
   return document.getElementById('checkbox-period-input').checked ? '1970to2020' : '1990to2020';
 }
 
+// color pink the indicators' negative values
+function colored(el, value) {
+  const is_negative = Number(value) < 0;
+  const color = is_negative ? "#e278f3" : "";
+  el.style.color = color;
+  el.closest(".wrapper").querySelector(".txt-label").style.color = color;
+}
+
 // update box 3 indicators
 function update_details(f) {
   const p = f.properties || {};
   const period = get_active_period();
   const geoid = String(f?.properties?.GEOID ?? "");
-  const cbsa = String(p.CBSA_NAME ?? "").split(",")[0] || " ";
+  const cbsa_code = String(p.CBSAFP ?? "");
+  const cbsa = (cbsa_names[cbsa_code] ?? cbsa_code) || " ";
   const type = String(p.classtype ?? " ").replace(/^./, c => c.toUpperCase());
   const idx = Number(p[`GentIntensity_${period}_sdfrommean`]);
   const idx_txt = Number.isFinite(idx) ? idx.toFixed(2) : " ";
@@ -311,15 +337,29 @@ function update_details(f) {
   document.getElementById("box-3").classList.add("has-data");
   document.getElementById("detail-tract").textContent = geoid;
   document.getElementById("detail-metro").textContent = cbsa;
+  // document.querySelector("#detail-metro").closest(".wrapper").querySelector(".txt-label").style.visibility =
+  //   period === "1970to2020" ? "hidden" : "visible";
   document.getElementById("detail-class").textContent = type;
-  document.getElementById("detail-rent").textContent = money(p[`ConRent_mean_chg_${period}`]);
-  document.getElementById("detail-house").textContent = money(p[`HouseValue_mean_chg_${period}`]);
-  document.getElementById("detail-income").textContent = money(p[`HHIncome_mean_chg_${period}`]);
-  document.getElementById("detail-poverty").textContent = pct(p[`Poverty_pct_chg_${period}`]);
-  document.getElementById("detail-bach").textContent = pct(p[`Bach_pct_chg_${period}`]);
-  document.getElementById("detail-white").textContent = pct(p[`WhiteCollar_pct_chg_${period}`]);
 
-  return { geoid, idx_txt, idx_num: idx };
+  document.getElementById("detail-rent").textContent = money(p[`ConRent_mean_chg_${period}`]);
+  colored(document.getElementById("detail-rent"), p[`ConRent_mean_chg_${period}`]);
+
+  document.getElementById("detail-house").textContent = money(p[`HouseValue_mean_chg_${period}`]);
+  colored(document.getElementById("detail-house"), p[`HouseValue_mean_chg_${period}`]);
+
+  document.getElementById("detail-income").textContent = money(p[`HHIncome_mean_chg_${period}`]);
+  colored(document.getElementById("detail-income"), p[`HHIncome_mean_chg_${period}`]);
+
+  document.getElementById("detail-poverty").textContent = pct(p[`Poverty_pct_chg_${period}`]);
+  colored(document.getElementById("detail-poverty"), p[`Poverty_pct_chg_${period}`]);
+
+  document.getElementById("detail-bach").textContent = pct(p[`Bach_pct_chg_${period}`]);
+  colored(document.getElementById("detail-bach"), p[`Bach_pct_chg_${period}`]);
+
+  document.getElementById("detail-white").textContent = pct(p[`WhiteCollar_pct_chg_${period}`]);
+  colored(document.getElementById("detail-white"), p[`WhiteCollar_pct_chg_${period}`]);
+
+  return {geoid, idx_txt, idx_num: idx};
 }
 
 // run on toggle

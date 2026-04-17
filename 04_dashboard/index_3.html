@@ -79,18 +79,6 @@
 
             <div class="line"></div>
 
-            <!-- boundaries checkbox -->
-            <div class="boundaries-wrapper">
-                <span class="txt-menu">Boundaries</span>
-                <div class="on_off">
-                    <input type="checkbox" id="checkbox-municipality-input" checked />
-                    <label for="checkbox-municipality-input" class="btn on">ON</label>
-                    <label for="checkbox-municipality-input" class="btn off">OFF</label>
-                </div>
-            </div>
-
-            <div class="line"></div>
-
             <!-- data period -->
             <div id="period" class="period-wrapper">
                 <span class="txt-menu">Data</span>
@@ -98,6 +86,18 @@
                     <input type="checkbox" id="checkbox-period-input" />
                     <label for="checkbox-period-input" class="btn on">1970-2020</label>
                     <label for="checkbox-period-input" class="btn off">1990-2020</label>
+                </div>
+            </div>
+
+            <div class="line"></div>
+
+            <!-- boundaries checkbox -->
+            <div class="boundaries-wrapper">
+                <span class="txt-menu">Boundaries</span>
+                <div class="on_off">
+                    <input type="checkbox" id="checkbox-municipality-input" checked />
+                    <label for="checkbox-municipality-input" class="btn on">ON</label>
+                    <label for="checkbox-municipality-input" class="btn off">OFF</label>
                 </div>
             </div>
 
@@ -168,44 +168,53 @@
                 <div class="line"></div>
 
                 <div class="wrapper">
-                    <div class="txt-menu">Tract</div>
+                    <div class="txt-label">Tract</div>
                     <div id="detail-tract" class="txt-value"><br></div>
                 </div>
                 <div class="wrapper">
-                    <div class="txt-menu">Class</div>
+                    <div class="txt-label">Class</div>
                     <div id="detail-class" class="txt-value"><br></div>
                 </div>
                 <div class="wrapper">
-                    <div class="txt-menu">Metro</div>
-                    <div id="detail-metro" class="txt-value"><br><br></div>
+                    <div class="txt-label">Metro</div>
+                    <div id="detail-metro" class="txt-value"><br></div>
                 </div>
 
                 <div class="line"></div>
 
                 <div class="wrapper">
-                    <div class="txt-menu">Indicators</div><br>
-                    <div class="txt-body">
-                        <div><span class="txt-label">Rental contract</span><br>
-                            <span id="detail-rent" class="txt-value"><br></span>
-                        </div><br>
-                        <div><span class="txt-label">House value</span><br>
-                            <span id="detail-house" class="txt-value"><br></span>
-                        </div><br>
-                        <div><span class="txt-label">Household income</span><br>
-                            <span id="detail-income" class="txt-value"><br></span>
-                        </div><br>
-                        <div><span class="txt-label">Poverty</span><br>
-                            <span id="detail-poverty" class="txt-value"><br></span>
-                        </div><br>
-                        <div><span class="txt-label">Bachelor degree</span><br>
-                            <span id="detail-bach" class="txt-value"><br></span>
-                        </div><br>
-                        <div><span class="txt-label">White collar positions</span><br>
-                            <span id="detail-white" class="txt-value"><br></span>
-                        </div>
-                    </div>
+                    <div class="txt-menu">Indicators</div>
                 </div>
-
+                <div class="wrapper">
+                    <div id="subtitle-mean" class="txt-subtitle">Mean change, 1990&nbsp;to&nbsp;2020</div>
+                </div>
+                <div class="wrapper">
+                    <div class="txt-label">Rental contract</div>
+                    <div id="detail-rent" class="txt-value"><br></div>
+                </div>
+                <div class="wrapper">
+                    <div class="txt-label">House value</div>
+                    <div id="detail-house" class="txt-value"><br></div>
+                </div>
+                <div class="wrapper">
+                    <div class="txt-label">Household income</div>
+                    <div id="detail-income" class="txt-value"><br></div>
+                </div>
+                <div class="wrapper">
+                    <div id="subtitle-pct" class="txt-subtitle">Percentage change, 1990&nbsp;to&nbsp;2020</div>
+                </div>
+                <div class="wrapper">
+                    <div class="txt-label">Poverty</div>
+                    <div id="detail-poverty" class="txt-value"><br></div>
+                </div>
+                <div class="wrapper">
+                    <div class="txt-label">Bachelor degree</div>
+                    <div id="detail-bach" class="txt-value"><br></div>
+                </div>
+                <div class="wrapper">
+                    <div class="txt-label">White collar positions</div>
+                    <div id="detail-white" class="txt-value"><br></div>
+                </div>
             </div>
         </div>
     </section>

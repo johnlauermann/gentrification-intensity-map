@@ -168,12 +168,12 @@
                 <div class="line"></div>
 
                 <div class="wrapper">
-                    <div class="txt-menu">Class</div>
-                    <div id="detail-class" class="txt-value"><br></div>
-                </div>
-                <div class="wrapper">
                     <div class="txt-menu">Tract</div>
                     <div id="detail-tract" class="txt-value"><br></div>
+                </div>
+                <div class="wrapper">
+                    <div class="txt-menu">Class</div>
+                    <div id="detail-class" class="txt-value"><br></div>
                 </div>
                 <div class="wrapper">
                     <div class="txt-menu">Metro</div>
@@ -212,7 +212,7 @@
 
 
     <section class="map-container">
-        <div id="map" class="box-map-container"> 
+        <div id="map" class="box-map-container">
             <!--  mapbox scripts  -->
             <script src="https://api.mapbox.com/mapbox-gl-js/v3.15.0/mapbox-gl.js"></script>
             <script>
@@ -225,8 +225,8 @@
                 });
                 // layers visibility on start
                 map.on('load', () => {
-                    if (window.innerWidth <= 720) {map.setPadding({left: 0, bottom: 0});} 
-                    else {map.setPadding({left: 300, bottom: 64});}
+                    if (window.innerWidth <= 720) { map.setPadding({ left: 0, bottom: 0 }); }
+                    else { map.setPadding({ left: 300, bottom: 64 }); }
 
                     map.setLayoutProperty('municipality-limits', 'visibility', 'visible');
 

@@ -92,15 +92,15 @@ menu.addEventListener('click', (e) => e.stopPropagation());
 // cities zoom
 const is_mobile = window.innerWidth <= 720;
 const cities_centers = {
-  "New York City": {center: [-74.0000, 40.7300], zoom: is_mobile ? 9 : 10},
-  "Los Angeles": {center: [-118.2437, 34.0522], zoom: is_mobile ? 9 : 10},
-  "Chicago": {center: [-87.6298, 41.8781], zoom: is_mobile ? 9 : 10},
-  "Dallas": {center: [-96.7970, 32.7767], zoom: is_mobile ? 9 : 10},
-  "Houston": {center: [-95.3698, 29.7604], zoom: is_mobile ? 9 : 10},
-  "Washington DC": {center: [-77.0369, 38.9072], zoom: is_mobile ? 9 : 10},
-  "Philadelphia": {center: [-75.1652, 39.9526], zoom: is_mobile ? 9 : 10},
-  "Atlanta": {center: [-84.3880, 33.7490], zoom: is_mobile ? 9 : 10},
-  "US": {center: [-98.5795, 39.8283], zoom: is_mobile ? 4 : 5}
+  "New York City": { center: [-74.0000, 40.7300], zoom: is_mobile ? 9 : 10 },
+  "Los Angeles": { center: [-118.2437, 34.0522], zoom: is_mobile ? 9 : 10 },
+  "Chicago": { center: [-87.6298, 41.8781], zoom: is_mobile ? 9 : 10 },
+  "Dallas": { center: [-96.7970, 32.7767], zoom: is_mobile ? 9 : 10 },
+  "Houston": { center: [-95.3698, 29.7604], zoom: is_mobile ? 9 : 10 },
+  "Washington DC": { center: [-77.0369, 38.9072], zoom: is_mobile ? 9 : 10 },
+  "Philadelphia": { center: [-75.1652, 39.9526], zoom: is_mobile ? 9 : 10 },
+  "Atlanta": { center: [-84.3880, 33.7490], zoom: is_mobile ? 9 : 10 },
+  "US": { center: [-98.5795, 39.8283], zoom: is_mobile ? 4 : 5 }
 };
 
 // when clicking on a city name
@@ -115,10 +115,10 @@ menu.querySelectorAll('.dropdown-link').forEach(link => {
 
     // centering municipalities
     window.map.easeTo({
-      center: view.center, 
-      zoom: view.zoom, 
-      duration: 400, 
-      padding: is_mobile ? {left: 0, bottom: 0 } : {left: 516}
+      center: view.center,
+      zoom: view.zoom,
+      duration: 400,
+      padding: is_mobile ? { left: 0, bottom: 0 } : { left: 516 }
     }); // 516 > boxes width
     document.querySelector('#dropdown-selected-city .txt-menu').textContent = city;
     menu_set(false);
@@ -187,7 +187,7 @@ const popup = new mapboxgl.Popup({
   closeOnClick: false,
   closeOnMove: false,
   anchor: "left",
-  offset: {left: [32, 32]}
+  offset: { left: [32, 32] }
 });
 
 // selected popup
@@ -197,7 +197,7 @@ const popup_selected = new mapboxgl.Popup({
   closeOnClick: false,
   closeOnMove: false,
   anchor: "left",
-  offset: {left: [26, 26]}
+  offset: { left: [26, 26] }
 });
 
 let raf_id; // animation frame id
@@ -211,7 +211,7 @@ let selected_geoid = null; // initial state for selected tract
 function money(v) {
   const n = Number(v);
   if (!Number.isFinite(n)) return "\u00A0";
-  return "$ " + n.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  return "$ " + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 function pct(v) {
@@ -239,21 +239,24 @@ function set_details_from_feature(f) {
 }
 
 function set_selected_feature(f, lngLat) {
-  const geoid = Number(f?.properties?.GEOID ?? f?.properties?.GEOID10);
+  const geoid = String(f?.properties?.GEOID ?? "");
+  const is_1970 = f.layer.id === "gi-fac-1970_2020";
 
   // clicking the already-selected tract toggles selection off
   if (selected_geoid && geoid === selected_geoid) {
     clear_selected();
     return;
   }
-
   selected_geoid = geoid;
 
-  // selected outline
-  ["gi-selected-1990", "gi-selected-1970"].forEach(id => {
-    if (window.map.getLayer(id)) window.map.setFilter(id, ["==", ["get", "GEOID"], selected_geoid]);
-  });
-
+  // only set the outline for the correct period layer
+  if (is_1970) {
+    if (window.map.getLayer("gi-selected-1970")) window.map.setFilter("gi-selected-1970", ["==", ["get", "GEOID"], geoid]);
+    if (window.map.getLayer("gi-selected-1990")) window.map.setFilter("gi-selected-1990", ["==", ["get", "GEOID"], "__none__"]);
+  } else {
+    if (window.map.getLayer("gi-selected-1990")) window.map.setFilter("gi-selected-1990", ["==", ["get", "GEOID"], geoid]);
+    if (window.map.getLayer("gi-selected-1970")) window.map.setFilter("gi-selected-1970", ["==", ["get", "GEOID"], "__none__"]);
+  }
 
   // freeze box 3 + legend marker to selected
   const { idx_txt, idx_num } = update_details(f);
@@ -261,7 +264,7 @@ function set_selected_feature(f, lngLat) {
 
   // fixed popup shows selected tract info
   const p = f.properties || {};
-  const geoid_txt = String(p.GEOID ?? p.GEOID10 ?? " ");
+  const geoid_txt = String(p.GEOID ?? " ");
   const fixed_html = `
     <div class="popup-wrapper">
       <span class="txt-label">Tract</span>
@@ -278,10 +281,11 @@ function set_selected_feature(f, lngLat) {
 
 function clear_selected() {
   selected_geoid = null;
+  if (window.map.getLayer("gi-hover-1990")) window.map.setFilter("gi-hover-1990", ["==", ["get", "GEOID"], "__none__"]);
+  if (window.map.getLayer("gi-hover-1970")) window.map.setFilter("gi-hover-1970", ["==", ["get", "GEOID"], "__none__"]);
+  if (window.map.getLayer("gi-selected-1990")) window.map.setFilter("gi-selected-1990", ["==", ["get", "GEOID"], "__none__"]);
+  if (window.map.getLayer("gi-selected-1970")) window.map.setFilter("gi-selected-1970", ["==", ["get", "GEOID"], "__none__"]);
 
-  ["gi-selected-1990", "gi-selected-1970"].forEach(id => {
-    if (window.map.getLayer(id)) window.map.setFilter(id, ["==", ["get", "GEOID"], "__none__"]);
-  });
   popup_selected.remove();
   hide_legend_marker();
 
@@ -298,7 +302,7 @@ function get_active_period() {
 function update_details(f) {
   const p = f.properties || {};
   const period = get_active_period();
-  const geoid = String(p.GEOID ?? p.GEOID10 ?? " ");
+  const geoid = String(f?.properties?.GEOID ?? "");
   const cbsa = String(p.CBSA_NAME ?? "").split(",")[0] || " ";
   const type = String(p.classtype ?? " ").replace(/^./, c => c.toUpperCase());
   const idx = Number(p[`GentIntensity_${period}_sdfrommean`]);
@@ -315,13 +319,8 @@ function update_details(f) {
   document.getElementById("detail-bach").textContent = pct(p[`Bach_pct_chg_${period}`]);
   document.getElementById("detail-white").textContent = pct(p[`WhiteCollar_pct_chg_${period}`]);
 
-  return {geoid, idx_txt, idx_num: idx};
+  return { geoid, idx_txt, idx_num: idx };
 }
-
-// run once when the map style is ready
-window.map.on('load', () => {
-  period_select(checkbox_period.checked);
-});
 
 // run on toggle
 checkbox_period.addEventListener('change', (e) => {
@@ -406,24 +405,24 @@ window.map.on("load", () => {
   }
 
   // hover outline for each data source
-  function add_outline_layer(id, source, source_layer, paint) {
+  function add_outline_layer(id, source, source_layer, geoid_field, paint) {
     if (!window.map.getLayer(id)) {
       window.map.addLayer({
         id,
         type: "line",
         source,
         "source-layer": source_layer,
-        filter: ["==", ["get", "GEOID"], "__none__"],
+        filter: ["==", ["get", geoid_field], "__none__"],
         paint
       });
     }
   }
   const source_1990 = window.map.getLayer("gi-fac-1990_2020").source;
   const source_1970 = window.map.getLayer("gi-fac-1970_2020").source;
-  add_outline_layer("gi-hover-1990", source_1990, "gentintensity_1990to2020", {"line-color": "#007BFF", "line-width": 2, "line-opacity": 1});
-  add_outline_layer("gi-hover-1970", source_1970, "gentintensity_1970to2020", {"line-color": "#007BFF", "line-width": 2, "line-opacity": 1});
-  add_outline_layer("gi-selected-1990", source_1990, "gentintensity_1990to2020", {"line-color": "white", "line-width": 2, "line-opacity": 1});
-  add_outline_layer("gi-selected-1970", source_1970, "gentintensity_1970to2020", {"line-color": "white", "line-width": 2, "line-opacity": 1});
+  add_outline_layer("gi-hover-1990", source_1990, "gentintensity_1990to2020", "GEOID", { "line-color": "#007BFF", "line-width": 2, "line-opacity": 1 });
+  add_outline_layer("gi-hover-1970", source_1970, "gentintensity_1970to2020", "GEOID", { "line-color": "#007BFF", "line-width": 2, "line-opacity": 1 });
+  add_outline_layer("gi-selected-1990", source_1990, "gentintensity_1990to2020", "GEOID", { "line-color": "white", "line-width": 2, "line-opacity": 1 });
+  add_outline_layer("gi-selected-1970", source_1970, "gentintensity_1970to2020", "GEOID", { "line-color": "white", "line-width": 2, "line-opacity": 1 });
 
   function bind_hover(layer_id) {
     if (!window.map.getLayer(layer_id)) {
@@ -445,19 +444,24 @@ window.map.on("load", () => {
         if (!f) return;
 
         // hover outline always updates
-        const geoid = Number(f?.properties?.GEOID ?? f?.properties?.GEOID10); //GEOID>1990, GEOID10>1970
-        ["gi-hover-1990", "gi-hover-1970"].forEach(id => {
-          if (window.map.getLayer(id)) window.map.setFilter(id, ["==", ["get", "GEOID"], geoid]);
-        });
+        const geoid = String(f?.properties?.GEOID ?? "");
+        const is_1970_hover = f.layer.id === "gi-fac-1970_2020";
+        if (is_1970_hover) {
+          if (window.map.getLayer("gi-hover-1970")) window.map.setFilter("gi-hover-1970", ["==", ["get", "GEOID"], geoid]);
+          if (window.map.getLayer("gi-hover-1990")) window.map.setFilter("gi-hover-1990", ["==", ["get", "GEOID"], "__none__"]);
+        } else {
+          if (window.map.getLayer("gi-hover-1990")) window.map.setFilter("gi-hover-1990", ["==", ["get", "GEOID"], geoid]);
+          if (window.map.getLayer("gi-hover-1970")) window.map.setFilter("gi-hover-1970", ["==", ["get", "GEOID"], "__none__"]);
+        }
 
-        // box 3 follows hover ONLY if nothing is selected
+        // box 3 follows hover only if nothing is selected
         if (!selected_geoid) {
           set_details_from_feature(f);
         }
 
         // hover popup always follow cursor
         const p = f.properties || {};
-        const geoid_txt = String(p.GEOID ?? p.GEOID10 ?? " ");
+        const geoid_txt = String(p.GEOID ?? " ");
         const period = get_active_period();
         const idx = Number(p[`GentIntensity_${period}_sdfrommean`]);
         const idx_txt = Number.isFinite(idx) ? idx.toFixed(2) : " ";
@@ -478,13 +482,12 @@ window.map.on("load", () => {
 
       // mouse leave
       window.map.on("mouseleave", layer_id, () => {
-        ["gi-hover-1990", "gi-hover-1970"].forEach(id => {
-          if (window.map.getLayer(id)) window.map.setFilter(id, ["==", ["get", "GEOID"], "__none__"]);
-        });
+        if (window.map.getLayer("gi-hover-1990")) window.map.setFilter("gi-hover-1990", ["==", ["get", "GEOID"], "__none__"]);
+        if (window.map.getLayer("gi-hover-1970")) window.map.setFilter("gi-hover-1970", ["==", ["get", "GEOID"], "__none__"]);
+        // ← do NOT touch gi-selected-* here
         popup.remove();
         window.map.getCanvas().style.cursor = "";
 
-        // if nothing is selected, leaving should hide marker + reset details
         if (!selected_geoid) {
           hide_legend_marker();
           reset_details_ui();
@@ -510,6 +513,8 @@ window.map.on("load", () => {
       clear_selected();
     }
   });
+
+  period_select(checkbox_period.checked);
 });
 
 // temp logs to check for bugs

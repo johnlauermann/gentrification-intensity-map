@@ -802,6 +802,7 @@
     bottom: var(--spacing-1);
     right: var(--spacing-1);
     width: calc(50% - var(--spacing-1) - var(--spacing-1) / 2);
+    box-shadow: none;
   }
 
   .txt-title {

@@ -749,6 +749,10 @@
   transform: translate(-6px, -6px);
 }
 
+.txt-popup {
+  display: inline;
+  margin-bottom: 0;
+}
 
 
 /* mobile */

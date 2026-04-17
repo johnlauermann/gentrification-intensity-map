@@ -203,7 +203,7 @@ const popup = new mapboxgl.Popup({
   closeOnClick: false,
   closeOnMove: false,
   anchor: "left",
-  offset: { left: [32, 32] }
+  offset: {left: [32, 32]}
 });
 
 // selected popup
@@ -213,7 +213,7 @@ const popup_selected = new mapboxgl.Popup({
   closeOnClick: false,
   closeOnMove: false,
   anchor: "left",
-  offset: { left: [26, 26] }
+  offset: {left: [26, 26]}
 });
 
 let raf_id; // animation frame id
@@ -284,9 +284,9 @@ function set_selected_feature(f, lngLat) {
   const fixed_html = `
     <div class="popup-wrapper">
       <span class="txt-label">Tract</span>
-      <span class="txt-value">${geoid_txt}</span>
+      <span class="txt-popup">${geoid_txt}</span>
       <span class="txt-label">Index</span>
-      <span class="txt-value">${idx_txt}</span>
+      <span class="txt-popup">${idx_txt}</span>
     </div>
   `;
 
@@ -508,9 +508,9 @@ window.map.on("load", () => {
         const small_html = `
           <div class="popup-wrapper">
             <span class="txt-label">Tract</span>
-            <span class="txt-value">${geoid_txt}</span>
+            <span class="txt-popup">${geoid_txt}</span>
             <span class="txt-label">Index</span>
-            <span class="txt-value">${idx_txt}</span>
+            <span class="txt-popup">${idx_txt}</span>
           </div>
         `;
 

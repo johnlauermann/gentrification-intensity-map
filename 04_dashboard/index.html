@@ -1,128 +1,253 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <meta charset="utf-8">
-  <title>Gentrification Intensity Index</title>
-  <meta content="width=device-width, initial-scale=1" name="viewport">
-  <link href="https://api.mapbox.com/mapbox-gl-js/v3.15.0/mapbox-gl.css" rel="stylesheet">
-  <link href="css/style-2.css" rel="stylesheet" type="text/css">
-  <link href="css/style-fonts.css" rel="stylesheet" type="text/css">
-  <link href="images/ga-favicon-1.png" rel="shortcut icon" type="image/x-icon">
-  <link href="images/ga-webclip-1.png" rel="apple-touch-icon">
+    <meta charset="utf-8">
+    <title>Gentrification intensity map</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.15.0/mapbox-gl.css" rel="stylesheet">
+    <link href="css/style-3.css" rel="stylesheet" type="text/css">
+    <link href="css/style-fonts.css" rel="stylesheet" type="text/css">
+    <link href="images/ga-favicon-1.png" rel="shortcut icon" type="image/x-icon">
+    <link href="images/ga-webclip-1.png" rel="apple-touch-icon">
 </head>
 
 <body class="body">
-    
-    <!-- header -->
+
+    <!-- content -->
     <section class="content-container">
 
-        <!-- card 1 –title and info -->
-        <div id="card-1" class="card-container">
-            <div class="txt-title">Gentrification Intensity Index, 1990 to 2020</div> 
-            <div class="info-wrapper">
-                <div class="txt-body">Based on indicators of class status and class upgrading.<br>16,603 tracts mapped.<br>Source: Decennial Census<br><br></div>
-                <a href="https://github.com/johnlauermann/gentrification-intensity-map" target="_blank" class="link-wrapper">
-                    <span class="txt-link">Learn more</span>
-                    <span class="txt-arrow">↗</span>
-                </a>
+        <!-- box 1 title and info -->
+        <div id="box-1" class="box-container">
+            <div class="wrapper">
+                <div class="txt-title">US gentrification intensity map</div>
+            </div>
+            <div class="line"></div>
+            <div class="wrapper">
+                <div class="learn_more-wrapper">
+                    <div class="txt-body">This is a spatial data science project that seeks to map varying degrees of
+                        gentrification intensity across most US metropolitan and micorpolitan communities.
+                        <br><br>
+                        The map was developed in&nbsp;the&nbsp;School of Information at&nbsp;Pratt&nbsp;Institute by
+                        <a href="https://github.com/johnlauermann/gentrification-intensity-map" target="_blank"
+                            class="link-wrapper">
+                            John&nbsp;Lauermann's lab group
+                        </a>
+                    </div>
+                    <button id="dropdown-learn_more-minus" class="dropdown-icon">
+                        <img src="images/picto-minus.png" alt="" class="picto">
+                    </button>
+                </div>
+            </div>
+
+            <!-- collapsed state -->
+            <div class="wrapper" style="display:none;">
+                <div class="learn_more-wrapper">
+                    <a href="https://github.com/johnlauermann/gentrification-intensity-map" target="_blank"
+                        class="link-wrapper">
+                        <span class="txt-link">John&nbsp;Lauermann's lab group<br></span>
+                    </a>
+                    <button id="dropdown-learn_more-plus" class="dropdown-icon collapsed">
+                        <img src="images/picto-plus.png" alt="" class="picto">
+                    </button>
+                </div>
             </div>
         </div>
 
-        <!-- card 2 –dropdowns -->
-        <div id="card-2" class="card-container">
 
-            <!-- dropdown menu -->
-            <div class="wrapper">
+        <!-- box 2 buttons -->
+        <div id="box-2" class="box-container">
+
+            <!-- municipality menu dropdown -->
+            <div class="wrapper dropdown-wrap">
                 <button id="dropdown-selected-city" class="dropdown-selected">
-                    <span class="txt-arrow">↓</span>
                     <span class="txt-menu">New York City</span>
+                    <img src="images/picto-arrow.png" alt="" class="picto">
                 </button>
-                <nav id="dropdown-menu-city" class="dropdown-menu">
-                    <a href="#" class="dropdown-link">Los Angeles</a>
+                <nav id="dropdown-menu-city" class="dropdown-menu" aria-hidden="true">
+                    <a href="#" class="dropdown-link">Atlanta</a>
                     <a href="#" class="dropdown-link">Chicago</a>
                     <a href="#" class="dropdown-link">Dallas</a>
                     <a href="#" class="dropdown-link">Houston</a>
-                    <a href="#" class="dropdown-link">Washington DC</a>
+                    <a href="#" class="dropdown-link">Los Angeles</a>
+                    <a href="#" class="dropdown-link">New York City</a>
                     <a href="#" class="dropdown-link">Philadelphia</a>
-                    <a href="#" class="dropdown-link">Atlanta</a>
+                    <a href="#" class="dropdown-link">Washington DC</a>
                     <a href="#" class="dropdown-link">US</a>
                 </nav>
             </div>
 
             <div class="line"></div>
-            
-            <!-- municipality checkbox -->
-            <div id="checkbox-municipality-wrapper" class="wrapper">
-                <label class="checkbox-label">
-                    <input type="checkbox" id="checkbox-municipality-input" class="checkbox-input" checked="">
-                    <span class="txt-menu">Central municipality</span>
-                </label>
+
+            <!-- data period -->
+            <div id="period" class="period-wrapper">
+                <span class="txt-menu">Data</span>
+                <div class="on_off">
+                    <input type="checkbox" id="checkbox-period-input" />
+                    <label for="checkbox-period-input" class="btn on">1970-2020</label>
+                    <label for="checkbox-period-input" class="btn off">1990-2020</label>
+                </div>
             </div>
 
             <div class="line"></div>
 
-            <!-- index legend -->
-            <div id="checkbox-index-wrapper" class="wrapper">
-                <label class="checkbox-wrapper">
-                    <input type="checkbox" id="legend-index-input" class="checkbox-input" checked="">
-                    <span id="legend-text-gent" class="txt-menu">Gentrification Intensity,</span>
-                    <span id="legend-text-sd" class="txt-menu">standard deviation</span>
-                </label>
-                <div class="legend-wrapper">
-                    <div class="legend-icon-wrapper">
-                        <div class="legend-icon _1"></div>
-                        <div class="txt-legend">-2.5</div>
-                    </div>
-                    <div class="legend-icon-wrapper">
-                        <div class="legend-icon _2"></div>
-                    </div>
-                    <div class="legend-icon-wrapper">
-                        <div class="legend-icon _3"></div>
-                        <div class="txt-legend">-0.5</div>
-                    </div>
-                    <div class="legend-icon-wrapper">
-                        <div class="legend-icon _4"></div>
-                    </div>
-                    <div class="legend-icon-wrapper">
-                        <div class="legend-icon _5"></div>
-                        <div class="txt-legend">1.5</div>
-                    </div>
-                    <div class="legend-icon-wrapper">
-                        <div class="legend-icon _6"></div>
-                    </div>
-                    <div class="legend-icon-wrapper">
-                        <div class="legend-icon _7"></div>
-                        <div class="txt-legend">3.5</div>
-                    </div>
-                </div>   
+            <!-- boundaries checkbox -->
+            <div class="boundaries-wrapper">
+                <span class="txt-menu">Boundaries</span>
+                <div class="on_off">
+                    <input type="checkbox" id="checkbox-municipality-input" checked />
+                    <label for="checkbox-municipality-input" class="btn on">ON</label>
+                    <label for="checkbox-municipality-input" class="btn off">OFF</label>
+                </div>
             </div>
+
+            <div id="line-bottom" class="line"></div>
         </div>
 
+
+        <!-- box 3 details panel -->
+        <div id="box-3" class="box-container details-box">
+
+            <!-- index legend -->
+            <div class="wrapper details-header">
+                <div class="details-header-left">
+                    <div class="txt-menu">Index</div>
+                    <div class="txt-body">Standard deviation</div>
+                </div>
+                <button id="toggle-details" class="toggle-details-btn" aria-expanded="true"
+                    aria-controls="details-body">
+                    <img src="images/picto-minus.png" alt="Collapse" class="picto">
+                </button>
+            </div>
+
+            <!-- legend -->
+            <div class="wrapper">
+                <div id="legend_wrap" class="legend-wrapper">
+                    <!-- marker -->
+                    <div id="legend_marker" class="legend-marker" aria-hidden="true" style="display:none;">
+                        <div id="legend_marker_value" class="legend-marker-value">—</div>
+                        <div class="legend-marker-line"></div>
+                    </div>
+
+                    <!-- index scale -->
+                    <div class="legend-gradient"></div>
+                    <div class="legend-ticks-wrap">
+                        <div class="legend-ticks">
+                            <div class="legend-label">-3</div>
+                        </div>
+                        <div class="legend-ticks">
+                            <div class="legend-label">-2</div>
+                        </div>
+                        <div class="legend-ticks">
+                            <div class="legend-label">-1</div>
+                        </div>
+                        <div class="legend-ticks">
+                            <div class="legend-label">0</div>
+                        </div>
+                        <div class="legend-ticks">
+                            <div class="legend-label">1</div>
+                        </div>
+                        <div class="legend-ticks">
+                            <div class="legend-label">2</div>
+                        </div>
+                        <div class="legend-ticks">
+                            <div class="legend-label">3</div>
+                        </div>
+                        <div class="legend-ticks">
+                            <div class="legend-label">4</div>
+                        </div>
+                        <div class="legend-ticks">
+                            <div class="legend-label">5</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- details (can collapse) -->
+            <div id="details-body" class="details-body">
+                <div class="line"></div>
+
+                <div class="wrapper">
+                    <div class="txt-label">Tract</div>
+                    <div id="detail-tract" class="txt-value"><br></div>
+                </div>
+                <div class="wrapper">
+                    <div class="txt-label">Class</div>
+                    <div id="detail-class" class="txt-value"><br></div>
+                </div>
+                <div class="wrapper">
+                    <div class="txt-label">Metro</div>
+                    <div id="detail-metro" class="txt-value"><br></div>
+                </div>
+
+                <div class="line"></div>
+
+                <div class="wrapper">
+                    <div class="txt-menu">Indicators</div>
+                </div>
+                <div class="wrapper">
+                    <div id="subtitle-mean" class="txt-subtitle">Mean change, 1990&nbsp;to&nbsp;2020</div>
+                </div>
+                <div class="wrapper">
+                    <div class="txt-label">Rental contract</div>
+                    <div id="detail-rent" class="txt-value"><br></div>
+                </div>
+                <div class="wrapper">
+                    <div class="txt-label">House value</div>
+                    <div id="detail-house" class="txt-value"><br></div>
+                </div>
+                <div class="wrapper">
+                    <div class="txt-label">Household income</div>
+                    <div id="detail-income" class="txt-value"><br></div>
+                </div>
+                <div class="wrapper">
+                    <div id="subtitle-pct" class="txt-subtitle">Percentage change, 1990&nbsp;to&nbsp;2020</div>
+                </div>
+                <div class="wrapper">
+                    <div class="txt-label">Poverty</div>
+                    <div id="detail-poverty" class="txt-value"><br></div>
+                </div>
+                <div class="wrapper">
+                    <div class="txt-label">Bachelor degree</div>
+                    <div id="detail-bach" class="txt-value"><br></div>
+                </div>
+                <div class="wrapper">
+                    <div class="txt-label">White collar positions</div>
+                    <div id="detail-white" class="txt-value"><br></div>
+                </div>
+            </div>
+        </div>
     </section>
 
+
     <section class="map-container">
-        <div id="map" class="card-map-container">
+        <div id="map" class="box-map-container">
             <!--  mapbox scripts  -->
             <script src="https://api.mapbox.com/mapbox-gl-js/v3.15.0/mapbox-gl.js"></script>
             <script>
                 mapboxgl.accessToken = 'pk.eyJ1IjoiamxhdWVybWEiLCJhIjoiY21pM210azZ6MXJvajJqcHkxcGN1NGdkOCJ9.tENRQ9ijIMLWhbjI7XJzWQ'; // john's
                 window.map = new mapboxgl.Map({
                     container: 'map',
-                    style: 'mapbox://styles/jlauerma/cmi3f9nfn004j01rs9d6m7bxj', // john's account
+                    style: 'mapbox://styles/jlauerma/cmi3f9nfn004j01rs9d6m7bxj',
                     center: [-74, 40.73],
-                    zoom: 10
+                    zoom: window.innerWidth <= 720 ? 9 : 10
                 });
                 // layers visibility on start
                 map.on('load', () => {
-                    map.setLayoutProperty('gi-fac-1990_2020', 'visibility', 'visible');
+                    if (window.innerWidth <= 720) { map.setPadding({ left: 0, bottom: 0 }); }
+                    else { map.setPadding({ left: 300, bottom: 64 }); }
+
                     map.setLayoutProperty('municipality-limits', 'visibility', 'visible');
-                    map.setLayoutProperty('gi-fac-1970_2020_temp', 'visibility', 'none');
+
+                    const is_1970 = document.getElementById('checkbox-period-input')?.checked ?? true;
+                    map.setLayoutProperty('gi-fac-1970_2020', 'visibility', is_1970 ? 'visible' : 'none');
+                    map.setLayoutProperty('gi-fac-1990_2020', 'visibility', is_1970 ? 'none' : 'visible');
                 });
             </script>
         </div>
     </section>
 
 
-    <script src="js/script-2.js"></script>
+    <script src="js/script-3.js"></script>
 
 </body>

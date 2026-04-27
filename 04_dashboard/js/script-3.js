@@ -83,10 +83,21 @@ const selected = document.getElementById('dropdown-selected-city');
 const menu = document.getElementById('dropdown-menu-city');
 const box2 = document.getElementById('box-2');
 
+// hide selected city from the dropdown menu
+// function update_city_list(active_city) {
+//   menu.querySelectorAll('.dropdown-link').forEach(link => {
+//     const city = link.textContent.trim();
+//     link.style.display = city === active_city ? 'none' : '';
+//   });
+// }
+
 function menu_set(is_open) {
   menu.classList.toggle('open', is_open);
   box2.classList.toggle('menu-open', is_open);
+  selected.classList.toggle('open', is_open);
 }
+
+// update_city_list('New York City');
 
 // toggle on button
 selected.addEventListener('click', (e) => {
@@ -133,6 +144,7 @@ menu.querySelectorAll('.dropdown-link').forEach(link => {
       padding: is_mobile ? { left: 0, bottom: 0 } : { left: 516 } // 516 > boxes width
     });
     document.querySelector('#dropdown-selected-city .txt-menu').textContent = city;
+    // update_city_list(city);
     menu_set(false);
   });
 });
@@ -203,7 +215,7 @@ const popup = new mapboxgl.Popup({
   closeOnClick: false,
   closeOnMove: false,
   anchor: "left",
-  offset: {left: [32, 32]}
+  offset: { left: [32, 32] }
 });
 
 // selected popup
@@ -213,7 +225,7 @@ const popup_selected = new mapboxgl.Popup({
   closeOnClick: false,
   closeOnMove: false,
   anchor: "left",
-  offset: {left: [26, 26]}
+  offset: { left: [26, 26] }
 });
 
 let raf_id; // animation frame id
@@ -359,7 +371,7 @@ function update_details(f) {
   document.getElementById("detail-white").textContent = pct(p[`WhiteCollar_pct_chg_${period}`]);
   colored(document.getElementById("detail-white"), p[`WhiteCollar_pct_chg_${period}`]);
 
-  return {geoid, idx_txt, idx_num: idx};
+  return { geoid, idx_txt, idx_num: idx };
 }
 
 // run on toggle

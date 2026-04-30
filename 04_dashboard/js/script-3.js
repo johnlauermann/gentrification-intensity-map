@@ -566,6 +566,15 @@ window.map.on("load", () => {
     }
   });
 
+  // search bar
+  const geocoder = new MapboxGeocoder({
+    accessToken: mapboxgl.accessToken,
+    mapboxgl: mapboxgl,
+    countries: 'us',
+    placeholder: ' '
+  });
+  window.map.addControl(geocoder);
+
   period_select(checkbox_period.checked);
 });
 

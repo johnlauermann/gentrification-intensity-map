@@ -337,6 +337,10 @@
   max-height: 300px;
   opacity: 1;
 }
+#box-2.menu-open .search-cell {
+  border-bottom: 1px solid var(--color-1);
+}
+
 
 .dropdown-link {
   padding: 4px var(--spacing-3);
@@ -360,6 +364,127 @@
 .dropdown-link:last-child:hover {
   border-bottom: 1px solid transparent;
 }
+
+/* city + search row */
+.city-search-row {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  width: 100%;
+}
+.city-search-row #dropdown-selected-city {
+  width: calc(var(--column) - 36px - 1px);
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.city-search-divider {
+  width: 1px;
+  background-color: var(--color-1);
+  flex-shrink: 0;
+}
+
+/* search cell — fixed width in closed state */
+.search-cell {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 36px;
+  transition: width 200ms ease;
+  background-color: var(--color-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* hover expands leftward */
+.search-cell:hover,
+.search-cell.is-open {
+  width: 100%;
+  z-index: 3;
+}
+
+/* magnifier button */
+.search-open-btn {
+  position: absolute;
+  left: calc(100% - 36px);
+  top: 0;
+  bottom: 0;
+  background: none;
+  border: none;
+  padding: 0 var(--spacing-3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: left 200ms ease;
+}
+
+/* input wrap — hidden until open */
+.search-input-wrap {
+  display: none;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3);
+  width: 100%;
+}
+
+.search-cell:hover .search-open-btn,
+.search-cell.is-open .search-open-btn {
+  left: 0; /* slides to left edge */
+}
+
+
+.search-cell.is-open .search-input-wrap {
+  display: flex;
+}
+
+.search-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--color-1);
+  outline: none;
+  text-transform: uppercase;
+}
+
+.search-input::placeholder {
+  color: var(--color-1);
+  opacity: 0.4;
+  font-weight: 400;
+}
+
+/* close button — hidden until typing */
+.search-close-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--color-1);
+  font-size: 18px;
+  line-height: 1;
+  display: none;
+  flex-shrink: 0;
+}
+
+.search-cell.has-input .search-close-btn {
+  display: flex;
+}
+
+.search-result-link.is-active {
+  border-top: 1px solid var(--color-1);
+  border-bottom: 1px solid var(--color-1);
+  font-weight: 500;
+}
+
 
 /* boundaries */
 

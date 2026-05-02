@@ -88,8 +88,8 @@ const box2 = document.getElementById('box-2');
 //   menu.querySelectorAll('.dropdown-link').forEach(link => {
 //     const city = link.textContent.trim();
 //     link.style.display = city === active_city ? 'none' : '';
-//   });
-// }
+//  });
+//}
 
 function menu_set(is_open) {
   menu.classList.toggle('open', is_open);
@@ -111,6 +111,177 @@ document.addEventListener('click', () => menu_set(false));
 
 // clicking inside menu shouldn’t close before your link handler runs
 menu.addEventListener('click', (e) => e.stopPropagation());
+
+
+// search bar
+const search_cell = document.getElementById('search-cell');
+// const search_open_btn = document.getElementById('search-open-btn');
+const search_input = document.getElementById('search-input');
+const search_close_btn = document.getElementById('search-close-btn');
+
+function search_open() {
+  search_cell.classList.add('is-open');
+  // menu_set(false);
+  search_input.focus();
+}
+function search_close() {
+  search_cell.classList.remove('is-open', 'has-input');
+  search_input.value = '';
+  clearTimeout(search_timeout);
+  show_city_list();
+  menu_set(false); // always close dropdown
+}
+
+// allows to typing on click
+search_cell.addEventListener('click', (e) => {
+  e.stopPropagation();
+  if (!search_cell.classList.contains('is-open')) {
+    search_open();
+  }
+});
+
+// search geocoder fetch from mapbox
+let search_timeout = null;
+search_input.addEventListener('input', () => {
+  const val = search_input.value.trim();
+  search_cell.classList.toggle('has-input', val.length > 0);
+
+  // clear previous timeout
+  clearTimeout(search_timeout);
+
+  if (val.length < 2) {
+    show_city_list();
+    return;
+  }
+
+  // debounce (wait after user stops typing)
+  search_timeout = setTimeout(() => fetch_suggestions(val), 300); // 300ms
+});
+
+function fetch_suggestions(query) {
+  const token = mapboxgl.accessToken;
+  // url controls search restrictions
+  // limit=9 is the height of the dropdown menu
+  const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?country=us&types=region,postcode,district,place,locality,neighborhood,address&limit=9&access_token=${token}`;
+
+  fetch(url)
+    .then(r => r.json())
+    .then(data => {
+      const results = (data.features || []).filter(f =>
+        ['region', 'postcode', 'district', 'place', 'locality', 'neighborhood', 'address'].includes(f.place_type[0])
+      );
+      show_search_results(results);
+    })
+    .catch(err => console.warn('Geocoder error:', err));
+}
+
+function show_search_results(results) {
+  // remove existing search results
+  active_result_index = -1;
+  menu.querySelectorAll('.search-result-link').forEach(el => el.remove());
+
+  // hide city links
+  menu.querySelectorAll('.dropdown-link').forEach(el => el.style.display = 'none');
+
+  results.forEach(feature => {
+    const a = document.createElement('a');
+    const state = feature.context?.find(c => c.id.startsWith('region'))?.short_code?.replace('US-', '') ?? '';
+    const zip = feature.context?.find(c => c.id.startsWith('postcode'))?.text ?? '';
+    const city = feature.place_name.replace(/, United States$/, '');
+    const short = state ? city.replace(/,\s*[^,]+$/, `, ${state}`) : city;
+    a.className = 'dropdown-link search-result-link';
+    a.textContent = zip ? `${short} ${zip}` : short;
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const [lng, lat] = feature.center;
+      const zoom_by_type = {
+        'region': 6,
+        'district': 8,
+        'place': 10,
+        'locality': 11,
+        'neighborhood': 12,
+        'postcode': 12,
+        'address': 13
+      };
+      const zoom = zoom_by_type[feature.place_type[0]] ?? 10;
+
+
+      // get the most relevant place name for the selected text
+      const is_place = feature.place_type[0] === 'place';
+      const place = is_place
+        ? feature.text
+        : feature.context?.find(c => c.id.startsWith('place'))?.text
+        ?? feature.context?.find(c => c.id.startsWith('region'))?.text
+        ?? feature.text
+        ?? '';
+
+      window.map.easeTo({
+        center: [lng, lat],
+        zoom: zoom,
+        duration: 400,
+        padding: is_mobile ? { left: 0, bottom: 0 } : { left: 516 }
+      });
+
+      document.querySelector('#dropdown-selected-city .txt-menu').textContent = place;
+
+      search_close();
+      show_city_list();
+    });
+    menu.appendChild(a);
+  });
+
+  // open the menu to show results
+  menu.classList.add('open');
+  box2.classList.add('menu-open');
+}
+
+function show_city_list() {
+  // remove search results
+  menu.querySelectorAll('.search-result-link').forEach(el => el.remove());
+  // restore city links
+  menu.querySelectorAll('.dropdown-link').forEach(el => el.style.display = '');
+}
+
+search_input.addEventListener('click', (e) => e.stopPropagation());
+// keyboard navigation
+let active_result_index = -1;
+function set_active_result(index) {
+  const results = menu.querySelectorAll('.search-result-link');
+  results.forEach((el, i) => {
+    el.classList.toggle('is-active', i === index);
+  });
+  active_result_index = index;
+}
+search_input.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    search_close();
+    return;
+  }
+
+  const results = menu.querySelectorAll('.search-result-link');
+  if (!results.length) return;
+
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    set_active_result(Math.min(active_result_index + 1, results.length - 1));
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    set_active_result(Math.max(active_result_index - 1, 0));
+  } else if (e.key === 'Enter' && active_result_index >= 0) {
+    e.preventDefault();
+    e.stopPropagation();
+    results[active_result_index].click();
+  }
+});
+// close on x
+search_close_btn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  search_close();
+});
+// close on click outside
+document.addEventListener('click', () => search_close());
+
 
 // cities zoom
 const is_mobile = window.innerWidth <= 720;
@@ -566,14 +737,14 @@ window.map.on("load", () => {
     }
   });
 
-  // search bar
-  const geocoder = new MapboxGeocoder({
-    accessToken: mapboxgl.accessToken,
-    mapboxgl: mapboxgl,
-    countries: 'us',
-    placeholder: ' '
-  });
-  window.map.addControl(geocoder);
+  // native mapbox search bar
+  // const geocoder = new MapboxGeocoder({
+  //   accessToken: mapboxgl.accessToken,
+  //   mapboxgl: mapboxgl,
+  //   countries: 'us',
+  //   placeholder: ' '
+  // });
+  // window.map.addControl(geocoder);
 
   period_select(checkbox_period.checked);
 });

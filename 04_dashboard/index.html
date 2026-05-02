@@ -61,10 +61,37 @@
         <div id="box-2" class="box-container">
 
             <!-- municipality menu dropdown -->
-            <button id="dropdown-selected-city" class="dropdown-selected">
+            <!-- <button id="dropdown-selected-city" class="dropdown-selected">
                 <span class="txt-menu">New York City</span>
                 <img src="images/picto-arrow.png" alt="" class="picto">
-            </button>
+            </button> -->
+
+            <!-- municipality menu with search row -->
+            <div id="city-search-row" class="city-search-row">
+                <!-- municipality dropdown button -->
+                <button id="dropdown-selected-city" class="dropdown-selected">
+                    <span class="txt-menu">New York City</span>
+                    <img src="images/picto-arrow.png" alt="" class="picto">
+                </button>
+
+                <div class="city-search-divider"></div>
+
+                <!-- search cell -->
+                <div id="search-cell" class="search-cell">
+                    <button id="search-open-btn" class="search-open-btn" aria-label="open search">
+                        <img src="images/picto-search-selected.png" alt="" class="picto">
+                    </button>
+                    <div id="search-input-wrap" class="search-input-wrap">
+                        <img src="images/picto-search-selected.png" alt="" class="picto">
+                        <input id="search-input" class="search-input" type="text" placeholder="search address"
+                            autocomplete="off">
+                        <button id="search-close-btn" class="search-close-btn" aria-label="close search">
+                            <img src="images/picto-x.png" alt="" class="picto">
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <nav id="dropdown-menu-city" class="dropdown-menu" aria-hidden="true">
                 <a href="#" class="dropdown-link">Atlanta</a>
                 <a href="#" class="dropdown-link">Chicago</a>
@@ -248,7 +275,9 @@
         </div>
     </section>
 
-    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.3/mapbox-gl-geocoder.min.js"></script> <!-- geocoder plugin for search -->
+    <script
+        src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.3/mapbox-gl-geocoder.min.js"></script>
+    <!-- geocoder plugin for search -->
     <script src="js/script-3.js"></script>
 
 </body>

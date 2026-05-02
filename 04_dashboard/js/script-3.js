@@ -373,8 +373,9 @@ function period_select(is_1970) {
   // update subtitle year
   document.getElementById("subtitle-mean").textContent = is_1970 ? "Mean change, 1970\u00A0to\u00A02020" : "Mean change, 1990\u00A0to\u00A02020";
   document.getElementById("subtitle-pct").textContent = is_1970 ? "Percentage change, 1970\u00A0to\u00A02020" : "Percentage change, 1990\u00A0to\u00A02020";
+  // re-apply filter to newly visible layer
+  if (checkbox_filter?.checked) apply_filter();
 }
-
 
 
 // hovered and selected tract
@@ -748,6 +749,140 @@ window.map.on("load", () => {
 
   period_select(checkbox_period.checked);
 });
+
+
+// index filter range
+
+const checkbox_filter = document.getElementById('checkbox-filter-input');
+const handle_min = document.getElementById('filter-handle-min');
+const handle_max = document.getElementById('filter-handle-max');
+const mask_min = document.getElementById('filter-mask-min');
+const mask_max = document.getElementById('filter-mask-max');
+
+// filter range state
+let filter_min = -2; // starting point
+let filter_max = 4;
+
+function get_handle_left_px(val) {
+  const ticks = document.querySelectorAll('.legend-ticks');
+  if (!ticks.length) return 0;
+  const wrap_left = legend_wrap.getBoundingClientRect().left;
+  const first = ticks[0].getBoundingClientRect();
+  const last = ticks[ticks.length - 1].getBoundingClientRect();
+  const first_center = first.left + first.width / 2 - wrap_left;
+  const last_center = last.left + last.width / 2 - wrap_left;
+  const run = last_center - first_center;
+  const t = (Math.max(legend_min, Math.min(legend_max, val)) - legend_min) / (legend_max - legend_min);
+  return first_center + t * run;
+}
+function position_handles() {
+  handle_min.style.left = get_handle_left_px(filter_min) + 'px';
+  handle_max.style.left = get_handle_left_px(filter_max) + 'px';
+}
+function position_masks() {
+  const min_px = get_handle_left_px(filter_min);
+  const max_px = get_handle_left_px(filter_max);
+  const grad = document.querySelector('.legend-gradient');
+  const grad_left = grad.getBoundingClientRect().left - legend_wrap.getBoundingClientRect().left;
+  const grad_width = grad.getBoundingClientRect().width;
+
+  mask_min.style.left = grad_left + 'px';
+  mask_min.style.width = Math.max(0, min_px - grad_left) + 'px';
+
+  mask_max.style.left = max_px + 'px';
+  mask_max.style.width = Math.max(0, grad_left + grad_width - max_px) + 'px';
+}
+function apply_filter() {
+  const layers = ['gi-fac-1990_2020', 'gi-fac-1970_2020'];
+  const field_1990 = 'GentIntensity_1990to2020_sdfrommean';
+  const field_1970 = 'GentIntensity_1970to2020_sdfrommean';
+  layers.forEach(id => {
+    if (!window.map?.getLayer(id)) return;
+    const field = id.includes('1970') ? field_1970 : field_1990;
+    window.map.setFilter(id, [
+      'all',
+      ['>=', ['get', field], filter_min],
+      ['<=', ['get', field], filter_max]
+    ]);
+  });
+}
+
+function clear_filter() {
+  ['gi-fac-1990_2020', 'gi-fac-1970_2020'].forEach(id => {
+    if (!window.map?.getLayer(id)) return;
+    window.map.setFilter(id, null);
+  });
+}
+
+function set_filter_on(on) {
+  if (on) {
+    handle_min.style.display = 'block';
+    handle_max.style.display = 'block';
+    mask_min.style.display = 'block';
+    mask_max.style.display = 'block';
+
+    position_handles();
+    position_masks();
+    apply_filter();
+  } else {
+    handle_min.style.display = 'none';
+    handle_max.style.display = 'none';
+    mask_min.style.display = 'none';
+    mask_max.style.display = 'none';
+    clear_filter();
+  }
+}
+
+checkbox_filter.addEventListener('change', (e) => set_filter_on(e.target.checked));
+
+// drag logic
+function make_draggable(handle, is_min) {
+  handle.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    handle.setPointerCapture(e.pointerId);
+
+    const ticks = document.querySelectorAll('.legend-ticks');
+    const wrap_rect = legend_wrap.getBoundingClientRect();
+    const first = ticks[0].getBoundingClientRect();
+    const last = ticks[ticks.length - 1].getBoundingClientRect();
+    const first_center = first.left + first.width / 2;
+    const last_center = last.left + last.width / 2;
+    const run = last_center - first_center;
+
+    function on_move(ev) {
+      const x = ev.clientX;
+      const raw_t = (x - first_center) / run;
+      const clamped_t = Math.max(0, Math.min(1, raw_t));
+      let val = legend_min + clamped_t * (legend_max - legend_min);
+
+      // snap to true data extremes at the edges
+      // to not filtering below -3 and above +5
+      if (clamped_t === 0) val = -4.348218; // smallest value, from 1990 layer
+      if (clamped_t === 1) val = 9.51; // highest value, from 1970 layer
+
+      if (is_min) {
+        filter_min = Math.min(val, filter_max - 0.1);
+      } else {
+        filter_max = Math.max(val, filter_min + 0.1);
+      }
+
+      position_handles();
+      position_masks();
+      apply_filter();
+    }
+    function on_up() {
+      handle.removeEventListener('pointermove', on_move);
+      handle.removeEventListener('pointerup', on_up);
+    }
+
+    handle.addEventListener('pointermove', on_move);
+    handle.addEventListener('pointerup', on_up);
+  });
+}
+
+make_draggable(handle_min, true);
+make_draggable(handle_max, false);
+
 
 // temp logs to check for bugs
 

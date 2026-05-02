@@ -150,6 +150,15 @@
             <!-- legend -->
             <div class="wrapper">
                 <div id="legend_wrap" class="legend-wrapper">
+                    <!-- filter handles -->
+                    <div id="filter-handle-min" class="filter-handle filter-handle-min" aria-hidden="true"
+                        style="display:none;">[</div>
+                    <div id="filter-handle-max" class="filter-handle filter-handle-max" aria-hidden="true"
+                        style="display:none;">]</div>
+                    <!-- unfiltered range -->  
+                    <div id="filter-mask-min" class="filter-mask" style="display:none;"></div>
+                    <div id="filter-mask-max" class="filter-mask" style="display:none;"></div>
+
                     <!-- marker -->
                     <div id="legend_marker" class="legend-marker" aria-hidden="true" style="display:none;">
                         <div id="legend_marker_value" class="legend-marker-value">—</div>
@@ -191,6 +200,18 @@
             </div>
 
             <div class="line"></div>
+
+            <!-- filter toggle -->
+            <div class="wrapper filter-toggle-row">
+                <span class="txt-menu">Filter range</span>
+                <div class="on_off">
+                    <input type="checkbox" id="checkbox-filter-input" />
+                    <label for="checkbox-filter-input" class="btn on">ON</label>
+                    <label for="checkbox-filter-input" class="btn off">OFF</label>
+                </div>
+            </div>
+
+            <div class="line filter-line"></div>
 
             <!-- details (can collapse) -->
             <div id="details-body" class="details-body">

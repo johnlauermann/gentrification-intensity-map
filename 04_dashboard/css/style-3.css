@@ -692,8 +692,6 @@
 }
 
 
-
-
 /* marker */
 #legend_wrap {
   position: relative;
@@ -733,6 +731,46 @@
 #detail-metro {
   min-height: 2lh;
 }
+
+
+/* filter handles */
+.filter-handle {
+  position: absolute;
+  top: -5px;
+  width: auto;
+  height: auto;
+  font-size: 36px;
+  line-height: 1;
+  color: var(--color-1);
+  font-weight: 200;
+  cursor: ew-resize;
+  touch-action: none;
+  z-index: 6;
+  transform: translateX(-50%);
+  user-select: none;
+}
+
+.filter-toggle-row {
+  display: flex;
+  align-items: left;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+}
+
+.filter-line {
+  flex-shrink: 0;
+}
+
+.filter-mask {
+  position: absolute;
+  top: 0;
+  height: 24px; /* match gradient bar height */
+  background-color: var(--color-2);
+  opacity: 0.7; /* makes underlying gradient appear at 30% */
+  pointer-events: none;
+  z-index: 4; /* below handles (z-index 6) */
+}
+
 
 /* colapse details */
 
@@ -792,6 +830,9 @@
 .details-box.is-collapsed .details-body {
   display: none;
   opacity: 0;
+}
+.details-box.is-collapsed .filter-line {
+  display: none;
 }
 
 
@@ -927,8 +968,10 @@
   #box-3 .details-body {
     display: none;
   }
-
   #box-3 .toggle-details-btn {
+    display: none;
+  }
+  #box-3 .filter-line {
     display: none;
   }
 

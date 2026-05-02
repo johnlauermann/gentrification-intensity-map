@@ -336,6 +336,7 @@
 .dropdown-menu.open {
   max-height: 300px;
   opacity: 1;
+  margin-top: -1px;
 }
 #box-2.menu-open .search-cell {
   border-bottom: 1px solid var(--color-1);
@@ -360,7 +361,6 @@
   border-bottom: 1px solid var(--color-1);
   font-weight: 500;
 }
-
 .dropdown-link:last-child:hover {
   border-bottom: 1px solid transparent;
 }
@@ -483,6 +483,10 @@
   border-top: 1px solid var(--color-1);
   border-bottom: 1px solid var(--color-1);
   font-weight: 500;
+}
+
+.search-result-link:first-of-type:hover {
+  border-top: 1px solid transparent;
 }
 
 

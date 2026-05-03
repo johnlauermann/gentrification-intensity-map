@@ -21,19 +21,19 @@
 
         <!-- box 1 title and info -->
         <div id="box-1" class="box-container">
-            <div class="wrapper">
+            <div id="title" class="wrapper">
                 <div class="txt-title">US gentrification intensity map</div>
             </div>
             <div class="line"></div>
             <div class="wrapper">
-                <div class="learn_more-wrapper">
+                <div id="learn-more" class="learn_more-wrapper">
                     <div class="txt-body">This is a spatial data science project that seeks to map varying degrees of
                         gentrification intensity across most US metropolitan and micorpolitan communities.
                         <br><br>
                         The map was developed in&nbsp;the&nbsp;School of Information at&nbsp;Pratt&nbsp;Institute by
                         <a href="https://github.com/johnlauermann/gentrification-intensity-map" target="_blank"
                             class="link-wrapper">
-                            John&nbsp;Lauermann's lab group
+                            John&nbsp;Lauermann's lab
                         </a>
                     </div>
                     <button id="dropdown-learn_more-minus" class="dropdown-icon">
@@ -47,7 +47,7 @@
                 <div class="learn_more-wrapper">
                     <a href="https://github.com/johnlauermann/gentrification-intensity-map" target="_blank"
                         class="link-wrapper">
-                        <span class="txt-link">John&nbsp;Lauermann's lab group<br></span>
+                        <span class="txt-link">John&nbsp;Lauermann's lab<br></span>
                     </a>
                     <button id="dropdown-learn_more-plus" class="dropdown-icon collapsed">
                         <img src="images/picto-plus.png" alt="" class="picto">
@@ -66,7 +66,7 @@
                 <img src="images/picto-arrow.png" alt="" class="picto">
             </button> -->
 
-            <!-- municipality menu with search row -->
+            <!-- municipality menu + search -->
             <div id="city-search-row" class="city-search-row">
                 <!-- municipality dropdown button -->
                 <button id="dropdown-selected-city" class="dropdown-selected">
@@ -82,7 +82,7 @@
                         <img src="images/picto-search-selected.png" alt="" class="picto">
                     </button>
                     <div id="search-input-wrap" class="search-input-wrap">
-                        <img src="images/picto-search-selected.png" alt="" class="picto">
+                        <img src="images/picto-search-sele cted.png" alt="" class="picto">
                         <input id="search-input" class="search-input" type="text" placeholder="search address"
                             autocomplete="off">
                         <button id="search-close-btn" class="search-close-btn" aria-label="close search">
@@ -107,7 +107,7 @@
             <div class="line"></div>
 
             <!-- data period -->
-            <div id="period" class="period-wrapper">
+            <div id="period" class="wrapper-period">
                 <span class="txt-menu">Data</span>
                 <div class="on_off">
                     <input type="checkbox" id="checkbox-period-input" />

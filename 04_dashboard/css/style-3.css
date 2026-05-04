@@ -130,7 +130,7 @@
   background-color: none;
   display: grid;
   column-gap: var(--spacing-1);
-  row-gap: var(--spacing-1);
+  row-gap: 29px;
   grid-template-columns: var(--column) var(--column);
   grid-template-rows: max-content 1fr;
   place-content: start;

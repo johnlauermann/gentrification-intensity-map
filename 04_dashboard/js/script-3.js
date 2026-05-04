@@ -30,15 +30,17 @@ document.addEventListener("DOMContentLoaded", () => {
   collapsed_el.style.display = "none"; // hide plus on load
 
   box1.querySelectorAll(".dropdown-icon").forEach(btn => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
       const isOpen = collapsed_el.style.display === "none";
       expanded.style.maxHeight = isOpen ? "0" : "420px";
       expanded.style.opacity = isOpen ? "0" : "1";
       expanded.style.padding = isOpen ? "0" : "";
       collapsed_el.style.display = isOpen ? "" : "none";
+      box1.classList.toggle('is-open', !isOpen);
     });
   });
-
+  
   if (window.innerWidth <= 720) {
     expanded.style.maxHeight = "0";
     expanded.style.opacity = "0";

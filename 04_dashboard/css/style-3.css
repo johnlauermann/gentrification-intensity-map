@@ -907,7 +907,7 @@
 
 /* mobile */
 
-@media (max-width: 720px) {
+@media (max-width: 620px) {
   :root {
     --spacing-1: 16px;
     --spacing-2: 12px;
@@ -936,10 +936,14 @@
   #box-1 {
     grid-column: 1 / span 3;
     max-height: none;
-    height: 100%;
+    height: calc((var(--line-height-txt) + var(--spacing-3) * 2) * 3 + 2px);
     display: grid;
     grid-template-rows: calc((var(--line-height-txt) + var(--spacing-3) * 2) * 2 + 1px) 1px auto;
     gap: 0;
+  }
+
+  #box-1.is-open {
+    height: auto;
   }
 
   #box-2 {
@@ -948,7 +952,7 @@
   }
 
   .box-container {
-    align-items: stretch;
+    /* align-items: stretch; */
     box-shadow: var(--spacing-4) var(--spacing-4) 0 var(--color-1);
   }
 
@@ -969,7 +973,6 @@
     /* padding-top: var(--spacing-3); */
     grid-row: 3;
   }
-
 
   .wrapper-learn_more {
     width: 100%;
@@ -993,6 +996,12 @@
   .dropdown-icon.collapsed {
     margin-top: 0;
     margin-bottom: 0;
+  }
+
+  .city-search-row #dropdown-selected-city {
+    width: calc(100% - 37px);
+    flex-shrink: 0;
+    flex: none;
   }
 
 

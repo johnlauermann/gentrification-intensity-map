@@ -1019,6 +1019,9 @@
     width: calc(50% - var(--spacing-1) - var(--spacing-1) / 2);
     box-shadow: none;
   }
+  #box-3.has-data {
+  box-shadow: var(--spacing-4) var(--spacing-4) 0 var(--color-1);
+}
 
   #box-3 .details-body {
     display: none;

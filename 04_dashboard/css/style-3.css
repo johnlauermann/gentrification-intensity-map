@@ -1040,4 +1040,18 @@
   .mapboxgl-popup {
     display: none;
   }
+
+  .filter-handle {
+    top: -8px;
+  }
+
+  .legend-wrapper {
+    margin-top: var(--spacing-2);
+  }
+
+  .legend-gradient {
+    margin-bottom: var(--spacing-2);
+    height: 18px;
+  }
+
 }

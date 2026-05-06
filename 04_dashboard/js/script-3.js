@@ -577,7 +577,7 @@ const scale_colors = [
 ];
 
 // mapbox expression to linear color scale
-// controling the colors from mapbox here
+// controlling the colors from mapbox here
 const mapbox_expression = [
   "interpolate", ["linear"],
   ["get", "GentIntensity_1990to2020_sdfrommean"],
@@ -585,7 +585,7 @@ const mapbox_expression = [
 ];
 
 // css gradient
-// it's in js, so it can be controled along with the layer color
+// it's in js, so it can be controlled along with the layer color
 const legend_total = legend_max - legend_min;
 const gradient_stops = scale_colors.map(([val, color]) => {
   const legend_pct = ((val - legend_min) / legend_total * 100).toFixed(2);
@@ -710,7 +710,6 @@ window.map.on("load", () => {
       window.map.on("mouseleave", layer_id, () => {
         if (window.map.getLayer("gi-hover-1990")) window.map.setFilter("gi-hover-1990", ["==", ["get", "GEOID"], "__none__"]);
         if (window.map.getLayer("gi-hover-1970")) window.map.setFilter("gi-hover-1970", ["==", ["get", "GEOID"], "__none__"]);
-        // ← do NOT touch gi-selected-* here
         popup.remove();
         window.map.getCanvas().style.cursor = "";
 
@@ -724,7 +723,7 @@ window.map.on("load", () => {
 
   layer_ids.forEach(bind_hover);
 
-  // one click handler for selection (toggle same tract off; empty space clears)
+  // one click handler for selection
   window.map.on("click", (e) => {
     const features = window.map.queryRenderedFeatures(e.point, {
       layers: ["gi-fac-1990_2020", "gi-fac-1970_2020"]
@@ -739,15 +738,6 @@ window.map.on("load", () => {
       clear_selected();
     }
   });
-
-  // native mapbox search bar
-  // const geocoder = new MapboxGeocoder({
-  //   accessToken: mapboxgl.accessToken,
-  //   mapboxgl: mapboxgl,
-  //   countries: 'us',
-  //   placeholder: ' '
-  // });
-  // window.map.addControl(geocoder);
 
   period_select(checkbox_period.checked);
 });
@@ -884,7 +874,3 @@ function make_draggable(handle, is_min) {
 
 make_draggable(handle_min, true);
 make_draggable(handle_max, false);
-
-
-// temp logs to check for bugs
-

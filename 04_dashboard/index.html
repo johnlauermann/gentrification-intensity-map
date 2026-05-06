@@ -285,8 +285,8 @@
                 });
                 // layers visibility on start
                 map.on('load', () => {
-                    if (window.innerWidth <= 720) { map.setPadding({ left: 0, bottom: 0 }); }
-                    else { map.setPadding({ left: 300, bottom: 64 }); }
+                    if (window.innerWidth <= 720) {map.setPadding({left: 0, bottom: 0 });}
+                    else { map.setPadding({left: 300, bottom: 64 });}
 
                     map.setLayoutProperty('municipality-limits', 'visibility', 'visible');
 

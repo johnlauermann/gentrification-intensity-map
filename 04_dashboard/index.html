@@ -27,34 +27,121 @@
 
             <div id="line-box-1" class="line"></div>
 
-            <!-- open state -->
-            <div class="wrapper">
-                <div id="learn-more-open" class="wrapper-learn_more">
-                    <div class="txt-body">This is a spatial data science project that seeks to map varying degrees of
-                        gentrification intensity across most US metropolitan and micorpolitan communities.
-                        <br><br>
-                        The map was developed in&nbsp;the&nbsp;School of Information at&nbsp;Pratt&nbsp;Institute by
-                        <a href="https://github.com/johnlauermann/gentrification-intensity-map" target="_blank"
-                            class="link-wrapper">
-                            John&nbsp;Lauermann's lab
-                        </a>
-                    </div>
-                    <button id="dropdown-learn_more-minus" class="dropdown-icon">
-                        <img src="images/picto-minus.png" alt="" class="picto">
+            <!-- about row (always visible) -->
+            <div class="about-subtitle-row" id="about-label-row">
+                <div class="wrapper-about-row">
+                    <span class="txt-menu" id="about-label">About</span>
+                    <button id="dropdown-learn_more-toggle" class="dropdown-icon">
+                        <img src="images/picto-plus.png" alt="Expand" class="picto" id="about-toggle-icon">
                     </button>
+                </div>
+                <div class="about-subtitle-content" id="about-label-content">
+                    <div class="wrapper">
+                        <div class="txt-body">This is a spatial data science project that seeks to map varying
+                            degrees of gentrification intensity across most US metropolitan and micorpolitan
+                            communities.
+                            <br><br>
+                            The map was developed in&nbsp;the&nbsp;School of Information
+                            at&nbsp;Pratt&nbsp;Institute by
+                            <a href="https://github.com/johnlauermann/gentrification-intensity-map" target="_blank"
+                                class="link-wrapper">
+                                John&nbsp;Lauermann's lab group
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <!-- collapsed state -->
-            <div id="learn-more-closed" class="wrapper" style="display:none;">
-                <div class="wrapper-learn_more">
-                    <a href="https://github.com/johnlauermann/gentrification-intensity-map" target="_blank"
-                        class="link-wrapper">
-                        <span class="txt-link">John&nbsp;Lauermann's lab<br></span>
-                    </a>
-                    <button id="dropdown-learn_more-plus" class="dropdown-icon collapsed">
-                        <img src="images/picto-plus.png" alt="" class="picto">
-                    </button>
+
+            <!-- expandable block -->
+            <div id="about-block" class="about-block" style="display:none;">
+
+                <div class="about-subtitle-line"></div>
+                <div class="about-subtitle-row" data-subtitle="built">
+                    <div class="wrapper about-subtitle-wrapper">
+                        <span class="txt-menu">How it was built</span>
+                    </div>
+                    <div class="about-subtitle-content">
+                        <div class="wrapper">
+                            <div class="txt-body">The gentrification intensity draws on ~800 metropolitan areas.
+                                The indicators displayed in the panel consistently linked to class upgrading were
+                                selected through principal component analysis of ~400 variables.<br><br>
+                                Factor analysis combines these into a class status score and a class change score,
+                                both benchmarked against regional averages so each tract is evaluated relative
+                                to its own metropolitan context.<br><br>
+                                A tract is classified as gentrified if it started below its regional average,
+                                experienced above-average upgrading, and ended above the regional average.
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+                <div class="about-subtitle-line"></div>
+                <div class="about-subtitle-row" data-subtitle="sources">
+                    <div class="wrapper about-subtitle-wrapper">
+                        <span class="txt-menu">Data sources</span>
+                    </div>
+                    <div class="about-subtitle-content">
+                        <div class="wrapper">
+                            <div class="txt-body">The map covers ~56,000 census tracts, built from Decennial Census
+                                and American Community Survey data via the National Historical GIS and IPUMS
+                                API.<br><br>
+                                Two formats are available: The primary version maps gentrification from 1990 to 2020,
+                                crosswalked to 2020 tract boundaries using the NHGIS Geographic Crosswalk
+                                methodology.<br><br>
+                                The historical version extends coverage to 1970, crosswalked to 2010 boundaries using
+                                both NHGIS
+                                and Longitudinal Tract Database methods, covering ~49,000 tracts.
+                                This version introduces more spatial noise and is best suited for historical research
+                                only.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-subtitle-line"></div>
+                <div class="about-subtitle-row" data-subtitle="replicate">
+                    <div class="wrapper about-subtitle-wrapper">
+                        <span class="txt-menu">How to replicate</span>
+                    </div>
+                    <div class="about-subtitle-content">
+                        <div class="wrapper">
+                            <div class="txt-body">Replication data and code are available on <a
+                                    href="https://dataverse.harvard.edu/citation?persistentId=doi:10.7910/DVN/DPKO3I"
+                                    target="_blank">Harvard Dataverse</a> (Lauermann et al. 2026). <br><br>
+                                On the <a href="https://github.com/johnlauermann/gentrification-intensity-map/tree/main"
+                                    target="_blank">repository</a>, R and Python scripts can be run to reproduce the
+                                full dataset. Download the folder structure, add your free <a
+                                    href="https://developer.ipums.org/docs/v2/get-started/" target="_blank">
+                                    IPUMS API key</a>, and execute from any directory.<br><br>
+                                Finished data tables and boundary layers are also available for direct
+                                download without running the code.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-subtitle-line"></div>
+                <div class="about-subtitle-row" data-subtitle="publications">
+                    <div class="wrapper about-subtitle-wrapper">
+                        <span class="txt-menu">Related publications</span>
+                    </div>
+                    <div class="about-subtitle-content">
+                        <div class="wrapper">
+                            <div class="txt-body">
+                                Lauermann, John, Viggiani, Alice, Wu, Yuanhao, &amp; Smash, Nathan (2026) National
+                                Gentrification Intensity Map: Mapping gentrification across US communities, 1970 to
+                                2020, <em>The Professional Geographer</em>, <a
+                                    href="https://doi.org/10.1080/00330124.2026.2625975"
+                                    target="_blank">https://doi.org/10.1080/00330124.2026.2625975</a>
+                                <br><br>
+                                Lauermann, John, Alexander, Zoe, &amp; Wang, Ziqi (2025) Mapping super-gentrification in
+                                large US cities, 1990-2020, <em>Urban Geography</em>, <a
+                                    href="https://doi.org/10.1080/02723638.2025.2528418"
+                                    target="_blank">https://doi.org/10.1080/02723638.2025.2528418</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -62,18 +149,12 @@
         <!-- box 2 buttons -->
         <div id="box-2" class="box-container">
 
-            <!-- municipality menu dropdown -->
-            <!-- <button id="dropdown-selected-city" class="dropdown-selected">
-                <span class="txt-menu">New York City</span>
-                <img src="images/picto-arrow.png" alt="" class="picto">
-            </button> -->
-
             <!-- municipality menu + search -->
             <div id="city-search-row" class="city-search-row">
                 <!-- municipality dropdown button -->
                 <button id="dropdown-selected-city" class="dropdown-selected">
                     <span class="txt-menu">New York City</span>
-                    <img src="images/picto-arrow.png" alt="" class="picto">
+                    <img src="images/picto-arrow_down.png" alt="" class="picto">
                 </button>
 
                 <div class="city-search-divider"></div>
@@ -84,7 +165,7 @@
                         <img src="images/picto-search-selected.png" alt="" class="picto">
                     </button>
                     <div id="search-input-wrap" class="search-input-wrap">
-                        <img src="images/picto-search-sele cted.png" alt="" class="picto">
+                        <img src="images/picto-search-selected.png" alt="" class="picto">
                         <input id="search-input" class="search-input" type="text" placeholder="search address"
                             autocomplete="off">
                         <button id="search-close-btn" class="search-close-btn" aria-label="close search">
@@ -157,7 +238,7 @@
                         style="display:none;">[</div>
                     <div id="filter-handle-max" class="filter-handle filter-handle-max" aria-hidden="true"
                         style="display:none;">]</div>
-                    <!-- unfiltered range -->  
+                    <!-- unfiltered range -->
                     <div id="filter-mask-min" class="filter-mask" style="display:none;"></div>
                     <div id="filter-mask-max" class="filter-mask" style="display:none;"></div>
 
@@ -285,8 +366,8 @@
                 });
                 // layers visibility on start
                 map.on('load', () => {
-                    if (window.innerWidth <= 720) {map.setPadding({left: 0, bottom: 0 });}
-                    else { map.setPadding({left: 300, bottom: 64 });}
+                    if (window.innerWidth <= 720) { map.setPadding({ left: 0, bottom: 0 }); }
+                    else { map.setPadding({ left: 300, bottom: 64 }); }
 
                     map.setLayoutProperty('municipality-limits', 'visibility', 'visible');
 

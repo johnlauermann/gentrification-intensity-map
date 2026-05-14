@@ -96,6 +96,11 @@
   color: inherit;
 }
 
+.txt-body a {
+  color: inherit;
+  text-decoration: underline;
+}
+
 .txt-link:hover {
   font-weight: 500;
   /* color: black; */
@@ -120,7 +125,7 @@
 
 /* sections */
 
-.content-container {
+.content-container {  
   z-index: 99;
   position: fixed;
   top: var(--spacing-1);
@@ -156,6 +161,8 @@
 #box-1 {
   grid-column: 1;
   grid-row: 1 / span 1;
+  max-height: calc(100vh - (var(--spacing-1) * 2));
+  overflow-y: auto;
 }
 
 #box-2 {
@@ -255,10 +262,69 @@
   /* align-self: center; */
 }
 
+/* info block */
+.wrapper-about-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: var(--spacing-2);
+}
+.wrapper-about-row .dropdown-icon {
+  width: auto;
+  flex-shrink: 0;
+}
+
+
+.about-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.txt-body about {
+  padding: 0 0 0 var(--spacing-2);
+}
+
+.about-subtitle-line {
+  height: 1px;
+  background-color: var(--color-1);
+  margin: 0 var(--spacing-2);
+}
+
+.about-subtitle-row {
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 0 var(--spacing-3);
+}
+
+.about-subtitle-wrapper {
+  cursor: pointer;
+  user-select: none;
+}
+.about-subtitle-wrapper .txt-menu {
+  font-weight: 400;
+}
+
+.about-subtitle-content {
+  display: none;
+}
+
+.about-subtitle-row.is-open .about-subtitle-content {
+  display: block;
+}
+
 #box-1 .box1-expanded {
   overflow: hidden;
   transition: max-height 220ms ease, opacity 160ms ease;
 }
+#box-1 .txt-body {
+  width: 96%;
+}
+
+#about-label {
+  cursor: pointer;
+  flex: 1;
+}
+
 
 /* collapse behavior */
 #box-1 .learnmore-collapse {
@@ -294,7 +360,7 @@
 .dropdown-selected {
   width: 100%;
   border: none;
-  padding: var(--spacing-3);
+  padding: 8px var(--spacing-3) var(--spacing-3) var(--spacing-3);
   display: flex;
   flex-flow: row;
   justify-content: space-between;
@@ -308,7 +374,7 @@
 
 .picto {
   width: 18px;
-  height: auto;
+  height: 18px;
 }
 
 .dropdown-selected .picto {
@@ -392,6 +458,7 @@
   top: 0;
   bottom: 0;
   width: 36px;
+  min-width: 36px;
   transition: width 200ms ease;
   background-color: var(--color-2);
   display: flex;
@@ -400,6 +467,10 @@
   overflow: hidden;
   z-index: 1;
 }
+/* #search-cell {
+  width: 30px;
+  min-width: 32px;
+} */
 
 /* hover expands leftward */
 .search-cell:hover,

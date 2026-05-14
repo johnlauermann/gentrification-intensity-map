@@ -13,40 +13,63 @@ const cbsa_names = {
   "12060": "Atlanta-Sandy Springs-Alpharetta"
 };
 
-// box collapse
 
+// box collapse
 document.addEventListener("DOMContentLoaded", () => {
+
   // box 1 collapse
   const box1 = document.getElementById("box-1");
-  const expanded = box1.querySelectorAll(".wrapper")[1]; // text + minus
-  const collapsed_el = box1.querySelectorAll(".wrapper")[2]; // link + plus
+  const about_block = document.getElementById('about-block');
+  const about_toggle = document.getElementById('dropdown-learn_more-toggle');
+  const about_icon = document.getElementById('about-toggle-icon');
+  const about_label = document.getElementById('about-label');
+  const about_label_row = document.getElementById('about-label-row');
+  let about_open = false;
 
-  // initial state
-  expanded.style.maxHeight = "420px";
-  expanded.style.opacity = "1";
-  expanded.style.overflow = "hidden";
-  expanded.style.transition = "max-height 220ms ease, opacity 160ms ease";
+  // reset opens and closeds subtitles when collapse
+  function close_all_subtitles() {
+    document.querySelectorAll('.about-subtitle-row').forEach(r => r.classList.remove('is-open', 'is-pinned'));
+  }
 
-  collapsed_el.style.display = "none"; // hide plus on load
+  function set_about_open(next) {
+    about_open = next;
+    about_block.style.display = next ? '' : 'none';
+    about_icon.src = next ? 'images/picto-minus.png' : 'images/picto-plus.png';
+    about_icon.alt = next ? 'Collapse' : 'Expand';
+    box1.classList.toggle('is-open', next);
+    if (next) about_label_row.classList.add('is-open');
+    if (!next) close_all_subtitles();
+  }
 
-  box1.querySelectorAll(".dropdown-icon").forEach(btn => {
-    btn.addEventListener("click", (e) => {
+  about_toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    set_about_open(!about_open);
+  });
+
+  // about label click
+  about_label_row.querySelector('.wrapper-about-row').addEventListener('click', (e) => {
+    if (e.target === about_toggle || about_toggle.contains(e.target)) return;
+    if (!about_open) return;
+    e.stopPropagation();
+    about_label_row.classList.toggle('is-open');
+  });  // subtitle rows click
+  document.querySelectorAll('.about-subtitle-row').forEach(row => {
+    if (row.id === 'about-label-row') return;
+    const wrapper = row.querySelector('.about-subtitle-wrapper');
+    wrapper.addEventListener('click', (e) => {
       e.stopPropagation();
-      const isOpen = collapsed_el.style.display === "none";
-      expanded.style.maxHeight = isOpen ? "0" : "420px";
-      expanded.style.opacity = isOpen ? "0" : "1";
-      expanded.style.padding = isOpen ? "0" : "";
-      collapsed_el.style.display = isOpen ? "" : "none";
-      box1.classList.toggle('is-open', !isOpen);
+      row.classList.toggle('is-open');
     });
   });
-  
+
+  // initial state: about text open
+  set_about_open(true);
+  about_label_row.classList.add('is-open');
+
   if (window.innerWidth <= 720) {
-    expanded.style.maxHeight = "0";
-    expanded.style.opacity = "0";
-    expanded.style.padding = "0";
-    collapsed_el.style.display = "";
+    set_about_open(false);
   }
+
 
   // box 3 collapse
   const box3 = document.getElementById("box-3");

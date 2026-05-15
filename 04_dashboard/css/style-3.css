@@ -252,7 +252,6 @@
   font-size: inherit;
   cursor: pointer;
   user-select: none;
-  margin-top: 7px;
   padding: 0;
 }
 
@@ -267,13 +266,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-right: var(--spacing-2);
+  /* padding-right: var(--spacing-2); */
+  padding: var(--spacing-4) var(--spacing-4) var(--spacing-4) 0;
 }
 .wrapper-about-row .dropdown-icon {
   width: auto;
   flex-shrink: 0;
 }
-
 
 .about-block {
   display: flex;

@@ -4,11 +4,9 @@ This repository contains code and data related to a national longitudinal tract 
 
 
 ## Map products 
-<img width="1462" height="874" alt="image" src="https://github.com/user-attachments/assets/2e01be0d-d9d9-4a09-88ab-34f4dce1ad03" />
+[<img width="1462" height="874" alt="image" src="https://github.com/user-attachments/assets/2e01be0d-d9d9-4a09-88ab-34f4dce1ad03" />](https://johnlauermann.github.io/gentrification-intensity-map/04_dashboard/index.html)
 
-Here's an interactive version of the map: https://johnlauermann.github.io/gentrification-intensity-map/04_dashboard/index.html
-
-The map is available in two formats: 
+To view the data, check out this [interactive version](https://johnlauermann.github.io/gentrification-intensity-map/04_dashboard/index.html) of the map. The map is available in two formats: 
 
 #### Gentrification patterns on 2020 tract boundaries
 Gentrification-related data from 1990 to 2020, adjusted to 2020 census tract boundaries. This is based on Decennial Census and American Community Survey data, drawn from [National Historical GIS](https://www.nhgis.org/) using the [IPUMS API](ttps://developer.ipums.org/docs/v2/get-started/). Crosswalks are based on the [NHGIS Geographic Crosswalk](https://www.nhgis.org/geographic-crosswalks) methodology. It covers ~56,000 census tracts in ~880 core-based statistical areas, with all data crosswalked to 2020 census boundaries. We recommend using this version of the map for most applications. Replication code is in `01_data`.

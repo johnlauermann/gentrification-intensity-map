@@ -25,15 +25,15 @@ The statistical workflow runs on R, primarily using `ipumsr` for querying APIs, 
 If you want to skip the code and go straight to the data, the finished csv tables and boundary layers are available for download on Harvard Dataverse in the replication data cited below.
 
 ## How to cite
-Lauermann, John, Viggiani, Alice, Wu, Yuanhao, & Smash, Nathan (2026) National Gentrification Intensity Map: Mapping gentrification across US communities, 1970 to 2020, _The Professional Geographer_, https://doi.org/10.1080/00330124.2026.2625975
+Lauermann, John, Viggiani, Alice, Wu, Yuanhao, & Smash, Nathan (2026) National Gentrification Intensity Map: Mapping gentrification across US communities, 1970 to 2020, _The Professional Geographer_, https://doi.org/10.1080/00330124.2026.2625975 
 
 ## Replication data
 Lauermann J, Wu Y, Feldman A, et al. (2026) National Gentrification Intensity Map. _Harvard Dataverse_. Available at: https://dataverse.harvard.edu/citation?persistentId=doi:10.7910/DVN/DPKO3I
 
 ## Related publications
-Lauermann, John, Viggiani, Alice, Wu, Yuanhao, & Smash, Nathan (2026) National Gentrification Intensity Map: Mapping gentrification across US communities, 1970 to 2020, _The Professional Geographer_, https://doi.org/10.1080/00330124.2026.2625975
+Lauermann, John, Viggiani, Alice, Wu, Yuanhao, & Smash, Nathan (2026) National Gentrification Intensity Map: Mapping gentrification across US communities, 1970 to 2020, _The Professional Geographer_, https://doi.org/10.1080/00330124.2026.2625975 ([Open Access copy here](https://www.academia.edu/167486442/National_Gentrification_Intensity_Map_Mapping_Gentrification_Across_U_S_Communities_1970_to_2020))
 
-Lauermann, John, Alexander, Zoe, & Wang, Ziqi (2025) Mapping super-gentrification in large US cities, 1990-2020, _Urban Geography_, https://doi.org/10.1080/02723638.2025.2528418 
+Lauermann, John, Alexander, Zoe, & Wang, Ziqi (2025) Mapping super-gentrification in large US cities, 1990-2020, _Urban Geography_, https://doi.org/10.1080/02723638.2025.2528418 ([Open Access copy here](https://www.tandfonline.com/doi/full/10.1080/00330124.2026.2625975))
 <br>
 <br>
 <br>

@@ -4,6 +4,9 @@ This repository contains code and data related to a national longitudinal tract 
 
 
 ## Map products 
+<img width="1462" height="874" alt="image" src="https://github.com/user-attachments/assets/2e01be0d-d9d9-4a09-88ab-34f4dce1ad03" />
+
+Here's an interactive version of the map: https://johnlauermann.github.io/gentrification-intensity-map/04_dashboard/index.html
 
 The map is available in two formats: 
 

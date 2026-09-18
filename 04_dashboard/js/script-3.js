@@ -12,7 +12,20 @@ const cbsa_names = {
   "37980": "Philadelphia-Camden-Wilmington",
   "12060": "Atlanta-Sandy Springs-Alpharetta",
   "41860": "San Francisco-Oakland-Berkeley",
-  "41180": "St. Louis, MO-IL"
+  "38060": "Phoenix-Mesa-Chandler",
+  "14460": "Boston-Cambridge-Newton",
+  "19820": "Detroit-Warren-Dearborn",
+  "42660": "Seattle-Tacoma-Bellevue",
+  "40140": "Riverside-San Bernardino-Ontario",
+  "41740": "San Diego-Chula Vista-Carlsbad"<
+  "45300": "Tampa-St. Petersburg-Clearwater",
+  "33460": "Minneapolis-St. Paul-Bloomington",
+  "19740": "Denver-Aurora-Lakewood",
+  "12580": "Baltimore-Columbia-Towson",
+  "29820": "Las Vegas-Henderson-Paradise",
+  "41180": "St. Louis, MO-IL",
+  "36740": "Orlando-Kissimmee-Sanford",
+  "38900": "Portland-Vancouver-Hillsboro"
 };
 
 

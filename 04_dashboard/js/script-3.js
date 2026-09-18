@@ -17,7 +17,7 @@ const cbsa_names = {
   "19820": "Detroit-Warren-Dearborn",
   "42660": "Seattle-Tacoma-Bellevue",
   "40140": "Riverside-San Bernardino-Ontario",
-  "41740": "San Diego-Chula Vista-Carlsbad"<
+  "41740": "San Diego-Chula Vista-Carlsbad",
   "45300": "Tampa-St. Petersburg-Clearwater",
   "33460": "Minneapolis-St. Paul-Bloomington",
   "19740": "Denver-Aurora-Lakewood",

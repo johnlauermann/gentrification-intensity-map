@@ -11,6 +11,7 @@ const cbsa_names = {
   "47900": "Washington-Arlington-Alexandria",
   "37980": "Philadelphia-Camden-Wilmington",
   "12060": "Atlanta-Sandy Springs-Alpharetta",
+  "41860": "San Francisco-Oakland-Berkeley",
   "41180": "St. Louis, MO-IL"
 };
 
